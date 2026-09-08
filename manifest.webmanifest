@@ -1,7 +1,7 @@
 {
   "name": "Not İstasyonu",
   "short_name": "Not İstasyonu",
-  "description": "Ege'nin Not İstasyonu — notlar, odak, kamp programı ve deneme takibi.",
+  "description": "Ege'nin Not İstasyonu",
   "lang": "tr",
   "dir": "ltr",
   "start_url": "./",
