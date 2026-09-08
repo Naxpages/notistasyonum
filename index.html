@@ -2720,6 +2720,49 @@ body.pro-active .motivation-label {
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Not İstasyonu">
+
+<style>
+/* =========================================================
+   BİLDİRİMLER + ADMİN PANELİ
+========================================================= */
+#ni-notify-btn{position:fixed;right:20px;top:20px;z-index:9100;width:42px;height:42px;border:1px solid #2d3339;border-radius:11px;background:#16181a;color:#dfe5ea;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28);transition:.2s}
+#ni-notify-btn:hover{border-color:#4c5660;transform:translateY(-1px)}
+#ni-notify-btn .ni-bell{font-size:19px;line-height:1}
+#ni-notify-badge{position:absolute;right:-4px;top:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#e53935;color:#fff;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center;border:2px solid #0c0d0e}
+.ni-overlay{position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(5px);z-index:12000;display:none;align-items:center;justify-content:center;padding:16px}
+.ni-overlay.open{display:flex}
+.ni-panel{width:min(720px,100%);max-height:88vh;overflow:auto;background:#141618;border:1px solid #30353b;border-radius:18px;box-shadow:0 30px 100px rgba(0,0,0,.7)}
+.ni-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #2b3035;position:sticky;top:0;background:rgba(20,22,24,.96);backdrop-filter:blur(10px);z-index:3}
+.ni-head-title{font-weight:900;font-size:1rem}
+.ni-close{width:32px;height:32px;border:1px solid #343a40;background:#1b1e21;color:#b7bec5;border-radius:8px;cursor:pointer;font-size:18px}
+.ni-body{padding:16px}
+.ni-empty{padding:34px 10px;text-align:center;color:#707780;border:1px dashed #2b3035;border-radius:12px}
+.ni-msg{padding:13px 14px;border:1px solid #2b3035;border-radius:12px;background:#111416;margin-bottom:10px}
+.ni-msg.unread{border-color:#3b638a;box-shadow:inset 3px 0 0 #4b9cff}
+.ni-msg-text{white-space:pre-wrap;line-height:1.6;color:#e7ebef;font-size:.9rem}
+.ni-msg-time{margin-top:7px;color:#737c85;font-size:.68rem}
+.ni-admin-btn{position:fixed;right:72px;top:20px;z-index:9100;width:42px;height:42px;border:1px solid #5b4930;border-radius:11px;background:#171411;color:#ffd37e;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:18px}
+.ni-admin-btn:hover{border-color:#a87b35}
+.ni-admin-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.ni-box{border:1px solid #2c3136;border-radius:12px;background:#101315;padding:14px}
+.ni-box h3{margin:0 0 11px;font-size:.82rem;color:#dce2e7}
+.ni-input,.ni-textarea,.ni-select{width:100%;background:#0d1012;border:1px solid #32373d;color:#f3f5f7;border-radius:9px;padding:10px 11px;outline:none;font:inherit}
+.ni-textarea{min-height:125px;resize:vertical}
+.ni-input:focus,.ni-textarea:focus,.ni-select:focus{border-color:#52789e}
+.ni-row{display:flex;gap:8px;align-items:center}
+.ni-send{margin-top:10px;width:100%;padding:10px 12px;border-radius:9px;border:1px solid #416992;background:#17304a;color:#eaf4ff;font-weight:900;cursor:pointer}
+.ni-send:disabled{opacity:.55;cursor:default}
+.ni-users{max-height:240px;overflow:auto;display:flex;flex-direction:column;gap:7px}
+.ni-user{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;border:1px solid #292e33;border-radius:9px;background:#14181a}
+.ni-user-main{min-width:0}
+.ni-user-name{font-size:.78rem;font-weight:800;color:#e4e8eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ni-user-id{font-size:.62rem;color:#737c85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ni-user-actions button{border:1px solid #353b42;background:#181c1f;color:#c7cdd2;border-radius:8px;padding:6px 8px;font-size:.66rem;font-weight:800;cursor:pointer}
+.ni-user-actions button.admin{border-color:#6f542d;color:#ffd27a;background:#201a12}
+.ni-status{font-size:.68rem;color:#7e8790;min-height:16px;margin-top:8px}
+.ni-login-link{display:block;text-align:center;margin-top:10px;color:#717c86;font-size:.67rem;text-decoration:underline;cursor:pointer}
+@media(max-width:760px){#ni-notify-btn{right:12px;top:12px}.ni-admin-btn{right:60px;top:12px}.ni-admin-grid{grid-template-columns:1fr}.ni-panel{max-height:92vh}}
+</style>
 </head>
 
 <body>
@@ -6814,5 +6857,248 @@ updateDailyMotivation();
 
 
 
+
+<button id="ni-notify-btn" type="button" aria-label="Bildirimler" title="Bildirimler">
+  <span class="ni-bell">🔔</span><span id="ni-notify-badge"></span>
+</button>
+<button id="ni-admin-btn" type="button" aria-label="Yönetim" title="Yönetim">⚙</button>
+
+<div class="ni-overlay" id="ni-notify-overlay" aria-hidden="true">
+  <section class="ni-panel">
+    <div class="ni-head"><div class="ni-head-title">Bildirimler</div><button class="ni-close" id="ni-notify-close">×</button></div>
+    <div class="ni-body"><div id="ni-notify-list"><div class="ni-empty">Bildirim bulunmuyor.</div></div></div>
+  </section>
+</div>
+
+<div class="ni-overlay" id="ni-login-overlay" aria-hidden="true">
+  <section class="ni-panel" style="max-width:430px">
+    <div class="ni-head"><div class="ni-head-title">Yönetici Girişi</div><button class="ni-close" id="ni-login-close">×</button></div>
+    <div class="ni-body">
+      <input class="ni-input" id="ni-login-email" type="email" autocomplete="username" placeholder="E-posta">
+      <input class="ni-input" id="ni-login-password" type="password" autocomplete="current-password" placeholder="Şifre" style="margin-top:8px">
+      <button class="ni-send" id="ni-login-btn">Giriş yap</button>
+      <div class="ni-status" id="ni-login-status"></div>
+    </div>
+  </section>
+</div>
+
+<div class="ni-overlay" id="ni-admin-overlay" aria-hidden="true">
+  <section class="ni-panel">
+    <div class="ni-head"><div class="ni-head-title">Yönetim</div><button class="ni-close" id="ni-admin-close">×</button></div>
+    <div class="ni-body">
+      <div class="ni-admin-grid">
+        <div class="ni-box">
+          <h3>Mesaj gönder</h3>
+          <textarea class="ni-textarea" id="ni-message-text" maxlength="2000" placeholder="Mesajını yaz..."></textarea>
+          <select class="ni-select" id="ni-message-target" style="margin-top:8px">
+            <option value="all">Herkese gönder</option>
+          </select>
+          <button class="ni-send" id="ni-message-send">Gönder</button>
+          <div class="ni-status" id="ni-message-status"></div>
+        </div>
+        <div class="ni-box">
+          <h3>Kullanıcılar / Yönetici yetkisi</h3>
+          <input class="ni-input" id="ni-user-search" placeholder="İsim veya kullanıcı ID ara...">
+          <div class="ni-users" id="ni-users" style="margin-top:8px"><div class="ni-empty">Yükleniyor...</div></div>
+          <div class="ni-status">Bir kişiye yönetici yetkisi vermek veya kaldırmak için ilgili düğmeye bas.</div>
+        </div>
+      </div>
+      <span class="ni-login-link" id="ni-logout">Yönetici hesabından çıkış yap</span>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* =========================================================
+   NOT İSTASYONU — BİLDİRİM + ADMİN SİSTEMİ
+   Gereken Supabase tabloları: app_profiles, app_messages,
+   app_message_reads, app_admins. SQL dosyası paketin içinde.
+========================================================= */
+(function(){
+  const sbUrl = 'https://wfloizgrqcgzpgvgfzze.supabase.co';
+  const sbKey = 'sb_publishable_8tUBRAk4AtlketpEllaX5g_ir0djTNq';
+  const sb = window.supabase.createClient(sbUrl, sbKey, { auth:{ persistSession:true, autoRefreshToken:true } });
+
+  const notifyBtn = document.getElementById('ni-notify-btn');
+  const notifyBadge = document.getElementById('ni-notify-badge');
+  const notifyOverlay = document.getElementById('ni-notify-overlay');
+  const notifyClose = document.getElementById('ni-notify-close');
+  const notifyList = document.getElementById('ni-notify-list');
+  const loginOverlay = document.getElementById('ni-login-overlay');
+  const adminOverlay = document.getElementById('ni-admin-overlay');
+  const adminBtn = document.getElementById('ni-admin-btn');
+  const loginEmail = document.getElementById('ni-login-email');
+  const loginPassword = document.getElementById('ni-login-password');
+  const loginBtn = document.getElementById('ni-login-btn');
+  const loginStatus = document.getElementById('ni-login-status');
+  const adminClose = document.getElementById('ni-admin-close');
+  const loginClose = document.getElementById('ni-login-close');
+  const logoutBtn = document.getElementById('ni-logout');
+  const msgText = document.getElementById('ni-message-text');
+  const msgTarget = document.getElementById('ni-message-target');
+  const msgSend = document.getElementById('ni-message-send');
+  const msgStatus = document.getElementById('ni-message-status');
+  const userSearch = document.getElementById('ni-user-search');
+  const usersBox = document.getElementById('ni-users');
+
+  let sessionUser = null;
+  let isAdmin = false;
+  let profile = null;
+  let profiles = [];
+  let unreadCount = 0;
+
+  const safeText = x => String(x ?? '');
+  const esc = x => safeText(x).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const dateLabel = iso => { try { return new Date(iso).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}); } catch { return ''; } };
+
+  function openOverlay(el){ el.classList.add('open'); el.setAttribute('aria-hidden','false'); }
+  function closeOverlay(el){ el.classList.remove('open'); el.setAttribute('aria-hidden','true'); }
+
+  async function ensureAuth(){
+    const {data:{session}} = await sb.auth.getSession();
+    if (session?.user){ sessionUser=session.user; return true; }
+    const {data,error} = await sb.auth.signInAnonymously();
+    if (!error && data?.user){ sessionUser=data.user; return true; }
+    console.warn('Bildirim kimliği oluşturulamadı:',error);
+    return false;
+  }
+
+  async function ensureProfile(){
+    if(!sessionUser) return;
+    const playerId = localStorage.getItem('yks_leader_player_id') || ('p-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('yks_leader_player_id',playerId);
+    const username = (typeof userName !== 'undefined' ? userName : localStorage.getItem('yks_user_name') || 'Kullanıcı').trim().slice(0,80) || 'Kullanıcı';
+    const payload={user_id:sessionUser.id,player_id:playerId,username,last_seen:new Date().toISOString()};
+    const {data,error}=await sb.from('app_profiles').upsert(payload,{onConflict:'user_id'}).select().maybeSingle();
+    if(!error) profile=data||payload;
+  }
+
+  async function checkAdmin(){
+    if(!sessionUser) return false;
+    const {data,error}=await sb.from('app_admins').select('user_id').eq('user_id',sessionUser.id).maybeSingle();
+    isAdmin=!error && !!data;
+    adminBtn.style.display=isAdmin?'flex':'none';
+    return isAdmin;
+  }
+
+  async function refreshNotifications(){
+    if(!sessionUser) return;
+    const {data:messages,error:mErr}=await sb.from('app_messages').select('id,message,created_at,target_user_id').order('created_at',{ascending:false}).limit(100);
+    if(mErr){ console.warn('Bildirimler yüklenemedi:',mErr); notifyBtn.style.display='none'; return; }
+    const ids=(messages||[]).map(x=>x.id);
+    let readSet=new Set();
+    if(ids.length){
+      const {data:reads}=await sb.from('app_message_reads').select('message_id').eq('user_id',sessionUser.id).in('message_id',ids);
+      (reads||[]).forEach(r=>readSet.add(r.message_id));
+    }
+    unreadCount=(messages||[]).filter(m=>!readSet.has(m.id)).length;
+    notifyBtn.style.display='flex';
+    notifyBadge.style.display=unreadCount?'flex':'none';
+    notifyBadge.textContent=unreadCount>99?'99+':String(unreadCount);
+    notifyList.innerHTML=(messages||[]).length ? (messages||[]).map(m=>`<article class="ni-msg ${readSet.has(m.id)?'':'unread'}" data-id="${m.id}"><div class="ni-msg-text">${esc(m.message)}</div><div class="ni-msg-time">${dateLabel(m.created_at)}</div></article>`).join('') : '<div class="ni-empty">Bildirim bulunmuyor.</div>';
+  }
+
+  async function markVisibleRead(){
+    if(!sessionUser) return;
+    const unreadIds=[...notifyList.querySelectorAll('.ni-msg.unread')].map(el=>Number(el.dataset.id)).filter(Boolean);
+    if(!unreadIds.length) return;
+    const rows=unreadIds.map(id=>({message_id:id,user_id:sessionUser.id}));
+    await sb.from('app_message_reads').upsert(rows,{onConflict:'message_id,user_id'});
+    await refreshNotifications();
+  }
+
+  async function loadProfiles(){
+    if(!isAdmin) return;
+    const {data,error}=await sb.from('app_profiles').select('user_id,player_id,username,last_seen').order('username',{ascending:true}).limit(500);
+    if(error){ usersBox.innerHTML='<div class="ni-empty">Kullanıcılar yüklenemedi.</div>'; return; }
+    profiles=data||[];
+    msgTarget.innerHTML='<option value="all">Herkese gönder</option>' + profiles.map(p=>`<option value="${esc(p.user_id)}">${esc(p.username||'Kullanıcı')} · ${esc(p.player_id||'')}</option>`).join('');
+    renderProfiles();
+    const admins=await sb.from('app_admins').select('user_id');
+    const adminIds=new Set((admins.data||[]).map(a=>a.user_id));
+    profiles.forEach(p=>p.__admin=adminIds.has(p.user_id));
+    renderProfiles();
+  }
+
+  function renderProfiles(){
+    const q=safeText(userSearch.value).toLocaleLowerCase('tr-TR').trim();
+    const list=profiles.filter(p=>!q || safeText(p.username).toLocaleLowerCase('tr-TR').includes(q) || safeText(p.player_id).toLocaleLowerCase('tr-TR').includes(q));
+    usersBox.innerHTML=list.length ? list.map(p=>`<div class="ni-user"><div class="ni-user-main"><div class="ni-user-name">${esc(p.username||'Kullanıcı')}</div><div class="ni-user-id">${esc(p.player_id||p.user_id)}</div></div><div class="ni-user-actions"><button class="${p.__admin?'admin':''}" data-user="${esc(p.user_id)}">${p.__admin?'Admini kaldır':'Admin yap'}</button></div></div>`).join('') : '<div class="ni-empty">Kullanıcı bulunamadı.</div>';
+    usersBox.querySelectorAll('button[data-user]').forEach(btn=>btn.addEventListener('click',()=>toggleAdmin(btn.dataset.user)));
+  }
+
+  async function toggleAdmin(userId){
+    if(!isAdmin || !sessionUser) return;
+    if(userId===sessionUser.id && profiles.find(p=>p.user_id===userId)?.__admin){
+      msgStatus.textContent='Kendini yönetici listesinden silemezsin.'; return;
+    }
+    const target=profiles.find(p=>p.user_id===userId); if(!target) return;
+    if(target.__admin){
+      const {error}=await sb.from('app_admins').delete().eq('user_id',userId);
+      if(error){msgStatus.textContent='Yetki kaldırılamadı.';return;}
+      target.__admin=false;
+    } else {
+      const {error}=await sb.from('app_admins').insert({user_id:userId});
+      if(error){msgStatus.textContent='Yetki verilemedi.';return;}
+      target.__admin=true;
+    }
+    msgStatus.textContent='Yönetici yetkisi güncellendi.';
+    renderProfiles();
+  }
+
+  async function sendMessage(){
+    const message=safeText(msgText.value).trim(); if(!message || !isAdmin) return;
+    msgSend.disabled=true; msgStatus.textContent='Gönderiliyor…';
+    const target=msgTarget.value==='all'?null:msgTarget.value;
+    const {error}=await sb.from('app_messages').insert({message,target_user_id:target,created_by:sessionUser.id});
+    msgSend.disabled=false;
+    if(error){msgStatus.textContent='Gönderilemedi: '+error.message;return;}
+    msgText.value=''; msgStatus.textContent='Gönderildi.';
+    await refreshNotifications();
+  }
+
+  async function adminOpen(){
+    if(!isAdmin){openOverlay(loginOverlay);return;}
+    openOverlay(adminOverlay); await loadProfiles();
+  }
+
+  async function login(){
+    const email=loginEmail.value.trim(), password=loginPassword.value;
+    if(!email || !password){loginStatus.textContent='E-posta ve şifre gerekli.';return;}
+    loginBtn.disabled=true; loginStatus.textContent='Giriş yapılıyor…';
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    loginBtn.disabled=false;
+    if(error){loginStatus.textContent='Giriş başarısız.';return;}
+    sessionUser=data.user; await ensureProfile(); await checkAdmin();
+    if(isAdmin){closeOverlay(loginOverlay);openOverlay(adminOverlay);await loadProfiles();loginStatus.textContent='';}
+    else loginStatus.textContent='Bu hesap yönetici değil.';
+  }
+
+  async function logout(){ await sb.auth.signOut(); sessionUser=null;isAdmin=false;adminBtn.style.display='none';closeOverlay(adminOverlay); }
+
+  notifyBtn.addEventListener('click',async()=>{openOverlay(notifyOverlay);await refreshNotifications();await markVisibleRead();});
+  notifyClose.addEventListener('click',()=>closeOverlay(notifyOverlay));
+  adminBtn.addEventListener('click',adminOpen);
+  adminClose.addEventListener('click',()=>closeOverlay(adminOverlay));
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==='a'){ e.preventDefault(); adminOpen(); }
+  });
+  loginClose.addEventListener('click',()=>closeOverlay(loginOverlay));
+  loginBtn.addEventListener('click',login);
+  logoutBtn.addEventListener('click',logout);
+  msgSend.addEventListener('click',sendMessage);
+  userSearch.addEventListener('input',renderProfiles);
+  [notifyOverlay,loginOverlay,adminOverlay].forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeOverlay(o)}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){[notifyOverlay,loginOverlay,adminOverlay].forEach(o=>closeOverlay(o));}});
+  sb.auth.onAuthStateChange(async(_event,session)=>{ sessionUser=session?.user||null; await ensureProfile(); await checkAdmin(); await refreshNotifications(); });
+
+  (async()=>{
+    const ok=await ensureAuth();
+    if(ok){await ensureProfile();await checkAdmin();await refreshNotifications();setInterval(refreshNotifications,15000);}
+    if(new URLSearchParams(location.search).get('admin')==='1') openOverlay(isAdmin?adminOverlay:loginOverlay);
+  })();
+})();
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const CACHE = 'not-istasyonu-v1';
+const CACHE = 'not-istasyonu-v2';
 const SHELL = [
   './',
   './index.html',
@@ -13,19 +13,15 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE).map(key => caches.delete(key))
-    ))
-  );
+  event.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+  )));
   self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
-
-  // Never intercept cross-origin API/media requests; let the app use them normally.
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
