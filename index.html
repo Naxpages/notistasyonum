@@ -158,6 +158,30 @@
             border-bottom: 1px solid rgba(255,255,255,0.03);
         }
 
+
+        /* =====================================================
+           GELİŞTİRİCİ DUYURULARI — SABİT 1 DUYURU
+        ===================================================== */
+        .notification-wrap{position:relative;display:flex;align-items:center;}
+        .notification-btn{position:relative;display:grid;place-items:center;}
+        .notification-btn svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+        .notification-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#ff9f43;box-shadow:0 0 0 2px var(--card-bg),0 0 10px rgba(255,159,67,.45);}
+        .notification-panel{position:fixed;top:76px;right:24px;width:min(420px,calc(100vw - 28px));padding:18px;background:rgba(14,17,22,.98);border:1px solid rgba(255,255,255,.10);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.48);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:11000;display:none;}
+        .notification-panel.open{display:block;animation:notificationIn .18s ease-out;}
+        .notification-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07);}
+        .notification-title{font-size:.72rem;font-weight:900;letter-spacing:1.4px;color:#e8edf2;text-transform:uppercase;}
+        .notification-close{width:30px;height:30px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(255,255,255,.025);color:#8d97a1;cursor:pointer;font-size:1rem;line-height:1;}
+        .notification-card{padding-top:15px;}
+        .notification-card-title{margin:0 0 7px;color:#fff;font-size:1rem;font-weight:850;}
+        .notification-card-date{font-size:.64rem;color:#727d88;margin-bottom:13px;}
+        .notification-card-text{margin:0;color:#b6bec7;font-size:.82rem;line-height:1.72;}
+        .notification-card-text strong{color:#e8edf2;font-weight:800;}
+        .notification-signature{margin-top:15px;color:#98a3ad;font-size:.78rem;font-weight:700;}
+        .notification-social{display:inline-block;margin-top:9px;color:#8dbbff;text-decoration:none;font-size:.76rem;font-weight:800;}
+        .notification-social:hover{text-decoration:underline;color:#b9d6ff;}
+        @keyframes notificationIn{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
+        @media(max-width:700px){.notification-panel{top:66px;right:10px;width:calc(100vw - 20px);}}
+
         /* =====================================================
            HEADER
         ===================================================== */
@@ -2668,6 +2692,20 @@ body.pro-active .motivation-label {
             👤
         </button>
 
+        <div class="notification-wrap">
+            <button class="square-btn notification-btn"
+                    id="notification-btn"
+                    title="Geliştirici Duyurusu"
+                    aria-label="Geliştirici duyurusu"
+                    aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
+                <span class="notification-dot" id="notification-dot"></span>
+            </button>
+        </div>
+
         <button class="square-btn leader-btn"
                 id="open-leader-btn"
                 title="Leader Stats">
@@ -2693,6 +2731,28 @@ body.pro-active .motivation-label {
 
         <div id="history-list-wrapper"></div>
     </div>
+
+    <!-- =====================================================
+         GELİŞTİRİCİ DUYURUSU
+    ===================================================== -->
+    <aside class="notification-panel" id="notification-panel" aria-hidden="true">
+        <div class="notification-head">
+            <div class="notification-title">Geliştirici Duyurusu</div>
+            <button class="notification-close" id="notification-close" type="button" aria-label="Duyuruyu kapat">×</button>
+        </div>
+        <div class="notification-card">
+            <h2 class="notification-card-title">Not İstasyonu’na hoş geldin!</h2>
+            <div class="notification-card-date">İlk geliştirici duyurusu</div>
+            <p class="notification-card-text">
+                Not İstasyonu’nu tercih ettiğin için teşekkür ederim.<br><br>
+                Burayı ders çalışmayı, notlarını düzenlemeyi ve hedeflerine daha düzenli ilerlemeyi kolaylaştıran sade bir alan olarak geliştirmeye çalışıyorum.<br><br>
+                Uygulamada gördüğün özellikler zamanla geliştirilecek ve yeni özellikler eklenmeye devam edecek. Eksik gördüğün veya geliştirilmesini istediğin yerler için geri bildirimlerin benim için önemli.<br><br>
+                İyi çalışmalar, bol motivasyon ve başarılar.
+            </p>
+            <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
+            <a class="notification-social" href="https://www.instagram.com/ege.kisisel/" target="_blank" rel="noopener noreferrer">Instagram: @ege.kisisel</a>
+        </div>
+    </aside>
 
     <!-- =====================================================
          KRONOMETRE
@@ -6449,6 +6509,49 @@ updateDailyMotivation();
         ).innerHTML =
             `YKS 2027: ${days} Gün, ${hours} Saat, ${minutes} Dakika`;
 
+    }
+
+
+    /* =========================================================
+       GELİŞTİRİCİ DUYURUSU
+    ========================================================= */
+
+    const notificationBtn = document.getElementById('notification-btn');
+    const notificationPanel = document.getElementById('notification-panel');
+    const notificationClose = document.getElementById('notification-close');
+    const notificationDot = document.getElementById('notification-dot');
+
+    function setNotificationOpen(open) {
+        if (!notificationPanel || !notificationBtn) return;
+        notificationPanel.classList.toggle('open', open);
+        notificationPanel.setAttribute('aria-hidden', String(!open));
+        notificationBtn.setAttribute('aria-expanded', String(open));
+        if (open && notificationDot) {
+            notificationDot.style.display = 'none';
+            localStorage.setItem('yks_dev_announcement_seen_v1', '1');
+        }
+    }
+
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setNotificationOpen(!notificationPanel.classList.contains('open'));
+        });
+    }
+
+    if (notificationClose) {
+        notificationClose.addEventListener('click', () => setNotificationOpen(false));
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!notificationPanel || !notificationPanel.classList.contains('open')) return;
+        if (!notificationPanel.contains(e.target) && !notificationBtn?.contains(e.target)) {
+            setNotificationOpen(false);
+        }
+    });
+
+    if (localStorage.getItem('yks_dev_announcement_seen_v1') === '1' && notificationDot) {
+        notificationDot.style.display = 'none';
     }
 
 
