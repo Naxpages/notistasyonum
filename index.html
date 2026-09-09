@@ -2741,7 +2741,7 @@ body.pro-active .motivation-label {
 .ni-msg.unread{border-color:#3b638a;box-shadow:inset 3px 0 0 #4b9cff}
 .ni-msg-text{white-space:pre-wrap;line-height:1.6;color:#e7ebef;font-size:.9rem}
 .ni-msg-time{margin-top:7px;color:#737c85;font-size:.68rem}
-.ni-admin-btn{position:fixed;right:72px;top:20px;z-index:9100;width:42px;height:42px;border:1px solid #5b4930;border-radius:11px;background:#171411;color:#ffd37e;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:18px}
+.ni-admin-btn{position:fixed;right:72px;top:20px;z-index:9100;width:42px;height:42px;border:1px solid #5b4930;border-radius:11px;background:#171411;color:#ffd37e;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:18px}
 .ni-admin-btn:hover{border-color:#a87b35}
 .ni-admin-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
 .ni-box{border:1px solid #2c3136;border-radius:12px;background:#101315;padding:14px}
@@ -6975,10 +6975,10 @@ updateDailyMotivation();
   }
 
   async function checkAdmin(){
-    if(!sessionUser) return false;
-    const {data,error}=await sb.from('app_admins').select('user_id').eq('user_id',sessionUser.id).maybeSingle();
-    isAdmin=!error && !!data;
-    adminBtn.style.display=isAdmin?'flex':'none';
+    if(!sessionUser){ isAdmin=false; return false; }
+    const {data,error}=await sb.rpc('is_admin');
+    isAdmin=!error && data===true;
+    adminBtn.style.display='flex';
     return isAdmin;
   }
 
@@ -7010,14 +7010,10 @@ updateDailyMotivation();
 
   async function loadProfiles(){
     if(!isAdmin) return;
-    const {data,error}=await sb.from('app_profiles').select('user_id,player_id,username,last_seen').order('username',{ascending:true}).limit(500);
-    if(error){ usersBox.innerHTML='<div class="ni-empty">Kullanıcılar yüklenemedi.</div>'; return; }
+    const {data,error}=await sb.rpc('admin_list_users');
+    if(error){ usersBox.innerHTML='<div class="ni-empty">Kullanıcılar yüklenemedi: '+esc(error.message||'')+'</div>'; return; }
     profiles=data||[];
     msgTarget.innerHTML='<option value="all">Herkese gönder</option>' + profiles.map(p=>`<option value="${esc(p.user_id)}">${esc(p.username||'Kullanıcı')} · ${esc(p.player_id||'')}</option>`).join('');
-    renderProfiles();
-    const admins=await sb.from('app_admins').select('user_id');
-    const adminIds=new Set((admins.data||[]).map(a=>a.user_id));
-    profiles.forEach(p=>p.__admin=adminIds.has(p.user_id));
     renderProfiles();
   }
 
@@ -7030,20 +7026,13 @@ updateDailyMotivation();
 
   async function toggleAdmin(userId){
     if(!isAdmin || !sessionUser) return;
-    if(userId===sessionUser.id && profiles.find(p=>p.user_id===userId)?.__admin){
-      msgStatus.textContent='Kendini yönetici listesinden silemezsin.'; return;
-    }
     const target=profiles.find(p=>p.user_id===userId); if(!target) return;
-    if(target.__admin){
-      const {error}=await sb.from('app_admins').delete().eq('user_id',userId);
-      if(error){msgStatus.textContent='Yetki kaldırılamadı.';return;}
-      target.__admin=false;
-    } else {
-      const {error}=await sb.from('app_admins').insert({user_id:userId});
-      if(error){msgStatus.textContent='Yetki verilemedi.';return;}
-      target.__admin=true;
-    }
-    msgStatus.textContent='Yönetici yetkisi güncellendi.';
+    const shouldAdmin=!target.is_admin;
+    const {error}=await sb.rpc('admin_set_admin',{target_user_id:userId, should_admin:shouldAdmin});
+    if(error){msgStatus.textContent='Yetki güncellenemedi: '+(error.message||'');return;}
+    target.is_admin=shouldAdmin;
+    target.__admin=shouldAdmin;
+    msgStatus.textContent=shouldAdmin?'Yönetici yetkisi verildi.':'Yönetici yetkisi kaldırıldı.';
     renderProfiles();
   }
 
@@ -7051,9 +7040,9 @@ updateDailyMotivation();
     const message=safeText(msgText.value).trim(); if(!message || !isAdmin) return;
     msgSend.disabled=true; msgStatus.textContent='Gönderiliyor…';
     const target=msgTarget.value==='all'?null:msgTarget.value;
-    const {error}=await sb.from('app_messages').insert({message,target_user_id:target,created_by:sessionUser.id});
+    const {error}=await sb.rpc('admin_send_message',{p_message:message,p_target_user_id:target});
     msgSend.disabled=false;
-    if(error){msgStatus.textContent='Gönderilemedi: '+error.message;return;}
+    if(error){msgStatus.textContent='Gönderilemedi: '+(error.message||'');return;}
     msgText.value=''; msgStatus.textContent='Gönderildi.';
     await refreshNotifications();
   }
@@ -7099,7 +7088,7 @@ updateDailyMotivation();
     }
   }
 
-  async function logout(){ await sb.auth.signOut(); sessionUser=null;isAdmin=false;adminBtn.style.display='none';closeOverlay(adminOverlay); }
+  async function logout(){ await sb.auth.signOut(); sessionUser=null;isAdmin=false;adminBtn.style.display='flex';closeOverlay(adminOverlay); }
 
   notifyBtn.addEventListener('click',async()=>{openOverlay(notifyOverlay);await refreshNotifications();await markVisibleRead();});
   notifyClose.addEventListener('click',()=>closeOverlay(notifyOverlay));
