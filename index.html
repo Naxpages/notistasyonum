@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ege'nin Not İstasyonu</title>
+    <title>'nin Not İstasyonu</title>
 
     <style>
         :root {
@@ -166,21 +166,56 @@
         .notification-btn{position:relative;display:grid;place-items:center;}
         .notification-btn svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
         .notification-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#ff9f43;box-shadow:0 0 0 2px var(--card-bg),0 0 10px rgba(255,159,67,.45);}
-        .notification-panel{position:fixed;top:76px;right:24px;width:min(420px,calc(100vw - 28px));padding:18px;background:rgba(14,17,22,.98);border:1px solid rgba(255,255,255,.10);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.48);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:11000;display:none;}
+        .notification-panel{position:fixed;top:76px;right:24px;width:min(430px,calc(100vw - 28px));padding:14px;background:rgba(14,17,22,.98);border:1px solid rgba(255,255,255,.10);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.48);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:11000;display:none;max-height:min(76vh,720px);overflow:auto;}
         .notification-panel.open{display:block;animation:notificationIn .18s ease-out;}
-        .notification-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07);}
+        .notification-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 4px 13px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:-14px;background:rgba(14,17,22,.98);z-index:2;}
         .notification-title{font-size:.72rem;font-weight:900;letter-spacing:1.4px;color:#e8edf2;text-transform:uppercase;}
+        .notification-count{font-size:.62rem;color:#737d86;font-weight:700;margin-left:6px;letter-spacing:.3px;}
         .notification-close{width:30px;height:30px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(255,255,255,.025);color:#8d97a1;cursor:pointer;font-size:1rem;line-height:1;}
-        .notification-card{padding-top:15px;}
-        .notification-card-title{margin:0 0 7px;color:#fff;font-size:1rem;font-weight:850;}
-        .notification-card-date{font-size:.64rem;color:#727d88;margin-bottom:13px;}
-        .notification-card-text{margin:0;color:#b6bec7;font-size:.82rem;line-height:1.72;}
+        .notification-list{display:flex;flex-direction:column;gap:10px;padding-top:12px;}
+        .notification-card{position:relative;padding:14px 14px 15px;border:1px solid rgba(255,255,255,.075);border-radius:12px;background:rgba(255,255,255,.022);transition:background .16s ease,border-color .16s ease;}
+        .notification-card.unread{border-color:rgba(255,159,67,.24);background:rgba(255,159,67,.035);}
+        .notification-card:hover{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.12);}
+        .notification-unread-dot{position:absolute;top:16px;right:16px;width:7px;height:7px;border-radius:50%;background:#ff9f43;box-shadow:0 0 0 2px rgba(14,17,22,.95),0 0 10px rgba(255,159,67,.35);}
+        .notification-card-kicker{font-size:.58rem;color:#8c97a0;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px;}
+        .notification-card-title{margin:0 16px 6px 0;color:#fff;font-size:.94rem;font-weight:850;line-height:1.35;}
+        .notification-card-date{font-size:.62rem;color:#727d88;margin-bottom:11px;}
+        .notification-card-text{margin:0;color:#b6bec7;font-size:.79rem;line-height:1.68;}
         .notification-card-text strong{color:#e8edf2;font-weight:800;}
-        .notification-signature{margin-top:15px;color:#98a3ad;font-size:.78rem;font-weight:700;}
-        .notification-social{display:inline-block;margin-top:9px;color:#8dbbff;text-decoration:none;font-size:.76rem;font-weight:800;}
+        .notification-card-text ul{margin:10px 0 0 17px;padding:0;}
+        .notification-card-text li{margin:4px 0;}
+        .notification-signature{margin-top:13px;color:#98a3ad;font-size:.74rem;font-weight:700;}
+        .notification-quote{margin-top:13px;padding:11px 13px;border-left:2px solid rgba(255,255,255,.22);background:rgba(255,255,255,.025);border-radius:0 9px 9px 0;color:#aeb7c0;font-size:.73rem;line-height:1.6;font-style:italic;}
+        .notification-social{display:inline-block;margin-top:8px;color:#8dbbff;text-decoration:none;font-size:.73rem;font-weight:800;}
         .notification-social:hover{text-decoration:underline;color:#b9d6ff;}
         @keyframes notificationIn{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
-        @media(max-width:700px){.notification-panel{top:66px;right:10px;width:calc(100vw - 20px);}}
+        @media(max-width:700px){.notification-panel{top:66px;right:10px;width:calc(100vw - 20px);max-height:78vh;}}
+
+        .spotify-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;}
+        .spotify-panel{position:fixed;top:76px;right:24px;width:min(420px,calc(100vw - 28px));padding:18px;background:rgba(14,17,22,.98);border:1px solid rgba(255,255,255,.10);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.48);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:11000;display:none;}
+        .spotify-panel.open{display:block;animation:notificationIn .18s ease-out;}
+        .spotify-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07);}
+        .spotify-kicker{font-size:.62rem;font-weight:900;letter-spacing:1.5px;color:#98a3ad;}
+        .spotify-panel-title{margin-top:3px;color:#fff;font-size:1rem;font-weight:850;}
+        .spotify-close{width:30px;height:30px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(255,255,255,.025);color:#8d97a1;cursor:pointer;font-size:1rem;line-height:1;}
+        .spotify-panel-text{margin:15px 0;color:#b6bec7;font-size:.82rem;line-height:1.65;}
+        .spotify-primary{width:100%;padding:11px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:#e9eef2;color:#101317;font-weight:850;cursor:pointer;}
+        .spotify-primary:hover{filter:brightness(.96);}
+        .spotify-setup-note{margin-top:10px;color:#7c8791;font-size:.68rem;line-height:1.55;}
+        .spotify-now-playing{display:flex;align-items:center;gap:12px;margin-top:15px;}
+        .spotify-track-image,.spotify-track-placeholder{width:64px;height:64px;border-radius:10px;flex:0 0 64px;object-fit:cover;background:#20252b;border:1px solid rgba(255,255,255,.08);}
+        .spotify-track-placeholder{display:grid;place-items:center;color:#98a3ad;font-size:.75rem;font-weight:900;}
+        .spotify-track-label{font-size:.62rem;color:#7c8791;text-transform:uppercase;letter-spacing:1.1px;}
+        .spotify-track-name{margin-top:4px;color:#fff;font-size:.9rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:285px;}
+        .spotify-track-artist{margin-top:3px;color:#9ea8b2;font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:285px;}
+        .spotify-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px;}
+        .spotify-control-btn,.spotify-disconnect{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);color:#d8dee4;font-weight:800;cursor:pointer;}
+        .spotify-control-btn:hover,.spotify-disconnect:hover{border-color:rgba(255,255,255,.2);}
+        .spotify-disconnect{width:100%;margin-top:8px;color:#99a3ad;font-size:.72rem;}
+        .notes-backup-bar{display:flex;justify-content:center;gap:8px;margin:16px 0 2px;}
+        .notes-backup-btn{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 12px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.025);color:#7f8993;font-size:.66rem;font-weight:800;cursor:pointer;text-decoration:none;transition:.18s ease;}
+        .notes-backup-btn:hover{color:#dfe4e8;border-color:rgba(255,255,255,.18);}
+        #import-file{display:none;}
 
         /* =====================================================
            HEADER
@@ -2656,22 +2691,6 @@ body.pro-active .motivation-label {
     <div class="backup-zone">
 
         <button class="square-btn"
-                id="export-btn"
-                title="Tüm Verileri Yedekle">
-            💾
-        </button>
-
-        <label class="square-btn"
-               for="import-file"
-               title="Tam Yedek Yükle">
-            📂
-        </label>
-
-        <input type="file"
-               id="import-file"
-               accept=".json">
-
-        <button class="square-btn"
                 id="toggle-history-btn"
                 title="Çalışma Geçmişi">
             🔥
@@ -2706,6 +2725,18 @@ body.pro-active .motivation-label {
             </button>
         </div>
 
+        <button class="square-btn spotify-btn"
+                id="spotify-btn"
+                title="Spotify"
+                aria-label="Spotify">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M7.2 9.2c3.2-1 6.4-.7 9.4.8"></path>
+                <path d="M7.8 12.2c2.5-.7 5.1-.4 7.5.8"></path>
+                <path d="M8.5 15c1.9-.45 3.8-.22 5.6.65"></path>
+            </svg>
+        </button>
+
         <button class="square-btn leader-btn"
                 id="open-leader-btn"
                 title="Leader Stats">
@@ -2737,20 +2768,82 @@ body.pro-active .motivation-label {
     ===================================================== -->
     <aside class="notification-panel" id="notification-panel" aria-hidden="true">
         <div class="notification-head">
-            <div class="notification-title">Geliştirici Duyurusu</div>
-            <button class="notification-close" id="notification-close" type="button" aria-label="Duyuruyu kapat">×</button>
+            <div>
+                <span class="notification-title">Bildirimler</span>
+                <span class="notification-count">Geliştirici</span>
+            </div>
+            <button class="notification-close" id="notification-close" type="button" aria-label="Bildirimleri kapat">×</button>
         </div>
-        <div class="notification-card">
-            <h2 class="notification-card-title">Not İstasyonu’na hoş geldin!</h2>
-            <div class="notification-card-date">İlk geliştirici duyurusu</div>
-            <p class="notification-card-text">
-                Not İstasyonu’nu tercih ettiğin için teşekkür ederim.<br><br>
-                Burayı ders çalışmayı, notlarını düzenlemeyi ve hedeflerine daha düzenli ilerlemeyi kolaylaştıran sade bir alan olarak geliştirmeye çalışıyorum.<br><br>
-                Uygulamada gördüğün özellikler zamanla geliştirilecek ve yeni özellikler eklenmeye devam edecek. Eksik gördüğün veya geliştirilmesini istediğin yerler için geri bildirimlerin benim için önemli.<br><br>
-                İyi çalışmalar, bol motivasyon ve başarılar.
-            </p>
-            <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
-            <a class="notification-social" href="https://www.instagram.com/ege.kisisel/" target="_blank" rel="noopener noreferrer">Instagram: @ege.kisisel</a>
+
+        <div class="notification-list">
+            <article class="notification-card unread" data-notification-id="v2">
+                <span class="notification-unread-dot" data-notification-unread="v2"></span>
+                <div class="notification-card-kicker">Yeni sürüm</div>
+                <h2 class="notification-card-title">Not İstasyonu 2.0 yayında</h2>
+                <div class="notification-card-date">9 Eylül 2026 · Geliştirici Duyurusu</div>
+                <p class="notification-card-text">
+                    Not İstasyonu artık aktif olarak kullanılmaya başladı. 2.0 sürümünde temel yapıyı daha sağlam hâle getirmeye odaklandım. Bu sürümle birlikte eklenen ve hazırlanan bazı yenilikler:
+                    <ul>
+                        <li>Yeni geliştirici bildirim sistemi</li>
+                        <li>Spotify bölümü ve hesap bağlantısı için altyapı</li>
+                        <li>Notların altında daha sade yedekleme ve geri yükleme alanı</li>
+                        <li>Günlük girişe göre çalışan seri sistemi</li>
+                    </ul>
+                    Spotify bağlantısı şu an hazırlık aşamasında; gerçek hesap bağlantısı ve müzik kontrolleri sonraki sürümlerde kullanıma açılacak.
+                </p>
+                <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
+            </article>
+
+            <article class="notification-card" data-notification-id="v1">
+                <div class="notification-card-kicker">Hoş geldin</div>
+                <h2 class="notification-card-title">Not İstasyonu’na hoş geldin!</h2>
+                <div class="notification-card-date">İlk geliştirici duyurusu</div>
+                <p class="notification-card-text">
+                    Not İstasyonu’nu tercih ettiğin için teşekkür ederim. Burayı ders çalışmayı, notlarını düzenlemeyi ve hedeflerine daha düzenli ilerlemeyi kolaylaştıran sade bir alan olarak geliştirmeye çalışıyorum.<br><br>
+                    Uygulamada gördüğün özellikler zamanla geliştirilecek ve yeni özellikler eklenmeye devam edecek. Eksik gördüğün veya geliştirilmesini istediğin yerler için geri bildirimlerin benim için önemli.<br><br>
+                    İyi çalışmalar, bol motivasyon ve başarılar.
+                </p>
+                <div class="notification-quote">Bu proje benim için sadece yazılmış bir web sitesi değil; sabrın, öğrenmenin ve bir fikrin zamanla gerçeğe dönüşmesinin küçük bir hikâyesi.</div>
+                <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
+                <a class="notification-social" href="https://www.instagram.com/ege.kisisel/" target="_blank" rel="noopener noreferrer">Instagram: @ege.kisisel</a>
+            </article>
+        </div>
+    </aside>
+
+    <!-- =====================================================
+         SPOTIFY
+    ===================================================== -->
+    <aside class="spotify-panel" id="spotify-panel" aria-hidden="true">
+        <div class="spotify-panel-head">
+            <div>
+                <div class="spotify-kicker">SPOTIFY</div>
+                <div class="spotify-panel-title" id="spotify-panel-title">Hesabını bağla</div>
+            </div>
+            <button class="spotify-close" id="spotify-close" type="button" aria-label="Spotify panelini kapat">×</button>
+        </div>
+
+        <div id="spotify-connect-view">
+            <p class="spotify-panel-text">Spotify hesabını bağladıktan sonra Not İstasyonu üzerinden o an çalan şarkıyı görebilir ve önceki / sonraki parçaya geçebilirsin.</p>
+            <button class="spotify-primary" id="spotify-connect-btn" type="button">Spotify hesabını bağla</button>
+            <div class="spotify-setup-note" id="spotify-setup-note">Spotify bağlantısı çok yakında kullanıma açılacak.</div>
+        </div>
+
+        <div id="spotify-player-view" hidden>
+            <div class="spotify-now-playing">
+                <img id="spotify-track-image" class="spotify-track-image" alt="" hidden>
+                <div class="spotify-track-placeholder" id="spotify-track-placeholder">SP</div>
+                <div class="spotify-track-info">
+                    <div class="spotify-track-label">Şu an çalıyor</div>
+                    <div class="spotify-track-name" id="spotify-track-name">Şarkı bilgisi bekleniyor</div>
+                    <div class="spotify-track-artist" id="spotify-track-artist"></div>
+                </div>
+            </div>
+            <div class="spotify-controls">
+                <button class="spotify-control-btn" id="spotify-prev-btn" type="button">Önceki</button>
+                <button class="spotify-control-btn" id="spotify-next-btn" type="button">Sonraki</button>
+            </div>
+            <button class="spotify-disconnect" id="spotify-disconnect-btn" type="button">Spotify bağlantısını kes</button>
+            <div class="spotify-setup-note" id="spotify-player-note"></div>
         </div>
     </aside>
 
@@ -2851,6 +2944,16 @@ body.pro-active .motivation-label {
 
                 <div class="status-bar"
                      id="status-text">
+                </div>
+
+                <div class="notes-backup-bar" aria-label="Not yedekleme">
+                    <button class="notes-backup-btn" id="export-btn" type="button" title="Tüm Verileri Yedekle">
+                        Yedekle
+                    </button>
+                    <label class="notes-backup-btn" for="import-file" title="Tam Yedek Yükle">
+                        Yedeği Yükle
+                    </label>
+                    <input type="file" id="import-file" accept=".json">
                 </div>
             </section>
 
@@ -6513,6 +6616,229 @@ updateDailyMotivation();
 
 
     /* =========================================================
+       SPOTIFY
+    ========================================================= */
+
+    const SPOTIFY_CLIENT_ID = 'BURAYA_SPOTIFY_CLIENT_ID';
+    const SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
+    const SPOTIFY_SCOPE = 'user-read-currently-playing user-read-playback-state user-modify-playback-state';
+    const spotifyBtn = document.getElementById('spotify-btn');
+    const spotifyPanel = document.getElementById('spotify-panel');
+    const spotifyClose = document.getElementById('spotify-close');
+    const spotifyConnectView = document.getElementById('spotify-connect-view');
+    const spotifyPlayerView = document.getElementById('spotify-player-view');
+    const spotifyConnectBtn = document.getElementById('spotify-connect-btn');
+    const spotifySetupNote = document.getElementById('spotify-setup-note');
+    const spotifyPlayerNote = document.getElementById('spotify-player-note');
+    const spotifyTrackImage = document.getElementById('spotify-track-image');
+    const spotifyTrackPlaceholder = document.getElementById('spotify-track-placeholder');
+    const spotifyTrackName = document.getElementById('spotify-track-name');
+    const spotifyTrackArtist = document.getElementById('spotify-track-artist');
+    const spotifyPrevBtn = document.getElementById('spotify-prev-btn');
+    const spotifyNextBtn = document.getElementById('spotify-next-btn');
+    const spotifyDisconnectBtn = document.getElementById('spotify-disconnect-btn');
+
+    let spotifyAccessToken = localStorage.getItem('yks_spotify_access_token') || '';
+    let spotifyRefreshToken = localStorage.getItem('yks_spotify_refresh_token') || '';
+    let spotifyPollingTimer = null;
+
+    function spotifyPanelOpen(open) {
+        if (!spotifyPanel) return;
+        spotifyPanel.classList.toggle('open', open);
+        spotifyPanel.setAttribute('aria-hidden', String(!open));
+    }
+
+    function spotifyConfigured() {
+        return SPOTIFY_CLIENT_ID && !SPOTIFY_CLIENT_ID.startsWith('BURAYA_');
+    }
+
+    function spotifyBase64Url(bytes) {
+        let binary = '';
+        bytes.forEach(b => binary += String.fromCharCode(b));
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function randomString(length = 64) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+        const values = new Uint8Array(length);
+        crypto.getRandomValues(values);
+        return Array.from(values, v => chars[v % chars.length]).join('');
+    }
+
+    async function createSpotifyChallenge(verifier) {
+        const data = new TextEncoder().encode(verifier);
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return spotifyBase64Url(new Uint8Array(digest));
+    }
+
+    async function startSpotifyLogin() {
+        if (!spotifyConfigured()) {
+            spotifySetupNote.textContent = 'Spotify bağlantısı çok yakında kullanıma açılacak.';
+            return;
+        }
+
+        const verifier = randomString();
+        const challenge = await createSpotifyChallenge(verifier);
+        localStorage.setItem('yks_spotify_pkce_verifier', verifier);
+        localStorage.setItem('yks_spotify_oauth_state', randomString(32));
+
+        const params = new URLSearchParams({
+            client_id: SPOTIFY_CLIENT_ID,
+            response_type: 'code',
+            redirect_uri: SPOTIFY_REDIRECT_URI,
+            code_challenge_method: 'S256',
+            code_challenge: challenge,
+            state: localStorage.getItem('yks_spotify_oauth_state'),
+            scope: SPOTIFY_SCOPE
+        });
+
+        window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;
+    }
+
+    async function exchangeSpotifyCode(code, state) {
+        const savedState = localStorage.getItem('yks_spotify_oauth_state');
+        const verifier = localStorage.getItem('yks_spotify_pkce_verifier');
+        if (!savedState || state !== savedState || !verifier || !spotifyConfigured()) return false;
+
+        const body = new URLSearchParams({
+            client_id: SPOTIFY_CLIENT_ID,
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: SPOTIFY_REDIRECT_URI,
+            code_verifier: verifier
+        });
+
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body
+        });
+
+        if (!response.ok) throw new Error('Spotify token exchange başarısız.');
+        const data = await response.json();
+        spotifyAccessToken = data.access_token || '';
+        spotifyRefreshToken = data.refresh_token || spotifyRefreshToken;
+        localStorage.setItem('yks_spotify_access_token', spotifyAccessToken);
+        if (spotifyRefreshToken) localStorage.setItem('yks_spotify_refresh_token', spotifyRefreshToken);
+        localStorage.removeItem('yks_spotify_pkce_verifier');
+        localStorage.removeItem('yks_spotify_oauth_state');
+        window.history.replaceState({}, document.title, SPOTIFY_REDIRECT_URI);
+        return true;
+    }
+
+    async function spotifyApi(path, options = {}) {
+        if (!spotifyAccessToken) throw new Error('Spotify hesabı bağlı değil.');
+        const response = await fetch(`https://api.spotify.com/v1${path}`, {
+            ...options,
+            headers: {
+                ...(options.headers || {}),
+                Authorization: `Bearer ${spotifyAccessToken}`
+            }
+        });
+        if (response.status === 204) return null;
+        if (response.status === 401) {
+            throw new Error('Spotify oturumu yenilenmeli.');
+        }
+        if (!response.ok) throw new Error(`Spotify API ${response.status}`);
+        return response.json();
+    }
+
+    function showSpotifyError(message) {
+        if (spotifyPlayerNote) spotifyPlayerNote.textContent = message;
+    }
+
+    function updateSpotifyTrack(data) {
+        const item = data && data.item;
+        if (!item) {
+            spotifyTrackName.textContent = 'Şu an çalan bir içerik yok';
+            spotifyTrackArtist.textContent = '';
+            spotifyTrackImage.hidden = true;
+            spotifyTrackPlaceholder.hidden = false;
+            return;
+        }
+        spotifyTrackName.textContent = item.name || 'Bilinmeyen parça';
+        spotifyTrackArtist.textContent = Array.isArray(item.artists) ? item.artists.map(a => a.name).join(', ') : '';
+        const image = item.album?.images?.[0]?.url || '';
+        if (image) {
+            spotifyTrackImage.src = image;
+            spotifyTrackImage.hidden = false;
+            spotifyTrackPlaceholder.hidden = true;
+        } else {
+            spotifyTrackImage.hidden = true;
+            spotifyTrackPlaceholder.hidden = false;
+        }
+    }
+
+    async function refreshSpotifyNowPlaying() {
+        if (!spotifyAccessToken) return;
+        try {
+            const data = await spotifyApi('/me/player/currently-playing');
+            updateSpotifyTrack(data);
+        } catch (error) {
+            showSpotifyError(error.message || 'Spotify verisi alınamadı.');
+        }
+    }
+
+    async function spotifySkip(endpoint) {
+        try {
+            await spotifyApi(`/me/player/${endpoint}`, {method:'POST'});
+            setTimeout(refreshSpotifyNowPlaying, 450);
+        } catch (error) {
+            showSpotifyError('Parça değiştirilemedi. Spotify Premium ve aktif bir cihaz gerekebilir.');
+        }
+    }
+
+    function setSpotifyConnectedUI(connected) {
+        spotifyConnectView.hidden = connected;
+        spotifyPlayerView.hidden = !connected;
+        if (connected) {
+            spotifySetupNote.textContent = '';
+            refreshSpotifyNowPlaying();
+            clearInterval(spotifyPollingTimer);
+            spotifyPollingTimer = setInterval(refreshSpotifyNowPlaying, 8000);
+        } else {
+            clearInterval(spotifyPollingTimer);
+        }
+    }
+
+    async function initSpotify() {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const state = params.get('state');
+        if (code && state) {
+            try {
+                const ok = await exchangeSpotifyCode(code, state);
+                if (!ok) showSpotifyError('Spotify doğrulaması tamamlanamadı.');
+            } catch (error) {
+                showSpotifyError(error.message || 'Spotify bağlantısı kurulamadı.');
+            }
+        }
+        setSpotifyConnectedUI(Boolean(spotifyAccessToken));
+    }
+
+    if (spotifyBtn) spotifyBtn.addEventListener('click', () => {
+        spotifyPanelOpen(true);
+    });
+    if (spotifyClose) spotifyClose.addEventListener('click', () => spotifyPanelOpen(false));
+    if (spotifyConnectBtn) spotifyConnectBtn.addEventListener('click', startSpotifyLogin);
+    if (spotifyPrevBtn) spotifyPrevBtn.addEventListener('click', () => spotifySkip('previous'));
+    if (spotifyNextBtn) spotifyNextBtn.addEventListener('click', () => spotifySkip('next'));
+    if (spotifyDisconnectBtn) spotifyDisconnectBtn.addEventListener('click', () => {
+        spotifyAccessToken = '';
+        spotifyRefreshToken = '';
+        localStorage.removeItem('yks_spotify_access_token');
+        localStorage.removeItem('yks_spotify_refresh_token');
+        setSpotifyConnectedUI(false);
+        spotifyPanelOpen(false);
+    });
+    document.addEventListener('click', (e) => {
+        if (!spotifyPanel || !spotifyPanel.classList.contains('open')) return;
+        if (!spotifyPanel.contains(e.target) && !spotifyBtn?.contains(e.target)) spotifyPanelOpen(false);
+    });
+    initSpotify();
+
+
+    /* =========================================================
        GELİŞTİRİCİ DUYURUSU
     ========================================================= */
 
@@ -6521,14 +6847,37 @@ updateDailyMotivation();
     const notificationClose = document.getElementById('notification-close');
     const notificationDot = document.getElementById('notification-dot');
 
+    const notificationCards = Array.from(document.querySelectorAll('[data-notification-id]'));
+
+    function updateNotificationUnreadState() {
+        const unreadIds = notificationCards
+            .map(card => card.dataset.notificationId)
+            .filter(id => id && localStorage.getItem(`yks_dev_announcement_seen_${id}`) !== '1');
+
+        notificationCards.forEach(card => {
+            const id = card.dataset.notificationId;
+            const unread = unreadIds.includes(id);
+            card.classList.toggle('unread', unread);
+            const dot = card.querySelector('[data-notification-unread]');
+            if (dot) dot.style.display = unread ? '' : 'none';
+        });
+
+        if (notificationDot) {
+            notificationDot.style.display = unreadIds.length ? '' : 'none';
+        }
+    }
+
     function setNotificationOpen(open) {
         if (!notificationPanel || !notificationBtn) return;
         notificationPanel.classList.toggle('open', open);
         notificationPanel.setAttribute('aria-hidden', String(!open));
         notificationBtn.setAttribute('aria-expanded', String(open));
-        if (open && notificationDot) {
-            notificationDot.style.display = 'none';
-            localStorage.setItem('yks_dev_announcement_seen_v1', '1');
+        if (open) {
+            notificationCards.forEach(card => {
+                const id = card.dataset.notificationId;
+                if (id) localStorage.setItem(`yks_dev_announcement_seen_${id}`, '1');
+            });
+            updateNotificationUnreadState();
         }
     }
 
@@ -6550,9 +6899,7 @@ updateDailyMotivation();
         }
     });
 
-    if (localStorage.getItem('yks_dev_announcement_seen_v1') === '1' && notificationDot) {
-        notificationDot.style.display = 'none';
-    }
+    updateNotificationUnreadState();
 
 
     /* =========================================================
