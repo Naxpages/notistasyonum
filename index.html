@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>'nin Not İstasyonu</title>
+    <title>Ege'nin Not İstasyonu</title>
 
     <style>
         :root {
@@ -452,7 +452,7 @@ body.focus-local-mode .content-track {
         }
 
         .card.glow-ates {
-            border-color: var(--border-color) !important;
+            /* Ateş etiketi, notun kendi rengini korur; yalnızca hafif glow ekler. */
             animation:
                 cardAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
                 pulseAtes 4.5s infinite ease-in-out;
@@ -583,6 +583,64 @@ body.focus-local-mode .content-track {
             color:#fff;
             border-color:#4a5158;
             transform:translateY(-1px);
+        }
+
+        .note-action-btn svg {
+            width:15px;
+            height:15px;
+            stroke:currentColor;
+            stroke-width:1.8;
+            fill:none;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            pointer-events:none;
+        }
+
+        .note-action-btn.note-format-btn {
+            min-width:30px;
+            padding:0 8px;
+            font-size:.72rem;
+            letter-spacing:-.02em;
+        }
+
+        .note-action-btn.note-highlight-btn {
+            position:relative;
+        }
+
+        .note-action-btn.note-highlight-btn::after {
+            content:'';
+            position:absolute;
+            left:7px;
+            right:7px;
+            bottom:5px;
+            height:3px;
+            border-radius:3px;
+            background:#fff176;
+            opacity:.9;
+        }
+
+        .card.is-locked .editable-title,
+        .card.is-locked .editable-area {
+            cursor:not-allowed;
+            opacity:.92;
+        }
+
+        .card.is-locked .btn-delete {
+            opacity:.28;
+            cursor:not-allowed;
+            pointer-events:none;
+        }
+
+        .note-action-btn:disabled,
+        .tag-select:disabled {
+            opacity:.35;
+            cursor:not-allowed;
+            transform:none !important;
+        }
+
+        .note-action-btn.note-lock-btn {
+            min-width:30px;
+            padding:0 8px;
         }
 
         .note-save-state {
@@ -2776,7 +2834,18 @@ body.pro-active .motivation-label {
         </div>
 
         <div class="notification-list">
-            <article class="notification-card unread" data-notification-id="v2">
+            <article class="notification-card unread" data-notification-id="v2_1">
+                <span class="notification-unread-dot" data-notification-unread="v2_1"></span>
+                <div class="notification-card-kicker">Yeni sürüm</div>
+                <h2 class="notification-card-title">2.1 sürümü yayında</h2>
+                <div class="notification-card-date">10 Eylül 2026 · Geliştirici Duyurusu</div>
+                <p class="notification-card-text">
+                    Notlar tarafında küçük ama önemli dokunuşlar geldi. Etiketlerde ateş seçildiğinde notun kendi rengi korunuyor ve hafif bir glow ekleniyor. Kopyalama ve metin biçimlendirme araçları geri geldi; büyük yazı, fosforlama ve küçük yazı seçenekleri artık notların altında. Ayrıca notları yanlışlıkla değiştirmeyi veya silmeyi önlemek için kilitleme özelliği eklendi.
+                </p>
+                <div class="notification-signature">— Geliştirici</div>
+            </article>
+
+            <article class="notification-card" data-notification-id="v2">
                 <span class="notification-unread-dot" data-notification-unread="v2"></span>
                 <div class="notification-card-kicker">Yeni sürüm</div>
                 <h2 class="notification-card-title">Not İstasyonu 2.0 yayında</h2>
@@ -3868,7 +3937,8 @@ const dragHandle = document.getElementById('timer-drag-handle');
                 title: 'Başlık',
                 content: '<ul><li>Notlar...</li></ul>',
                 color: '#1a73e8',
-                tag: 'unlem'
+                tag: 'unlem',
+                locked: false
             },
 
             {
@@ -3876,7 +3946,8 @@ const dragHandle = document.getElementById('timer-drag-handle');
                 title: 'Başlık',
                 content: '<ul><li>Notlar...</li></ul>',
                 color: '#e53935',
-                tag: 'ates'
+                tag: 'ates',
+                locked: false
             },
 
             {
@@ -3884,7 +3955,8 @@ const dragHandle = document.getElementById('timer-drag-handle');
                 title: 'Başlık',
                 content: '<ul><li>Notlar...</li></ul>',
                 color: '#2e7d32',
-                tag: 'yildiz'
+                tag: 'yildiz',
+                locked: false
             }
 
         ];
@@ -3942,7 +4014,7 @@ updateDailyMotivation();
         template.innerHTML = String(rawHtml || '');
 
         const allowed = new Set([
-            'UL','OL','LI','P','DIV','BR','STRONG','B','EM','I','U','S','SPAN','IMG'
+            'UL','OL','LI','P','DIV','BR','STRONG','B','EM','I','U','S','SPAN','BIG','SMALL','MARK','FONT','IMG'
         ]);
 
         template.content.querySelectorAll('*').forEach(el => {
@@ -3958,6 +4030,15 @@ updateDailyMotivation();
                 if (el.tagName === 'IMG' && name === 'src') {
                     const safeImage = /^(data:image\/(png|jpeg|jpg|gif|webp);base64,|https?:\/\/)/i.test(value);
                     if (!safeImage) el.removeAttribute('src');
+                } else if (el.tagName === 'FONT' && name === 'size') {
+                    if (!/^[1-7]$/.test(value)) el.removeAttribute(attr.name);
+                } else if (el.tagName === 'SPAN' && name === 'style') {
+                    const m = value.match(/(?:^|;)\s*background-color\s*:\s*([^;]+)\s*(?:;|$)/i);
+                    if (m && /^(?:rgb\([^)]*\)|rgba\([^)]*\)|#[0-9a-f]{3,8}|(?:yellow|lemonchiffon))$/i.test(m[1].trim())) {
+                        el.setAttribute('style', 'background-color:#fff176;');
+                    } else {
+                        el.removeAttribute('style');
+                    }
                 } else if (name !== 'src' && name !== 'alt' && name !== 'title') {
                     el.removeAttribute(attr.name);
                 }
@@ -4064,6 +4145,9 @@ updateDailyMotivation();
             const card = document.createElement('div');
             card.className = 'card';
 
+            const isLocked = note.locked === true;
+            if (isLocked) card.classList.add('is-locked');
+
             const activeColor = note.color || '#dee2e6';
             card.style.borderTopColor = activeColor;
 
@@ -4078,14 +4162,14 @@ updateDailyMotivation();
 
                 <div
                     class="editable-title"
-                    contenteditable="true"
+                    contenteditable="${isLocked ? 'false' : 'true'}"
                     spellcheck="true"
                     data-placeholder="Başlık"
                     style="color:${activeColor};">${safeTitle}</div>
 
                 <div
                     class="editable-area"
-                    contenteditable="true"
+                    contenteditable="${isLocked ? 'false' : 'true'}"
                     spellcheck="true"
                     data-placeholder="Notlarını buraya yaz..."
                 >${safeContent}</div>
@@ -4093,18 +4177,55 @@ updateDailyMotivation();
                 <div class="card-footer">
                     <select class="tag-select"
                         style="color:${activeColor};border-color:${activeColor};"
-                        aria-label="Not önceliği">
+                        aria-label="Not önceliği"
+                        ${isLocked ? 'disabled' : ''}>
                         <option value="unlem" ${note.tag === 'unlem' ? 'selected' : ''}>⚠️</option>
                         <option value="ates" ${note.tag === 'ates' ? 'selected' : ''}>🔥</option>
                         <option value="yildiz" ${note.tag === 'yildiz' ? 'selected' : ''}>⭐</option>
                     </select>
 
                     <div class="note-actions">
+                        <button class="note-action-btn note-copy-btn" type="button" title="Notu kopyala" aria-label="Notu kopyala">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <rect x="8" y="8" width="11" height="12" rx="2"></rect>
+                                <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"></path>
+                            </svg>
+                        </button>
+                        <button class="note-action-btn note-format-btn" type="button" data-note-format="large" title="Büyük yazı" aria-label="Büyük yazı">A+</button>
+                        <button class="note-action-btn note-format-btn note-highlight-btn" type="button" data-note-format="highlight" title="Fosforlama" aria-label="Fosforlama">A</button>
+                        <button class="note-action-btn note-format-btn" type="button" data-note-format="small" title="Küçük yazı" aria-label="Küçük yazı">A−</button>
+                        <button class="note-action-btn note-lock-btn" type="button" title="Notu kilitle" aria-label="Notu kilitle">
+                            <svg viewBox="0 0 24 24" class="note-lock-icon" aria-hidden="true">
+                                <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                            </svg>
+                        </button>
                         <span class="note-save-state">Kaydedildi</span>
-                        <button class="note-action-btn note-copy-btn" type="button" title="Notu kopyala">Kopyala</button>
                     </div>
                 </div>
             `;
+
+            const deleteBtn = card.querySelector('.btn-delete');
+            const copyBtn = card.querySelector('.note-copy-btn');
+            const formatBtns = [...card.querySelectorAll('[data-note-format]')];
+            const lockBtn = card.querySelector('.note-lock-btn');
+            const lockIcon = card.querySelector('.note-lock-icon');
+            const setLockUi = locked => {
+                card.classList.toggle('is-locked', locked);
+                titleEl?.setAttribute('contenteditable', locked ? 'false' : 'true');
+                area?.setAttribute('contenteditable', locked ? 'false' : 'true');
+                card.querySelector('.tag-select').disabled = locked;
+                deleteBtn.disabled = locked;
+                copyBtn.disabled = false;
+                formatBtns.forEach(btn => btn.disabled = locked);
+                lockBtn.title = locked ? 'Notun kilidini aç' : 'Notu kilitle';
+                lockBtn.setAttribute('aria-label', locked ? 'Notun kilidini aç' : 'Notu kilitle');
+                if (locked) {
+                    lockIcon.innerHTML = '<rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>';
+                } else {
+                    lockIcon.innerHTML = '<rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 4-4c2.2 0 4 1.8 4 4"></path>';
+                }
+            };
 
             const saveNoteField = (field, value) => {
                 const index = notesData.findIndex(n => n.id === note.id);
@@ -4226,11 +4347,39 @@ updateDailyMotivation();
 
             card.querySelector('.note-copy-btn').addEventListener('click', () => copyNote(card, note));
 
+            formatBtns.forEach(btn => {
+                btn.addEventListener('mousedown', e => {
+                    e.preventDefault();
+                    if (note.locked === true) return;
+
+                    area.focus();
+                    const mode = btn.dataset.noteFormat;
+                    if (mode === 'large') {
+                        document.execCommand('fontSize', false, '5');
+                    } else if (mode === 'small') {
+                        document.execCommand('fontSize', false, '2');
+                    } else if (mode === 'highlight') {
+                        document.execCommand('hiliteColor', false, '#fff176');
+                    }
+                    saveArea();
+                });
+            });
+
+            lockBtn.addEventListener('click', () => {
+                const index = notesData.findIndex(n => n.id === note.id);
+                if (index === -1) return;
+                notesData[index].locked = !note.locked;
+                localStorage.setItem('yks_box_data_v11', JSON.stringify(notesData));
+                renderNotes(searchBar.value);
+            });
+
             card.querySelector('.tag-select').addEventListener('change', e => {
                 saveNoteField('tag', e.target.value);
                 renderNotes(searchBar.value);
             });
 
+            // Kilit durumu ilk çizimde uygulanır.
+            setLockUi(isLocked);
             notesGrid.appendChild(card);
         });
     }
@@ -4294,7 +4443,9 @@ updateDailyMotivation();
 
                 color: nextColor,
 
-                tag: 'yildiz'
+                tag: 'yildiz',
+
+                locked: false
 
             });
 
@@ -6972,7 +7123,3 @@ updateDailyMotivation();
 
 </body>
 </html>
-<script>
-/* fallback initial note render */
-try { if (typeof renderNotes === 'function' && typeof searchBar !== 'undefined') renderNotes(searchBar.value); } catch(e) {}
-</script>
