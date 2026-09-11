@@ -692,6 +692,21 @@ body.focus-local-mode .content-track {
             margin-top: 20px;
         }
 
+        .streak-disabled { opacity:.42; cursor:default !important; filter:grayscale(.35); }
+        .streak-disabled:hover { transform:none !important; box-shadow:none !important; }
+        .history-panel { display:none !important; }
+        .timer-extra { align-items:center; }
+        .timer-fullscreen-btn, .timer-external-btn {
+            min-width:42px; height:38px; padding:0 11px; border-radius:10px;
+            border:1px solid rgba(255,255,255,.09); background:transparent; color:#717d87;
+            cursor:pointer; font-size:.72rem; font-weight:800;
+            transition:color .18s ease, background .18s ease, border-color .18s ease;
+        }
+        .timer-fullscreen-btn:hover, .timer-external-btn:hover {
+            color:#dbe8f4; background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.15);
+        }
+        .timer-external-btn { min-width:128px; }
+
         /* =====================================================
            FOCUS KRONOMETRE — SADE / FLocus ESİNTİLİ
         ===================================================== */
@@ -836,216 +851,6 @@ body.focus-local-mode .content-track {
             margin-top: 12px;
         }
 
-        .timer-fullscreen-btn {
-            padding: 7px 12px;
-            border-radius: 9px;
-            border: 1px solid rgba(255,255,255,.07);
-            background: transparent;
-            color: #717d87;
-            cursor: pointer;
-            font-size: .66rem;
-            font-weight: 800;
-            transition: color .18s ease, background .18s ease;
-        }
-
-        .timer-fullscreen-btn:hover {
-            color: #dbe8f4;
-            background: rgba(255,255,255,.04);
-        }
-
-        /* =====================================================
-           KRONOMETRE TEMALARI — SADE + LAVA LAMP
-           Tema seçimi yalnızca tam ekranda görünür.
-        ===================================================== */
-        .timer-modal {
-            --timer-fs-bg: var(--bg-color);
-        }
-
-        .timer-modal.timer-theme-lava:fullscreen,
-        .timer-modal.timer-theme-lava:-webkit-full-screen,
-        .timer-modal.timer-theme-lava.ios-fullscreen {
-            background: var(--timer-fs-bg);
-            overflow: hidden;
-        }
-
-        .timer-modal.timer-theme-lava:fullscreen::before,
-        .timer-modal.timer-theme-lava:-webkit-full-screen::before,
-        .timer-modal.timer-theme-lava.ios-fullscreen::before,
-        .timer-modal.timer-theme-lava:fullscreen::after,
-        .timer-modal.timer-theme-lava:-webkit-full-screen::after,
-        .timer-modal.timer-theme-lava.ios-fullscreen::after {
-            content: '';
-            position: absolute;
-            inset: -18%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(42px) saturate(1.18);
-        }
-
-        .timer-modal.timer-theme-lava:fullscreen::before,
-        .timer-modal.timer-theme-lava:-webkit-full-screen::before,
-        .timer-modal.timer-theme-lava.ios-fullscreen::before {
-            background:
-                radial-gradient(ellipse at 18% 78%, rgba(255,74,116,.70), transparent 23%),
-                radial-gradient(ellipse at 72% 22%, rgba(255,165,70,.62), transparent 22%),
-                radial-gradient(ellipse at 52% 82%, rgba(144,54,255,.72), transparent 25%),
-                radial-gradient(ellipse at 86% 72%, rgba(255,97,181,.34), transparent 19%);
-            animation: timerLavaOne 15s ease-in-out infinite alternate;
-        }
-
-        .timer-modal.timer-theme-lava:fullscreen::after,
-        .timer-modal.timer-theme-lava:-webkit-full-screen::after,
-        .timer-modal.timer-theme-lava.ios-fullscreen::after {
-            background:
-                radial-gradient(ellipse at 35% 25%, rgba(255,210,100,.28), transparent 17%),
-                radial-gradient(ellipse at 82% 58%, rgba(113,61,255,.36), transparent 20%),
-                radial-gradient(ellipse at 20% 52%, rgba(255,68,128,.34), transparent 18%);
-            animation: timerLavaTwo 18s ease-in-out infinite alternate;
-            mix-blend-mode: screen;
-        }
-
-        @keyframes timerLavaOne {
-            0%   { transform: translate3d(-5%, 3%, 0) scale(1); }
-            35%  { transform: translate3d(4%, -3%, 0) scale(1.05); }
-            70%  { transform: translate3d(1%, 5%, 0) scale(1.02); }
-            100% { transform: translate3d(-4%, -1%, 0) scale(1.08); }
-        }
-
-        @keyframes timerLavaTwo {
-            0%   { transform: translate3d(4%, -2%, 0) scale(.98) rotate(-1deg); }
-            50%  { transform: translate3d(-3%, 4%, 0) scale(1.05) rotate(1deg); }
-            100% { transform: translate3d(5%, 0, 0) scale(1.02) rotate(-.5deg); }
-        }
-
-
-        .timer-modal.timer-theme-aurora:fullscreen,
-        .timer-modal.timer-theme-aurora:-webkit-full-screen,
-        .timer-modal.timer-theme-aurora.ios-fullscreen {
-            background:
-                radial-gradient(ellipse at 50% 110%, rgba(39,216,173,.16), transparent 38%),
-                radial-gradient(ellipse at 0% 20%, rgba(61,127,255,.12), transparent 34%),
-                radial-gradient(ellipse at 100% 30%, rgba(125,72,255,.14), transparent 38%),
-                #071017;
-            overflow: hidden;
-        }
-
-        .timer-modal.timer-theme-aurora:fullscreen::before,
-        .timer-modal.timer-theme-aurora:-webkit-full-screen::before,
-        .timer-modal.timer-theme-aurora.ios-fullscreen::before {
-            content:'';
-            position:absolute;
-            inset:-20%;
-            pointer-events:none;
-            z-index:0;
-            background:
-                radial-gradient(ellipse at 20% 58%, rgba(30,255,182,.34), transparent 25%),
-                radial-gradient(ellipse at 58% 28%, rgba(76,142,255,.27), transparent 27%),
-                radial-gradient(ellipse at 84% 62%, rgba(173,67,255,.30), transparent 23%),
-                radial-gradient(ellipse at 46% 88%, rgba(19,222,178,.18), transparent 24%);
-            filter: blur(46px) saturate(1.12);
-            animation: timerAuroraDrift 17s ease-in-out infinite alternate;
-        }
-
-        .timer-modal.timer-theme-aurora:fullscreen::after,
-        .timer-modal.timer-theme-aurora:-webkit-full-screen::after,
-        .timer-modal.timer-theme-aurora.ios-fullscreen::after {
-            content:'';
-            position:absolute;
-            inset:-14%;
-            pointer-events:none;
-            z-index:0;
-            background:
-                conic-gradient(
-                    from 120deg at 52% 52%,
-                    transparent 0deg,
-                    rgba(37,230,182,.13) 46deg,
-                    transparent 96deg,
-                    rgba(95,108,255,.12) 152deg,
-                    transparent 214deg,
-                    rgba(183,79,255,.11) 278deg,
-                    transparent 330deg
-                );
-            filter: blur(20px);
-            mix-blend-mode: screen;
-            animation: timerAuroraRotate 22s linear infinite;
-        }
-
-        @keyframes timerAuroraDrift {
-            0%   { transform: translate3d(-5%, 4%, 0) scale(1); }
-            32%  { transform: translate3d(4%, -3%, 0) scale(1.05); }
-            65%  { transform: translate3d(1%, 5%, 0) scale(1.02); }
-            100% { transform: translate3d(-3%, -1%, 0) scale(1.08); }
-        }
-
-        @keyframes timerAuroraRotate {
-            from { transform: rotate(0deg) scale(1); }
-            to   { transform: rotate(360deg) scale(1.05); }
-        }
-
-        .timer-modal.timer-theme-lava:fullscreen > *,
-        .timer-modal.timer-theme-lava:-webkit-full-screen > *,
-        .timer-modal.timer-theme-lava.ios-fullscreen > *,
-        .timer-modal.timer-theme-aurora:fullscreen > *,
-        .timer-modal.timer-theme-aurora:-webkit-full-screen > *,
-        .timer-modal.timer-theme-aurora.ios-fullscreen > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .timer-theme-control {
-            display: none;
-            position: absolute;
-            top: 22px;
-            right: 22px;
-            z-index: 20;
-            align-items: center;
-            gap: 7px;
-            padding: 0;
-            border: 0;
-            border-radius: 0;
-            background: transparent;
-        }
-
-        .timer-modal:fullscreen .timer-theme-control,
-        .timer-modal:-webkit-full-screen .timer-theme-control,
-        .timer-modal.ios-fullscreen .timer-theme-control {
-            display: flex;
-        }
-
-        .timer-modal:not(:fullscreen) .timer-theme-control {
-            display: none;
-        }
-
-        .timer-theme-btn {
-            border: 1px solid rgba(255,255,255,.09);
-            background: rgba(8,10,14,.34);
-            color: #aab2bb;
-            border-radius: 9px;
-            padding: 7px 10px;
-            font-size: .64rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: .18s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .timer-theme-btn:hover {
-            color: #fff;
-            background: rgba(255,255,255,.07);
-        }
-
-        .timer-theme-btn.active {
-            color: #fff;
-            border-color: rgba(255,255,255,.20);
-            background: rgba(255,255,255,.09);
-        }
-
-        .timer-theme-btn[data-theme="lava"].active {
-            border-color: rgba(255,122,177,.36);
-            box-shadow: 0 0 16px rgba(255,93,165,.12);
-        }
-
         @media (max-width: 700px) {
             .timer-modal {
                 width: 100%;
@@ -1085,12 +890,6 @@ body.focus-local-mode .content-track {
             overflow: hidden !important;
             padding-bottom: max(28px, env(safe-area-inset-bottom)) !important;
             padding-top: max(18px, env(safe-area-inset-top)) !important;
-        }
-
-        .timer-modal.ios-fullscreen .timer-theme-control {
-            display: flex !important;
-            top: max(14px, env(safe-area-inset-top)) !important;
-            right: 14px !important;
         }
 
         .timer-modal.ios-fullscreen .timer-display {
@@ -2748,9 +2547,11 @@ body.pro-active .motivation-label {
 
     <div class="backup-zone">
 
-        <button class="square-btn"
+        <button class="square-btn streak-disabled"
                 id="toggle-history-btn"
-                title="Çalışma Geçmişi">
+                title="Seri sistemi şimdilik pasif"
+                aria-disabled="true"
+                type="button">
             🔥
             <span class="streak-count" id="streak-disp">0</span>
         </button>
@@ -3055,13 +2856,8 @@ body.pro-active .motivation-label {
         </div>
 
         <div class="timer-extra">
-            <button class="timer-fullscreen-btn" id="timer-fullscreen-btn" type="button">⛶ Tam ekran</button>
-        </div>
-
-        <div class="timer-theme-control" id="timer-theme-control" aria-label="Kronometre temaları">
-            <button class="timer-theme-btn active" type="button" data-theme="plain" aria-label="Sade tema">Default</button>
-            <button class="timer-theme-btn" type="button" data-theme="lava" aria-label="Lava Lamp tema">Lava Lamp</button>
-            <button class="timer-theme-btn" type="button" data-theme="aurora" aria-label="Aurora tema">Aurora</button>
+            <button class="timer-fullscreen-btn" id="timer-fullscreen-btn" type="button" title="Focus'u tarayıcıda tam ekran aç" aria-label="Tam ekran">⛶</button>
+            <button class="timer-external-btn" id="timer-external-btn" type="button" title="Ayrı kronometreyi aç">Ayrı Kronometre</button>
         </div>
 
     </div>
@@ -3470,30 +3266,8 @@ body.pro-active .motivation-label {
     const searchBar = document.getElementById('search-bar');
 const timerModal = document.getElementById('timer-modal');
 const dragHandle = document.getElementById('timer-drag-handle');
-    const timerFullscreenBtn = document.getElementById('timer-fullscreen-btn');
-    const timerThemeButtons = document.querySelectorAll('.timer-theme-btn');
-    let timerTheme = localStorage.getItem('yks_timer_fullscreen_theme') || 'plain';
-
-    function applyTimerTheme(theme) {
-        const safeTheme = ['plain','lava','aurora'].includes(theme) ? theme : 'plain';
-        timerTheme = safeTheme;
-        timerModal.classList.toggle('timer-theme-lava', safeTheme === 'lava');
-        timerModal.classList.toggle('timer-theme-aurora', safeTheme === 'aurora');
-
-        timerThemeButtons.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.theme === safeTheme);
-        });
-
-        localStorage.setItem('yks_timer_fullscreen_theme', safeTheme);
-    }
-
-    timerThemeButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            applyTimerTheme(btn.dataset.theme);
-        });
-    });
-
-    applyTimerTheme(timerTheme);
+const timerFullscreenBtn = document.getElementById('timer-fullscreen-btn');
+const timerExternalBtn = document.getElementById('timer-external-btn');
 
     const historyPanel = document.getElementById('history-panel');
     const toggleHistoryBtn = document.getElementById('toggle-history-btn');
@@ -3899,6 +3673,14 @@ const dragHandle = document.getElementById('timer-drag-handle');
 
     let lastWorkDate =
         localStorage.getItem('yks_last_work_date') || '';
+
+    /* Focus çalışma geçmişi ve seri sistemi şimdilik pasif. */
+    localStorage.removeItem('yks_work_history');
+    localStorage.removeItem('yks_streak_count');
+    localStorage.removeItem('yks_last_work_date');
+    workHistory = {};
+    streakCount = 0;
+    lastWorkDate = '';
 
 
     let exams =
@@ -4541,13 +4323,13 @@ updateDailyMotivation();
                 notesData,
 
             workHistory:
-                workHistory,
+                {},
 
             streakCount:
-                streakCount,
+                0,
 
             lastWorkDate:
-                lastWorkDate,
+                '', 
 
             mainTitle:
                 userName ? `${userName}'nın İstasyonu` : 'İstasyon',
@@ -4722,18 +4504,9 @@ updateDailyMotivation();
                             backup.notes;
 
 
-                        workHistory =
-                            backup.workHistory || {};
-
-
-                        streakCount =
-                            Number(
-                                backup.streakCount
-                            ) || 0;
-
-
-                        lastWorkDate =
-                            backup.lastWorkDate || '';
+                        workHistory = {};
+                        streakCount = 0;
+                        lastWorkDate = '';
 
 
                         exams =
@@ -4792,24 +4565,9 @@ updateDailyMotivation();
                         );
 
 
-                        localStorage.setItem(
-                            'yks_work_history',
-                            JSON.stringify(
-                                workHistory
-                            )
-                        );
-
-
-                        localStorage.setItem(
-                            'yks_streak_count',
-                            streakCount
-                        );
-
-
-                        localStorage.setItem(
-                            'yks_last_work_date',
-                            lastWorkDate
-                        );
+                        localStorage.removeItem('yks_work_history');
+                        localStorage.removeItem('yks_streak_count');
+                        localStorage.removeItem('yks_last_work_date');
 
 
                         localStorage.setItem(
@@ -4831,7 +4589,6 @@ updateDailyMotivation();
                         );
 
 
-                        renderHistoryList();
 
                         updateStreakDisplay();
 
@@ -5002,13 +4759,7 @@ updateDailyMotivation();
         saveTimerState();
 
 
-        if (totalSeconds > 0) {
-            saveTimeLog(
-                totalSeconds
-            );
-        }
-
-        /* Durdur sadece duraklatır; süreyi sıfırlamak ayrı bir işlemdir. */
+        /* Durdur sadece duraklatır; çalışma geçmişi artık tutulmaz. */
         saveTimerState();
 
     }
@@ -5095,88 +4846,11 @@ updateDailyMotivation();
     notesViewBtn.addEventListener('click', () => setFocusMode(false));
 
     /* =========================================================
-       ÇALIŞMA KAYDI
+       ÇALIŞMA KAYDI — ŞİMDİLİK PASİF
     ========================================================= */
 
-    function saveTimeLog(seconds) {
-
-        if (seconds < 5) return;
-
-        const today =
-            new Date()
-                .toLocaleDateString(
-                    'tr-TR'
-                );
-
-        workHistory[today] =
-            (workHistory[today] || 0)
-            + seconds;
-
-        localStorage.setItem(
-            'yks_work_history',
-            JSON.stringify(
-                workHistory
-            )
-        );
-
-        /* Streak artık çalışma süresinden etkilenmez. */
-        updateStreakDisplay();
-        renderHistoryList();
-
-    }
-
-    /* =========================================================
-       STREAK
-    ========================================================= */
-
-    function updateStreakDisplay() {
-
-        const today =
-            new Date()
-                .toLocaleDateString(
-                    'tr-TR'
-                );
-
-        const yesterday =
-            new Date();
-
-        yesterday.setDate(
-            yesterday.getDate() - 1
-        );
-
-        const yesterdayStr =
-            yesterday.toLocaleDateString(
-                'tr-TR'
-            );
-
-        /*
-         * Seri artık kronometreden bağımsızdır.
-         * Siteye her yeni takvim gününde ilk girişte 1 kez artar.
-         */
-        if (lastWorkDate !== today) {
-            if (lastWorkDate === yesterdayStr) {
-                streakCount++;
-            } else {
-                streakCount = 1;
-            }
-
-            lastWorkDate = today;
-
-            localStorage.setItem(
-                'yks_streak_count',
-                streakCount
-            );
-
-            localStorage.setItem(
-                'yks_last_work_date',
-                lastWorkDate
-            );
-        }
-
-        streakDisp.innerText =
-            streakCount;
-
-    }
+    function saveTimeLog() { return; }
+    function updateStreakDisplay() { if (streakDisp) streakDisp.innerText = '0'; }
 
     /* =========================================================
        GEÇMİŞ LİSTESİ
@@ -5275,21 +4949,7 @@ updateDailyMotivation();
     }
 
 
-    toggleHistoryBtn.addEventListener(
-        'click',
-        () => {
-
-            historyPanel.style.display =
-                historyPanel.style.display ===
-                    'block'
-                    ? 'none'
-                    : 'block';
-
-
-            renderHistoryList();
-
-        }
-    );
+    toggleHistoryBtn.addEventListener('click', (e) => { e.preventDefault(); });
 
 
     /* =========================================================
@@ -5384,21 +5044,18 @@ updateDailyMotivation();
         }
     }
 
-    timerFullscreenBtn.addEventListener('click', toggleTimerFullscreen);
-    document.addEventListener('fullscreenchange', () => {
-        const isFullscreen = document.fullscreenElement === timerModal;
-        const iosFullscreen = timerModal.classList.contains('ios-fullscreen');
+    timerFullscreenBtn.addEventListener('click', async () => {
+        try {
+            if (!document.fullscreenElement) {
+                await timerModal.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        } catch (e) {}
+    });
 
-        if (!isFullscreen && !iosFullscreen) {
-            document.body.classList.remove('ios-timer-open');
-        }
-
-        timerFullscreenBtn.textContent =
-            (isFullscreen || iosFullscreen)
-                ? '⛶ Tam ekrandan çık'
-                : '⛶ Tam ekran';
-
-        applyTimerTheme(timerTheme);
+    timerExternalBtn.addEventListener('click', () => {
+        window.location.href = 'derssel-seyler-timer.html';
     });
 
 
@@ -6326,8 +5983,6 @@ updateDailyMotivation();
         }
 
         const x = q.toLocaleLowerCase('tr-TR');
-        const totalSeconds = Object.values(workHistory || {}).reduce((a,b)=>a+Number(b||0),0);
-        const hours = Math.floor(totalSeconds/3600);
         const examCount = Array.isArray(exams) ? exams.length : 0;
         const noteCount = Array.isArray(notesData) ? notesData.length : 0;
         const streak = Number(streakCount)||0;
@@ -6335,7 +5990,7 @@ updateDailyMotivation();
         if (x.includes('bugün') || x.includes('ne çalış') || x.includes('program')) return `${userName || 'Dostum'}, bugünkü rotayı şöyle kurardım: önce en zorlandığın derse 50 dakika odaklan, 10 dakika ara ver; ardından yanlış/eksik konulara 40 dakika ayır ve son 20 dakikayı soru çözümüne bırak. İstersen bana hedefini söyle, rotayı daha da özelleştirebilirim.`;
         if (x.includes('deneme') || x.includes('net')) return `İstasyon kayıtlarında ${examCount} deneme görüyorum. Sonuçlarını düzenli girersen trendlerini birlikte takip edebiliriz. Özellikle neti düşen dersi belirleyip yanlışlarını konu bazında ayırmanı öneririm.`;
         if (x.includes('not')) return `Şu anda istasyonunda ${noteCount} not kartı bulunuyor. Önemli kartlarını ⚠️ ile, odaklanmak istediğin kartları 🔥 ile işaretleyebilirsin.`;
-        if (x.includes('kaç saat') || x.includes('çalıştım') || x.includes('çalışma')) return `Çalışma geçmişinde toplam yaklaşık ${hours} saat kayıtlı. Ayrıca ${streak} günlük mevcut serin var. Küçük ama istikrarlı artışlar uzun vadede çok daha değerli.`;
+        if (x.includes('kaç saat') || x.includes('çalıştım') || x.includes('çalışma')) return `Focus bölümü artık çalışma süresi geçmişi tutmuyor. Kronometreyi anlık odaklanma için kullanabilirsin.`;
         if (x.includes('moral') || x.includes('yapamıyorum') || x.includes('yoruldum')) return `Bir adım geri çekil. Bugün mükemmel olmak zorunda değilsin; sadece bir sonraki 25 dakikayı kazan. İstasyon burada, rotayı birlikte toparlarız.`;
         return `Seni anladım. Ben İstasyon AI'yım. Şimdilik sitendeki not, çalışma ve deneme verilerini okuyarak yardımcı oluyorum. Bana örneğin “Bugün ne çalışmalıyım?”, “Kaç saat çalıştım?” veya “Denemelerimi yorumla” diye sorabilirsin.`;
     }
