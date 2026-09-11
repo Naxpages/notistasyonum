@@ -3294,6 +3294,7 @@ const timerModal = document.getElementById('timer-modal');
 const dragHandle = document.getElementById('timer-drag-handle');
     const timerFullscreenBtn = document.getElementById('timer-fullscreen-btn');
     const timerExternalBtn = document.getElementById('timer-external-btn');
+    const streakDisp = document.getElementById('streak-disp');
 
     const examOverlay =
         document.getElementById('exam-overlay');
@@ -6693,6 +6694,7 @@ updateDailyMotivation();
     refreshNotesOnStartup();
     requestAnimationFrame(refreshNotesOnStartup);
     window.addEventListener('load', refreshNotesOnStartup, { once: true });
+    window.addEventListener('DOMContentLoaded', refreshNotesOnStartup, { once: true });
     setTimeout(refreshNotesOnStartup, 120);
 
     updateTimerDisplay();
