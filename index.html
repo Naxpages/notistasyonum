@@ -77,6 +77,15 @@
             transform: translateY(-2px);
         }
 
+        .square-btn#toggle-history-btn {
+            cursor: default;
+        }
+
+        .square-btn#toggle-history-btn:hover {
+            transform: none;
+            border-color: var(--border-color);
+        }
+
         .streak-count {
             position: absolute;
             bottom: -3px;
@@ -857,8 +866,21 @@ body.focus-local-mode .content-track {
         }
 
         .timer-external-btn {
-            min-width: 128px;
-            padding: 0 12px;
+            width: 38px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-external-btn svg {
+            width: 17px;
+            height: 17px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .timer-fullscreen-btn:hover,
@@ -2545,11 +2567,9 @@ body.pro-active .motivation-label {
 
     <div class="backup-zone">
 
-        <button class="square-btn streak-disabled"
+        <button class="square-btn"
                 id="toggle-history-btn"
-                title="Seri (şimdilik pasif)"
-                aria-disabled="true"
-                disabled
+                title="Günlük seri"
                 type="button">
             🔥
             <span class="streak-count" id="streak-disp">0</span>
@@ -2628,7 +2648,7 @@ body.pro-active .motivation-label {
                 <h2 class="notification-card-title">2.2 sürümü yayında</h2>
                 <div class="notification-card-date">11 Eylül 2026 · Geliştirici Duyurusu</div>
                 <p class="notification-card-text">
-                    Focus bölümü sadeleştirildi. Gün ve toplam çalışma süresi geçmişi artık tutulmuyor; günlük seri sistemi korunuyor. Tam ekran seçeneği sade bir ikon butonuna dönüştürüldü ve Focus'un yanına ayrı kronometreye geçiş eklendi. Ayrı kronometrede Lap artık kayıt tutmuyor, yalnızca Current süresini sıfırlıyor.
+                    Kronometre yeniden tasarlandı. Streak sistemi yeniden yapılandırıldı.
                 </p>
                 <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
             </article>
@@ -2855,7 +2875,13 @@ body.pro-active .motivation-label {
 
         <div class="timer-extra">
             <button class="timer-fullscreen-btn" id="timer-fullscreen-btn" type="button" title="Tam ekran" aria-label="Tam ekran">⛶</button>
-            <button class="timer-external-btn" id="timer-external-btn" type="button" title="Ayrı kronometreyi aç">Ayrı Kronometre</button>
+            <button class="timer-external-btn" id="timer-external-btn" type="button" title="Ayrı kronometre" aria-label="Ayrı kronometre">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="13" r="7.5"></circle>
+                    <path d="M12 9v4l2.5 1.5"></path>
+                    <path d="M9.5 3h5M12 3v2"></path>
+                </svg>
+            </button>
         </div>
 
 
@@ -6671,6 +6697,20 @@ updateDailyMotivation();
     updateStreakDisplay();
 
     renderNotes();
+
+    /* İlk açılışta notların boş görünmemesi için güvenli ikinci çizim. */
+    requestAnimationFrame(() => {
+        if (notesGrid && notesData.length && !notesGrid.children.length) {
+            renderNotes(searchBar.value);
+        }
+    });
+
+    /* Sayfa tamamen hazır olduğunda bir kez daha kontrol et. */
+    window.addEventListener('DOMContentLoaded', () => {
+        if (notesGrid && notesData.length && !notesGrid.children.length) {
+            renderNotes(searchBar.value);
+        }
+    }, { once: true });
 
     updateTimerDisplay();
 
