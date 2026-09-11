@@ -3715,35 +3715,11 @@ const dragHandle = document.getElementById('timer-drag-handle');
     ) {
 
         notesData = [
-
-            {
-                id: 1,
-                title: 'Başlık',
-                content: '<ul><li>Notlar...</li></ul>',
-                color: '#1a73e8',
-                tag: 'unlem',
-                locked: false
-            },
-
-            {
-                id: 2,
-                title: 'Başlık',
-                content: '<ul><li>Notlar...</li></ul>',
-                color: '#e53935',
-                tag: 'ates',
-                locked: false
-            },
-
-            {
-                id: 3,
-                title: 'Başlık',
-                content: '<ul><li>Notlar...</li></ul>',
-                color: '#2e7d32',
-                tag: 'yildiz',
-                locked: false
-            }
-
+            { id: 1, title: 'Başlık', content: '<ul><li>Notlar...</li></ul>', color: '#1a73e8', tag: 'unlem', locked: false },
+            { id: 2, title: 'Başlık', content: '<ul><li>Notlar...</li></ul>', color: '#e53935', tag: 'ates', locked: false },
+            { id: 3, title: 'Başlık', content: '<ul><li>Notlar...</li></ul>', color: '#2e7d32', tag: 'yildiz', locked: false }
         ];
+        localStorage.setItem('yks_box_data_v11', JSON.stringify(notesData));
 
     }
 
@@ -4892,28 +4868,34 @@ updateDailyMotivation();
          * Seri artık kronometreden bağımsızdır.
          * Siteye her yeni takvim gününde ilk girişte 1 kez artar.
          */
-        if (lastWorkDate !== today) {
-            if (lastWorkDate === yesterdayStr) {
-                streakCount++;
+        /*
+         * Seri yalnızca takvim gününe göre ilerler.
+         * Focus süresi bu sisteme dahil değildir.
+         * Eski sürümlerde tarih bugün görünürken sayı 0 kalmışsa
+         * seri güvenli biçimde 1'e toparlanır.
+         */
+        if (lastWorkDate === today && streakCount < 1) {
+            streakCount = 1;
+            localStorage.setItem('yks_streak_count', String(streakCount));
+        } else if (lastWorkDate !== today) {
+            if (lastWorkDate === yesterdayStr && streakCount > 0) {
+                streakCount += 1;
             } else {
                 streakCount = 1;
             }
 
             lastWorkDate = today;
 
-            localStorage.setItem(
-                'yks_streak_count',
-                streakCount
-            );
-
-            localStorage.setItem(
-                'yks_last_work_date',
-                lastWorkDate
-            );
+            localStorage.setItem('yks_streak_count', String(streakCount));
+            localStorage.setItem('yks_last_work_date', lastWorkDate);
         }
 
-        streakDisp.innerText =
-            streakCount;
+        if (streakDisp) streakDisp.innerText = String(streakCount);
+
+        /* Leaderboard'da da güncel seriyi kullan. */
+        if (typeof syncLeaderStats === 'function' && userName) {
+            syncLeaderStats(false);
+        }
 
     }
 
@@ -6696,21 +6678,22 @@ updateDailyMotivation();
 
     updateStreakDisplay();
 
-    renderNotes();
-
-    /* İlk açılışta notların boş görünmemesi için güvenli ikinci çizim. */
-    requestAnimationFrame(() => {
-        if (notesGrid && notesData.length && !notesGrid.children.length) {
-            renderNotes(searchBar.value);
+    /* İlk açılışta notları garanti et. Başka bir başlangıç işlemi
+       notes-grid'i etkilerse kısa gecikmeli yeniden çizilir. */
+    const refreshNotesOnStartup = () => {
+        try {
+            if (notesGrid && Array.isArray(notesData) && notesData.length) {
+                renderNotes(searchBar ? searchBar.value : '');
+            }
+        } catch (err) {
+            console.warn('Notlar ilk çizimde hata verdi:', err);
         }
-    });
+    };
 
-    /* Sayfa tamamen hazır olduğunda bir kez daha kontrol et. */
-    window.addEventListener('DOMContentLoaded', () => {
-        if (notesGrid && notesData.length && !notesGrid.children.length) {
-            renderNotes(searchBar.value);
-        }
-    }, { once: true });
+    refreshNotesOnStartup();
+    requestAnimationFrame(refreshNotesOnStartup);
+    window.addEventListener('load', refreshNotesOnStartup, { once: true });
+    setTimeout(refreshNotesOnStartup, 120);
 
     updateTimerDisplay();
 
