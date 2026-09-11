@@ -692,21 +692,6 @@ body.focus-local-mode .content-track {
             margin-top: 20px;
         }
 
-        .streak-disabled { opacity:.42; cursor:default !important; filter:grayscale(.35); }
-        .streak-disabled:hover { transform:none !important; box-shadow:none !important; }
-        .history-panel { display:none !important; }
-        .timer-extra { align-items:center; }
-        .timer-fullscreen-btn, .timer-external-btn {
-            min-width:42px; height:38px; padding:0 11px; border-radius:10px;
-            border:1px solid rgba(255,255,255,.09); background:transparent; color:#717d87;
-            cursor:pointer; font-size:.72rem; font-weight:800;
-            transition:color .18s ease, background .18s ease, border-color .18s ease;
-        }
-        .timer-fullscreen-btn:hover, .timer-external-btn:hover {
-            color:#dbe8f4; background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.15);
-        }
-        .timer-external-btn { min-width:128px; }
-
         /* =====================================================
            FOCUS KRONOMETRE — SADE / FLocus ESİNTİLİ
         ===================================================== */
@@ -851,24 +836,37 @@ body.focus-local-mode .content-track {
             margin-top: 12px;
         }
 
-        @media (max-width: 700px) {
-            .timer-modal {
-                width: 100%;
-                min-height: 360px;
-                padding: 0 14px 22px;
-            }
-
-            .timer-display {
-                font-size: clamp(4.4rem, 19vw, 8rem);
-                letter-spacing: -4px;
-            }
-
-            .timer-btn {
-                min-width: 118px;
-                padding: 12px 18px;
-            }
+        .timer-fullscreen-btn,
+        .timer-external-btn {
+            height: 34px;
+            border-radius: 9px;
+            border: 1px solid rgba(255,255,255,.07);
+            background: transparent;
+            color: #717d87;
+            cursor: pointer;
+            font-size: .66rem;
+            font-weight: 800;
+            transition: color .18s ease, background .18s ease, border-color .18s ease;
         }
 
+        .timer-fullscreen-btn {
+            width: 38px;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .timer-external-btn {
+            min-width: 128px;
+            padding: 0 12px;
+        }
+
+        .timer-fullscreen-btn:hover,
+        .timer-external-btn:hover {
+            color: #dbe8f4;
+            background: rgba(255,255,255,.04);
+            border-color: rgba(255,255,255,.13);
+        }
 
         /* =====================================================
            iPHONE / SAFARI UYUMLULUĞU
@@ -2549,8 +2547,9 @@ body.pro-active .motivation-label {
 
         <button class="square-btn streak-disabled"
                 id="toggle-history-btn"
-                title="Seri sistemi şimdilik pasif"
+                title="Seri (şimdilik pasif)"
                 aria-disabled="true"
+                disabled
                 type="button">
             🔥
             <span class="streak-count" id="streak-disp">0</span>
@@ -2611,18 +2610,6 @@ body.pro-active .motivation-label {
     </div>
 
     <!-- =====================================================
-         ÇALIŞMA GEÇMİŞİ
-    ===================================================== -->
-
-    <div class="history-panel" id="history-panel">
-        <div class="history-title">
-            Çalışma Günlüğü
-        </div>
-
-        <div id="history-list-wrapper"></div>
-    </div>
-
-    <!-- =====================================================
          GELİŞTİRİCİ DUYURUSU
     ===================================================== -->
     <aside class="notification-panel" id="notification-panel" aria-hidden="true">
@@ -2635,6 +2622,17 @@ body.pro-active .motivation-label {
         </div>
 
         <div class="notification-list">
+            <article class="notification-card unread" data-notification-id="v2_2">
+                <span class="notification-unread-dot" data-notification-unread="v2_2"></span>
+                <div class="notification-card-kicker">Yeni sürüm</div>
+                <h2 class="notification-card-title">2.2 sürümü yayında</h2>
+                <div class="notification-card-date">11 Eylül 2026 · Geliştirici Duyurusu</div>
+                <p class="notification-card-text">
+                    Focus bölümü sadeleştirildi. Gün ve toplam çalışma süresi geçmişi artık tutulmuyor; günlük seri sistemi korunuyor. Tam ekran seçeneği sade bir ikon butonuna dönüştürüldü ve Focus'un yanına ayrı kronometreye geçiş eklendi. Ayrı kronometrede Lap artık kayıt tutmuyor, yalnızca Current süresini sıfırlıyor.
+                </p>
+                <div class="notification-signature">— Not İstasyonu Geliştiricisi</div>
+            </article>
+
             <article class="notification-card unread" data-notification-id="v2_1">
                 <span class="notification-unread-dot" data-notification-unread="v2_1"></span>
                 <div class="notification-card-kicker">Yeni sürüm</div>
@@ -2856,9 +2854,11 @@ body.pro-active .motivation-label {
         </div>
 
         <div class="timer-extra">
-            <button class="timer-fullscreen-btn" id="timer-fullscreen-btn" type="button" title="Focus'u tarayıcıda tam ekran aç" aria-label="Tam ekran">⛶</button>
+            <button class="timer-fullscreen-btn" id="timer-fullscreen-btn" type="button" title="Tam ekran" aria-label="Tam ekran">⛶</button>
             <button class="timer-external-btn" id="timer-external-btn" type="button" title="Ayrı kronometreyi aç">Ayrı Kronometre</button>
         </div>
+
+
 
     </div>
 
@@ -3266,22 +3266,8 @@ body.pro-active .motivation-label {
     const searchBar = document.getElementById('search-bar');
 const timerModal = document.getElementById('timer-modal');
 const dragHandle = document.getElementById('timer-drag-handle');
-const timerFullscreenBtn = document.getElementById('timer-fullscreen-btn');
-const timerExternalBtn = document.getElementById('timer-external-btn');
-
-    const historyPanel = document.getElementById('history-panel');
-    const toggleHistoryBtn = document.getElementById('toggle-history-btn');
-
-    const historyListWrapper =
-        document.getElementById('history-list-wrapper');
-
-    const streakDisp =
-        document.getElementById('streak-disp');
-
-
-    /* =========================================================
-       DENEME ELEMENTLERİ
-    ========================================================= */
+    const timerFullscreenBtn = document.getElementById('timer-fullscreen-btn');
+    const timerExternalBtn = document.getElementById('timer-external-btn');
 
     const examOverlay =
         document.getElementById('exam-overlay');
@@ -3661,11 +3647,6 @@ const timerExternalBtn = document.getElementById('timer-external-btn');
 
      let notesData = [];
 
-    let workHistory =
-        JSON.parse(
-            localStorage.getItem('yks_work_history')
-        ) || {};
-
     let streakCount =
         parseInt(
             localStorage.getItem('yks_streak_count')
@@ -3674,13 +3655,8 @@ const timerExternalBtn = document.getElementById('timer-external-btn');
     let lastWorkDate =
         localStorage.getItem('yks_last_work_date') || '';
 
-    /* Focus çalışma geçmişi ve seri sistemi şimdilik pasif. */
+    /* Focus çalışma geçmişi kaldırıldı; yalnızca eski süre/tarih verisini temizle. Seri verisine dokunma. */
     localStorage.removeItem('yks_work_history');
-    localStorage.removeItem('yks_streak_count');
-    localStorage.removeItem('yks_last_work_date');
-    workHistory = {};
-    streakCount = 0;
-    lastWorkDate = '';
 
 
     let exams =
@@ -4322,14 +4298,11 @@ updateDailyMotivation();
             notes:
                 notesData,
 
-            workHistory:
-                {},
-
             streakCount:
-                0,
+                streakCount,
 
             lastWorkDate:
-                '', 
+                lastWorkDate,
 
             mainTitle:
                 userName ? `${userName}'nın İstasyonu` : 'İstasyon',
@@ -4485,7 +4458,7 @@ updateDailyMotivation();
                         const confirmed =
                             confirm(
                                 "Bu yedek mevcut verilerinin üzerine yazılacak.\n\n" +
-                                "Notlar, çalışma geçmişi, streak ve denemeler değiştirilecek.\n\n" +
+                                "Notlar, seri ve denemeler değiştirilecek.\n\n" +
                                 "Devam etmek istiyor musun?"
                             );
 
@@ -4504,9 +4477,15 @@ updateDailyMotivation();
                             backup.notes;
 
 
-                        workHistory = {};
-                        streakCount = 0;
-                        lastWorkDate = '';
+
+                        streakCount =
+                            Number(
+                                backup.streakCount
+                            ) || 0;
+
+
+                        lastWorkDate =
+                            backup.lastWorkDate || '';
 
 
                         exams =
@@ -4565,9 +4544,17 @@ updateDailyMotivation();
                         );
 
 
-                        localStorage.removeItem('yks_work_history');
-                        localStorage.removeItem('yks_streak_count');
-                        localStorage.removeItem('yks_last_work_date');
+
+                        localStorage.setItem(
+                            'yks_streak_count',
+                            streakCount
+                        );
+
+
+                        localStorage.setItem(
+                            'yks_last_work_date',
+                            lastWorkDate
+                        );
 
 
                         localStorage.setItem(
@@ -4587,7 +4574,6 @@ updateDailyMotivation();
                         renderNotes(
                             searchBar.value
                         );
-
 
 
                         updateStreakDisplay();
@@ -4759,7 +4745,7 @@ updateDailyMotivation();
         saveTimerState();
 
 
-        /* Durdur sadece duraklatır; çalışma geçmişi artık tutulmaz. */
+        /* Durdur sadece duraklatır; süreyi sıfırlamak ayrı bir işlemdir. */
         saveTimerState();
 
     }
@@ -4846,111 +4832,64 @@ updateDailyMotivation();
     notesViewBtn.addEventListener('click', () => setFocusMode(false));
 
     /* =========================================================
-       ÇALIŞMA KAYDI — ŞİMDİLİK PASİF
+       ÇALIŞMA KAYDI
     ========================================================= */
 
+    /* Focus gün/süre geçmişi tutmuyor. Seri sistemi ayrı çalışıyor. */
     function saveTimeLog() { return; }
-    function updateStreakDisplay() { if (streakDisp) streakDisp.innerText = '0'; }
 
     /* =========================================================
-       GEÇMİŞ LİSTESİ
+       STREAK
     ========================================================= */
 
-    function renderHistoryList() {
+    function updateStreakDisplay() {
 
-        historyListWrapper.innerHTML = '';
-
-
-        const sortedDates =
-            Object.keys(
-                workHistory
-            ).reverse();
-
-
-        if (
-            sortedDates.length === 0
-        ) {
-
-            historyListWrapper.innerHTML =
-                '<div style="font-size:.7rem;color:#555;text-align:center;">Henüz kayıt yok.</div>';
-
-            return;
-
-        }
-
-
-        sortedDates.forEach(
-            date => {
-
-                const totalSec =
-                    workHistory[date];
-
-
-                const hours =
-                    Math.floor(
-                        totalSec / 3600
-                    );
-
-
-                const minutes =
-                    Math.floor(
-                        (totalSec % 3600) / 60
-                    );
-
-
-                const item =
-                    document.createElement(
-                        'div'
-                    );
-
-
-                item.className =
-                    'history-item';
-
-
-                let text = '';
-
-
-                if (hours > 0) {
-
-                    text +=
-                        hours + 's ';
-
-                }
-
-
-                if (minutes > 0) {
-
-                    text +=
-                        minutes + 'dk';
-
-                }
-
-
-                if (text === '') {
-
-                    text =
-                        totalSec + 'sn';
-
-                }
-
-
-                item.innerHTML =
-                    `<span>${date}</span><span>${text}</span>`;
-
-
-                historyListWrapper.appendChild(
-                    item
+        const today =
+            new Date()
+                .toLocaleDateString(
+                    'tr-TR'
                 );
 
-            }
+        const yesterday =
+            new Date();
+
+        yesterday.setDate(
+            yesterday.getDate() - 1
         );
 
+        const yesterdayStr =
+            yesterday.toLocaleDateString(
+                'tr-TR'
+            );
+
+        /*
+         * Seri artık kronometreden bağımsızdır.
+         * Siteye her yeni takvim gününde ilk girişte 1 kez artar.
+         */
+        if (lastWorkDate !== today) {
+            if (lastWorkDate === yesterdayStr) {
+                streakCount++;
+            } else {
+                streakCount = 1;
+            }
+
+            lastWorkDate = today;
+
+            localStorage.setItem(
+                'yks_streak_count',
+                streakCount
+            );
+
+            localStorage.setItem(
+                'yks_last_work_date',
+                lastWorkDate
+            );
+        }
+
+        streakDisp.innerText =
+            streakCount;
+
     }
-
-
-    toggleHistoryBtn.addEventListener('click', (e) => { e.preventDefault(); });
-
 
     /* =========================================================
        KRONOMETRE SÜRÜKLEME — PC + MOBİL
@@ -5011,51 +4950,55 @@ updateDailyMotivation();
         try {
             if (document.fullscreenElement === timerModal) {
                 await document.exitFullscreen();
-                timerFullscreenBtn.textContent = '⛶ Tam ekran';
+                timerFullscreenBtn.setAttribute('aria-label','Tam ekran');
+                timerFullscreenBtn.title = 'Tam ekran';
                 return;
             }
 
             if (timerModal.classList.contains('ios-fullscreen')) {
                 timerModal.classList.remove('ios-fullscreen');
                 document.body.classList.remove('ios-timer-open');
-                timerFullscreenBtn.textContent = '⛶ Tam ekran';
-                applyTimerTheme(timerTheme);
+                timerFullscreenBtn.setAttribute('aria-label','Tam ekran');
+                timerFullscreenBtn.title = 'Tam ekran';
                 return;
             }
 
             if (timerModal.requestFullscreen) {
                 await timerModal.requestFullscreen();
-                timerFullscreenBtn.textContent = '⛶ Tam ekrandan çık';
+                timerFullscreenBtn.setAttribute('aria-label','Tam ekrandan çık');
+                timerFullscreenBtn.title = 'Tam ekrandan çık';
             } else {
                 /* iPhone Safari için tam viewport fallback'i. */
                 timerModal.classList.add('ios-fullscreen');
                 document.body.classList.add('ios-timer-open');
                 timerModal.style.display = 'flex';
-                timerFullscreenBtn.textContent = '⛶ Tam ekrandan çık';
-                applyTimerTheme(timerTheme);
+                timerFullscreenBtn.setAttribute('aria-label','Tam ekrandan çık');
+                timerFullscreenBtn.title = 'Tam ekrandan çık';
             }
         } catch (err) {
             /* Native fullscreen reddedilirse iOS benzeri fallback'e geç. */
             timerModal.classList.add('ios-fullscreen');
             document.body.classList.add('ios-timer-open');
             timerModal.style.display = 'flex';
-            timerFullscreenBtn.textContent = '⛶ Tam ekrandan çık';
-            applyTimerTheme(timerTheme);
+            timerFullscreenBtn.setAttribute('aria-label','Tam ekrandan çık');
+                timerFullscreenBtn.title = 'Tam ekrandan çık';
         }
     }
 
-    timerFullscreenBtn.addEventListener('click', async () => {
-        try {
-            if (!document.fullscreenElement) {
-                await timerModal.requestFullscreen();
-            } else {
-                await document.exitFullscreen();
-            }
-        } catch (e) {}
-    });
+    timerFullscreenBtn.addEventListener('click', toggleTimerFullscreen);
+    timerExternalBtn.addEventListener('click', () => { window.location.href = 'derssel-seyler-timer.html'; });
+    document.addEventListener('fullscreenchange', () => {
+        const isFullscreen = document.fullscreenElement === timerModal;
+        const iosFullscreen = timerModal.classList.contains('ios-fullscreen');
 
-    timerExternalBtn.addEventListener('click', () => {
-        window.location.href = 'derssel-seyler-timer.html';
+        if (!isFullscreen && !iosFullscreen) {
+            document.body.classList.remove('ios-timer-open');
+        }
+
+        timerFullscreenBtn.setAttribute('aria-label',
+            (isFullscreen || iosFullscreen) ? 'Tam ekrandan çık' : 'Tam ekran');
+        timerFullscreenBtn.title =
+            (isFullscreen || iosFullscreen) ? 'Tam ekrandan çık' : 'Tam ekran';
     });
 
 
@@ -5824,8 +5767,6 @@ updateDailyMotivation();
                 aboutOverlay.style.display =
                     'none';
 
-                historyPanel.style.display =
-                    'none';
 
                 if (examAnalysisOverlay) {
                     examAnalysisOverlay.style.display = 'none';
@@ -5990,9 +5931,9 @@ updateDailyMotivation();
         if (x.includes('bugün') || x.includes('ne çalış') || x.includes('program')) return `${userName || 'Dostum'}, bugünkü rotayı şöyle kurardım: önce en zorlandığın derse 50 dakika odaklan, 10 dakika ara ver; ardından yanlış/eksik konulara 40 dakika ayır ve son 20 dakikayı soru çözümüne bırak. İstersen bana hedefini söyle, rotayı daha da özelleştirebilirim.`;
         if (x.includes('deneme') || x.includes('net')) return `İstasyon kayıtlarında ${examCount} deneme görüyorum. Sonuçlarını düzenli girersen trendlerini birlikte takip edebiliriz. Özellikle neti düşen dersi belirleyip yanlışlarını konu bazında ayırmanı öneririm.`;
         if (x.includes('not')) return `Şu anda istasyonunda ${noteCount} not kartı bulunuyor. Önemli kartlarını ⚠️ ile, odaklanmak istediğin kartları 🔥 ile işaretleyebilirsin.`;
-        if (x.includes('kaç saat') || x.includes('çalıştım') || x.includes('çalışma')) return `Focus bölümü artık çalışma süresi geçmişi tutmuyor. Kronometreyi anlık odaklanma için kullanabilirsin.`;
+        if (x.includes('kaç saat') || x.includes('çalıştım') || x.includes('çalışma')) return `Çalışma süresi geçmişi artık tutulmuyor. Günlük serin ayrı olarak korunuyor: ${streak} gün.`;
         if (x.includes('moral') || x.includes('yapamıyorum') || x.includes('yoruldum')) return `Bir adım geri çekil. Bugün mükemmel olmak zorunda değilsin; sadece bir sonraki 25 dakikayı kazan. İstasyon burada, rotayı birlikte toparlarız.`;
-        return `Seni anladım. Ben İstasyon AI'yım. Şimdilik sitendeki not, çalışma ve deneme verilerini okuyarak yardımcı oluyorum. Bana örneğin “Bugün ne çalışmalıyım?”, “Kaç saat çalıştım?” veya “Denemelerimi yorumla” diye sorabilirsin.`;
+        return `Seni anladım. Ben İstasyon AI'yım. Şimdilik sitendeki not, çalışma ve deneme verilerini okuyarak yardımcı oluyorum. Bana örneğin “Bugün ne çalışmalıyım?”, “Bugünkü planımı kur” veya “Denemelerimi yorumla” diye sorabilirsin.`;
     }
 
     function addAIVideoMessage(payload, save=true) {
@@ -6072,7 +6013,6 @@ updateDailyMotivation();
                         message:q,
                         userName,
                         notes:notesData,
-                        workHistory,
                         streakCount,
                         exams
                     })
@@ -6729,8 +6669,6 @@ updateDailyMotivation();
 
 
     updateStreakDisplay();
-
-    renderHistoryList();
 
     renderNotes();
 
