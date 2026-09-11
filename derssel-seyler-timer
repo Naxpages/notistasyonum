@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derssel Şeyler - Timer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        font-family: "Nunito Sans", "Segoe UI", Arial, sans-serif;
+        color: #fff;
+        background: #df477b;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        isolation: isolate;
+    }
+
+    /* Çok hafif lava-lamp hareketi */
+    body::before,
+    body::after {
+        content: "";
+        position: absolute;
+        inset: -18%;
+        z-index: -1;
+        pointer-events: none;
+        filter: blur(48px);
+        will-change: transform;
+    }
+
+    body::before {
+        background:
+            radial-gradient(ellipse at 18% 78%, rgba(166, 0, 255, .98) 0%, rgba(166, 0, 255, .55) 18%, transparent 43%),
+            radial-gradient(ellipse at 82% 20%, rgba(242, 100, 77, .95) 0%, rgba(242, 100, 77, .55) 21%, transparent 46%),
+            radial-gradient(ellipse at 48% 45%, rgba(218, 52, 133, .82) 0%, transparent 40%);
+        animation: lavaMove 18s ease-in-out infinite alternate;
+    }
+
+    body::after {
+        background:
+            radial-gradient(ellipse at 72% 72%, rgba(255, 93, 70, .62) 0%, transparent 37%),
+            radial-gradient(ellipse at 28% 28%, rgba(203, 35, 165, .62) 0%, transparent 39%),
+            radial-gradient(ellipse at 55% 95%, rgba(147, 0, 255, .48) 0%, transparent 33%);
+        animation: lavaMove2 23s ease-in-out infinite alternate;
+        opacity: .9;
+    }
+
+    @keyframes lavaMove {
+        0%   { transform: translate3d(-2%, 1%, 0) scale(1); }
+        50%  { transform: translate3d(2%, -2%, 0) scale(1.035); }
+        100% { transform: translate3d(-1%, 2%, 0) scale(1.02); }
+    }
+
+    @keyframes lavaMove2 {
+        0%   { transform: translate3d(2%, -1%, 0) scale(1.02); }
+        50%  { transform: translate3d(-2%, 2%, 0) scale(1.045); }
+        100% { transform: translate3d(1%, -2%, 0) scale(1.025); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        body::before,
+        body::after {
+            animation: none;
+        }
+    }
+
+    .timer-wrap {
+        width: min(1000px, 94vw);
+        text-align: center;
+        transform: translateY(-5px);
+    }
+
+    .title {
+        font-size: clamp(30px, 4vw, 45px);
+        font-weight: 700;
+        margin-bottom: 14px;
+        letter-spacing: 0.2px;
+    }
+
+    .time {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: clamp(100px, 15vw, 175px);
+        line-height: .85;
+        font-weight: 700;
+        letter-spacing: -3px;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 24px;
+    }
+
+    .current {
+        font-size: clamp(30px, 4vw, 42px);
+        font-weight: 700;
+        margin-bottom: 30px;
+        letter-spacing: 0.2px;
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    button {
+        border: 0;
+        color: #fff;
+        background: transparent;
+        font: inherit;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .start {
+        min-width: 163px;
+        height: 59px;
+        padding: 0 35px;
+        border-radius: 18px;
+        background: #7130ff;
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+    .lap {
+        min-width: 101px;
+        height: 59px;
+        padding: 0 25px;
+        border-radius: 19px;
+        border: 2px solid rgba(255,255,255,.95);
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+    .icon-btn {
+        width: 50px;
+        height: 59px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .reset-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .fullscreen-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .laps {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: calc(50% + 250px);
+        width: min(500px, 90vw);
+        max-height: 130px;
+        overflow-y: auto;
+        display: none;
+        text-align: left;
+        background: rgba(0,0,0,.12);
+        border-radius: 12px;
+        padding: 8px 14px;
+    }
+
+    .laps.show {
+        display: block;
+    }
+
+    .lap-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 7px 3px;
+        font-size: 17px;
+        border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+
+    @media (max-width: 600px) {
+        .timer-wrap {
+            width: 96vw;
+        }
+
+        .title {
+            margin-bottom: 18px;
+        }
+
+        .time {
+            letter-spacing: -5px;
+            margin-bottom: 25px;
+        }
+
+        .current {
+            margin-bottom: 25px;
+        }
+
+        .controls {
+            gap: 7px;
+        }
+
+        .start {
+            min-width: 130px;
+            height: 54px;
+            padding: 0 22px;
+            font-size: 23px;
+        }
+
+        .lap {
+            min-width: 87px;
+            height: 54px;
+            padding: 0 18px;
+            font-size: 23px;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 54px;
+        }
+
+        .reset-icon,
+        .fullscreen-icon {
+            width: 33px;
+            height: 33px;
+        }
+    }
+
+    .station-btn {
+        position: fixed;
+        top: 24px;
+        right: 26px;
+        z-index: 20;
+        height: 46px;
+        padding: 0 19px;
+        border: 1px solid rgba(255,255,255,.55);
+        border-radius: 14px;
+        background: rgba(255,255,255,.13);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: .1px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 8px 30px rgba(80,0,120,.12);
+        transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+
+    .station-btn:hover {
+        transform: translateY(-2px) scale(1.025);
+        background: rgba(255,255,255,.20);
+        box-shadow: 0 10px 35px rgba(80,0,120,.22);
+    }
+
+    .station-btn:active {
+        transform: scale(.97);
+    }
+
+    /* Geçiş efekti */
+    .warp {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 8%, transparent 25%),
+            linear-gradient(125deg, #a600ff 0%, #d82ca0 38%, #ef4774 67%, #f2644d 100%);
+    }
+
+    .warp::before,
+    .warp::after {
+        content: "";
+        position: absolute;
+        inset: -30%;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,.65);
+        transform: scale(.05);
+        opacity: 0;
+    }
+
+    .warp::after {
+        border-width: 1px;
+        filter: blur(2px);
+    }
+
+    .warp.go {
+        animation: warpFlash .95s cubic-bezier(.15,.8,.2,1) forwards;
+    }
+
+    .warp.go::before {
+        animation: warpRing .9s cubic-bezier(.1,.75,.15,1) forwards;
+    }
+
+    .warp.go::after {
+        animation: warpRing 1.05s cubic-bezier(.1,.75,.15,1) .04s forwards;
+    }
+
+    @keyframes warpFlash {
+        0% {
+            opacity: 0;
+            transform: scale(1);
+            filter: blur(0);
+        }
+        12% {
+            opacity: 1;
+        }
+        48% {
+            opacity: 1;
+            filter: blur(1px);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1.16);
+            filter: blur(12px);
+        }
+    }
+
+    @keyframes warpRing {
+        0% {
+            transform: scale(.05);
+            opacity: .9;
+        }
+        100% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+    }
+
+    body.leaving .timer-wrap,
+    body.leaving .station-btn {
+        animation: leaveZoom .75s cubic-bezier(.2,.8,.15,1) forwards;
+    }
+
+    @keyframes leaveZoom {
+        to {
+            transform: scale(1.12);
+            opacity: 0;
+            filter: blur(5px);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .station-btn {
+            top: 14px;
+            right: 14px;
+            height: 40px;
+            padding: 0 13px;
+            font-size: 13px;
+            border-radius: 12px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+<button class="station-btn" id="stationBtn">Not İstasyonuma Git</button>
+<div class="warp" id="warp"></div>
+
+<div class="timer-wrap">
+    <div class="title">derssel şeyler</div>
+
+    <div class="time" id="time">00:00</div>
+
+    <div class="current">
+        Current: <span id="current">00:00</span>
+    </div>
+
+    <div class="controls">
+        <button class="start" id="startBtn">Start</button>
+
+        <button class="lap" id="lapBtn">Lap</button>
+
+        <button class="icon-btn" id="resetBtn" aria-label="Sıfırla">
+            <svg class="reset-icon" viewBox="0 0 48 48" fill="none">
+                <path d="M12 19a17 17 0 1 1-1 13" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                <path d="M12 10v10h10" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
+        <button class="icon-btn" id="fullscreenBtn" aria-label="Tam ekran">
+            <svg class="fullscreen-icon" viewBox="0 0 48 48" fill="none">
+                <path d="M8 18V8h10M30 8h10v10M40 30v10H30M18 40H8V30"
+                      stroke="white" stroke-width="4" stroke-linecap="square"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<div class="laps" id="laps"></div>
+
+<script>
+    let elapsed = 0;
+    let currentElapsed = 0;
+    let running = false;
+    let lastTime = 0;
+    let animationFrame = null;
+    let lapNumber = 0;
+
+    const timeEl = document.getElementById("time");
+    const currentEl = document.getElementById("current");
+    const startBtn = document.getElementById("startBtn");
+    const lapBtn = document.getElementById("lapBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const lapsEl = document.getElementById("laps");
+
+    function format(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        return String(minutes).padStart(2, "0") + ":" +
+               String(seconds).padStart(2, "0");
+    }
+
+    function render() {
+        timeEl.textContent = format(elapsed);
+        currentEl.textContent = format(currentElapsed);
+    }
+
+    function tick(timestamp) {
+        if (!running) return;
+
+        if (!lastTime) lastTime = timestamp;
+        const delta = timestamp - lastTime;
+        elapsed += delta;
+        currentElapsed += delta;
+        lastTime = timestamp;
+
+        render();
+        animationFrame = requestAnimationFrame(tick);
+    }
+
+    startBtn.addEventListener("click", () => {
+        running = !running;
+
+        if (running) {
+            startBtn.textContent = "Stop";
+            lastTime = 0;
+            animationFrame = requestAnimationFrame(tick);
+        } else {
+            startBtn.textContent = "Start";
+            cancelAnimationFrame(animationFrame);
+        }
+    });
+
+    lapBtn.addEventListener("click", () => {
+        // Lap artık kayıt/liste oluşturmaz; yalnızca Current sıfırlanır.
+        if (!running && currentElapsed === 0) return;
+        currentElapsed = 0;
+        currentEl.textContent = "00:00";
+    });
+
+    resetBtn.addEventListener("click", () => {
+        running = false;
+        cancelAnimationFrame(animationFrame);
+
+        elapsed = 0;
+        currentElapsed = 0;
+        lastTime = 0;
+        lapNumber = 0;
+
+        startBtn.textContent = "Start";
+        lapsEl.innerHTML = "";
+        lapsEl.classList.remove("show");
+
+        render();
+    });
+
+    fullscreenBtn.addEventListener("click", async () => {
+        try {
+            if (!document.fullscreenElement) {
+                await document.documentElement.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        } catch (e) {}
+    });
+
+    render();
+
+    const stationBtn = document.getElementById("stationBtn");
+    const warp = document.getElementById("warp");
+
+    stationBtn.addEventListener("click", () => {
+        if (document.body.classList.contains("leaving")) return;
+
+        document.body.classList.add("leaving");
+        warp.classList.add("go");
+
+        setTimeout(() => {
+            window.location.href = "https://naxpages.github.io/notistasyonum/";
+        }, 820);
+    });
+</script>
+
+</body>
+</html>
