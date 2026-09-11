@@ -164,32 +164,6 @@
         height: 38px;
     }
 
-    .laps {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: calc(50% + 250px);
-        width: min(500px, 90vw);
-        max-height: 130px;
-        overflow-y: auto;
-        display: none;
-        text-align: left;
-        background: rgba(0,0,0,.12);
-        border-radius: 12px;
-        padding: 8px 14px;
-    }
-
-    .laps.show {
-        display: block;
-    }
-
-    .lap-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 7px 3px;
-        font-size: 17px;
-        border-bottom: 1px solid rgba(255,255,255,.18);
-    }
 
     @media (max-width: 600px) {
         .timer-wrap {
@@ -402,7 +376,6 @@
     </div>
 </div>
 
-<div class="laps" id="laps"></div>
 
 <script>
     let elapsed = 0;
@@ -410,7 +383,6 @@
     let running = false;
     let lastTime = 0;
     let animationFrame = null;
-    let lapNumber = 0;
 
     const timeEl = document.getElementById("time");
     const currentEl = document.getElementById("current");
@@ -418,7 +390,6 @@
     const lapBtn = document.getElementById("lapBtn");
     const resetBtn = document.getElementById("resetBtn");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const lapsEl = document.getElementById("laps");
 
     function format(ms) {
         const totalSeconds = Math.floor(ms / 1000);
@@ -461,7 +432,6 @@
     });
 
     lapBtn.addEventListener("click", () => {
-        // Lap artık kayıt/liste oluşturmaz; yalnızca Current sıfırlanır.
         if (!running && currentElapsed === 0) return;
         currentElapsed = 0;
         currentEl.textContent = "00:00";
@@ -474,11 +444,8 @@
         elapsed = 0;
         currentElapsed = 0;
         lastTime = 0;
-        lapNumber = 0;
 
         startBtn.textContent = "Start";
-        lapsEl.innerHTML = "";
-        lapsEl.classList.remove("show");
 
         render();
     });
