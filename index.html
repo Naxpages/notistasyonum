@@ -2555,6 +2555,36 @@ body.pro-active .motivation-label {
         @media(max-width:620px){.avatar-options{grid-template-columns:repeat(4,1fr)}.avatar-effect-options{grid-template-columns:repeat(3,1fr)}}
 
     </style>
+
+<style id="admin-system-style">
+.ni-admin-overlay{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,5,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.ni-admin-overlay.open{display:flex}
+.ni-admin-modal{width:min(760px,94vw);max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.12);border-radius:22px;background:linear-gradient(180deg,rgba(23,28,36,.98),rgba(12,16,22,.98));box-shadow:0 30px 90px rgba(0,0,0,.45);color:#fff}
+.ni-admin-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ni-admin-title{font-size:1.15rem;font-weight:800}
+.ni-admin-close{width:36px;height:36px;border:0;border-radius:10px;background:rgba(255,255,255,.06);color:#fff;font-size:22px;cursor:pointer}
+.ni-admin-body{padding:20px;display:grid;gap:16px}
+.ni-admin-card{padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.035)}
+.ni-admin-card h3{margin:0 0 10px;font-size:.95rem}
+.ni-admin-card p{margin:0 0 10px;color:#aab4c2;font-size:.82rem;line-height:1.5}
+.ni-admin-input,.ni-admin-textarea,.ni-admin-select{width:100%;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(0,0,0,.18);color:#fff;padding:11px 12px;font:inherit;outline:none}
+.ni-admin-textarea{min-height:110px;resize:vertical}
+.ni-admin-input:focus,.ni-admin-textarea:focus,.ni-admin-select:focus{border-color:rgba(255,184,70,.55)}
+.ni-admin-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ni-admin-btn{border:0;border-radius:11px;padding:11px 14px;background:#e6a332;color:#111;font-weight:800;cursor:pointer}
+.ni-admin-btn.secondary{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1)}
+.ni-admin-status{min-height:20px;margin-top:8px;color:#a9c8ff;font-size:.82rem}
+.ni-admin-user-note{font-size:.76rem;color:#8793a3;margin-top:8px}
+@media(max-width:620px){.ni-admin-row{grid-template-columns:1fr}.ni-admin-body{padding:14px}.ni-admin-head{padding:14px 16px}}
+</style>
+
+
+<style id="admin-notification-style">
+.ni-remote-msg{position:relative;margin-bottom:14px}
+.ni-remote-msg .notification-card-date{display:flex;align-items:center;gap:6px}
+.ni-remote-live{font-size:.68rem;font-weight:800;color:#f0c36a}
+</style>
+
 </head>
 
 <body>
@@ -2592,8 +2622,8 @@ body.pro-active .motivation-label {
         <div class="notification-wrap">
             <button class="square-btn notification-btn"
                     id="notification-btn"
-                    title="Bildirimler"
-                    aria-label="Bildirimler"
+                    title="Duyurular"
+                    aria-label="Duyurular"
                     aria-expanded="false">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
@@ -2635,13 +2665,14 @@ body.pro-active .motivation-label {
     <aside class="notification-panel" id="notification-panel" aria-hidden="true">
         <div class="notification-head">
             <div>
-                <span class="notification-title">Bildirimler</span>
+                <span class="notification-title">Duyurular</span>
                 
             </div>
-            <button class="notification-close" id="notification-close" type="button" aria-label="Bildirimleri kapat">×</button>
+            <button class="notification-close" id="notification-close" type="button" aria-label="Duyuruları kapat">×</button>
         </div>
 
         <div class="notification-list">
+            <div id="ni-remote-notifications"></div>
             <article class="notification-card unread" data-notification-id="v2_2">
                 <span class="notification-unread-dot" data-notification-unread="v2_2"></span>
                 <div class="notification-card-kicker">Yeni sürüm</div>
@@ -5923,6 +5954,11 @@ updateDailyMotivation();
     }
 
     function localAIReply(q) {
+        const normalized = q.toLocaleLowerCase('tr-TR').trim();
+        if (/^(admin|admin giriş|admin giris|admin panel|yönetim paneli|yonetim paneli)$/.test(normalized)) {
+            return { kind: 'admin' };
+        }
+
         const requestedVideo = getRequestedVideo(q);
         if (requestedVideo) {
             return {
@@ -6038,7 +6074,9 @@ updateDailyMotivation();
 
             thinking.remove();
 
-            if (reply && typeof reply === 'object' && reply.kind === 'video') {
+            if (reply && typeof reply === 'object' && reply.kind === 'admin') {
+                openAdminEntry();
+            } else if (reply && typeof reply === 'object' && reply.kind === 'video') {
                 addAIVideoMessage(reply);
             } else {
                 addAIMessage(reply || 'Şu an cevap oluşturamadım.','bot');
@@ -6738,6 +6776,225 @@ updateDailyMotivation();
 
 
 
+
+
+<div class="ni-admin-overlay" id="ni-admin-login-overlay" aria-hidden="true">
+  <div class="ni-admin-modal" role="dialog" aria-modal="true" aria-labelledby="ni-admin-login-title">
+    <div class="ni-admin-head"><div class="ni-admin-title" id="ni-admin-login-title">Admin Girişi</div><button class="ni-admin-close" id="ni-admin-login-close" type="button">×</button></div>
+    <div class="ni-admin-body">
+      <div class="ni-admin-card">
+        <h3>Yönetim alanına giriş</h3>
+        <p>Yönetim paneline erişmek için yetkili hesabınla giriş yap.</p>
+        <input class="ni-admin-input" id="ni-admin-email" type="email" autocomplete="username" placeholder="E-posta">
+        <input class="ni-admin-input" id="ni-admin-password" type="password" autocomplete="current-password" placeholder="Şifre" style="margin-top:10px">
+        <button class="ni-admin-btn" id="ni-admin-login-btn" type="button" style="margin-top:10px;width:100%">Giriş Yap</button>
+        <div class="ni-admin-status" id="ni-admin-login-status"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ni-admin-overlay" id="ni-admin-panel-overlay" aria-hidden="true">
+  <div class="ni-admin-modal" role="dialog" aria-modal="true" aria-labelledby="ni-admin-panel-title">
+    <div class="ni-admin-head"><div class="ni-admin-title" id="ni-admin-panel-title">Yönetim Paneli</div><button class="ni-admin-close" id="ni-admin-panel-close" type="button">×</button></div>
+    <div class="ni-admin-body">
+      <div class="ni-admin-card">
+        <h3>Duyuru gönder</h3>
+        <p>Herkese açık bir duyuru yayınla. Kullanıcılar bunu mevcut Duyurular bölümünde görecek.</p>
+        <input class="ni-admin-input" id="ni-admin-msg-title" maxlength="120" placeholder="Başlık">
+        <textarea class="ni-admin-textarea" id="ni-admin-msg-body" maxlength="2000" placeholder="Mesajı yaz..." style="margin-top:10px"></textarea>
+        <button class="ni-admin-btn" id="ni-admin-send-all" type="button" style="margin-top:10px">Herkese Gönder</button>
+        <div class="ni-admin-status" id="ni-admin-send-status"></div>
+      </div>
+      <div class="ni-admin-card">
+        <h3>Kişiye özel mesaj</h3>
+        <p>Mesaj göndermek istediğin kullanıcının Supabase Auth kullanıcı ID'sini gir.</p>
+        <input class="ni-admin-input" id="ni-admin-target-user" placeholder="Kullanıcı UUID">
+        <input class="ni-admin-input" id="ni-admin-personal-title" maxlength="120" placeholder="Başlık" style="margin-top:10px">
+        <textarea class="ni-admin-textarea" id="ni-admin-personal-body" maxlength="2000" placeholder="Mesajı yaz..." style="margin-top:10px"></textarea>
+        <button class="ni-admin-btn" id="ni-admin-send-personal" type="button" style="margin-top:10px">Gönder</button>
+        <div class="ni-admin-status" id="ni-admin-personal-status"></div>
+      </div>
+      <div class="ni-admin-card">
+        <h3>Yönetici yetkisi</h3>
+        <p>Bir kullanıcıya admin yetkisi ver veya mevcut yetkiyi kaldır.</p>
+        <input class="ni-admin-input" id="ni-admin-manage-user" placeholder="Kullanıcı UUID">
+        <div class="ni-admin-row" style="margin-top:10px">
+          <button class="ni-admin-btn" id="ni-admin-make-admin" type="button">Admin Yap</button>
+          <button class="ni-admin-btn secondary" id="ni-admin-remove-admin" type="button">Adminliği Kaldır</button>
+        </div>
+        <div class="ni-admin-status" id="ni-admin-manage-status"></div>
+      </div>
+      <button class="ni-admin-btn secondary" id="ni-admin-logout" type="button">Admin Oturumunu Kapat</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="not-istasyonu-admin-system">
+(() => {
+  const SUPABASE_URL = 'https://wfloizgrqcgzpgvgfzze.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_8tUBRAk4AtlketpEllaX5g_ir0djTNq';
+  const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY, { auth:{ persistSession:true, autoRefreshToken:true } });
+
+  const loginOverlay = document.getElementById('ni-admin-login-overlay');
+  const panelOverlay = document.getElementById('ni-admin-panel-overlay');
+  const closeLogin = document.getElementById('ni-admin-login-close');
+  const closePanel = document.getElementById('ni-admin-panel-close');
+  const loginEmail = document.getElementById('ni-admin-email');
+  const loginPassword = document.getElementById('ni-admin-password');
+  const loginBtn = document.getElementById('ni-admin-login-btn');
+  const loginStatus = document.getElementById('ni-admin-login-status');
+  const msgTitle = document.getElementById('ni-admin-msg-title');
+  const msgBody = document.getElementById('ni-admin-msg-body');
+  const sendAll = document.getElementById('ni-admin-send-all');
+  const sendStatus = document.getElementById('ni-admin-send-status');
+  const targetUser = document.getElementById('ni-admin-target-user');
+  const personalTitle = document.getElementById('ni-admin-personal-title');
+  const personalBody = document.getElementById('ni-admin-personal-body');
+  const sendPersonal = document.getElementById('ni-admin-send-personal');
+  const personalStatus = document.getElementById('ni-admin-personal-status');
+  const manageUser = document.getElementById('ni-admin-manage-user');
+  const makeAdmin = document.getElementById('ni-admin-make-admin');
+  const removeAdmin = document.getElementById('ni-admin-remove-admin');
+  const manageStatus = document.getElementById('ni-admin-manage-status');
+  const logoutBtn = document.getElementById('ni-admin-logout');
+  const remoteNotifications = document.getElementById('ni-remote-notifications');
+
+  let session = null;
+  let remoteMessageIds = [];
+
+  function open(el){ if(!el) return; el.classList.add('open'); el.setAttribute('aria-hidden','false'); }
+  function close(el){ if(!el) return; el.classList.remove('open'); el.setAttribute('aria-hidden','true'); }
+
+  async function currentSession(){
+    if(!sb) return null;
+    const {data:{session:current}} = await sb.auth.getSession();
+    session = current || null;
+    return session;
+  }
+
+  async function ensurePublicSession(){
+    if(!sb) return false;
+    const current = await currentSession();
+    if(current?.user) return true;
+    const {data,error} = await sb.auth.signInAnonymously();
+    if(!error && data?.session){ session=data.session; return true; }
+    return false;
+  }
+
+  async function isCurrentAdmin(){
+    const current = await currentSession();
+    if(!current?.user || current.user.is_anonymous) return false;
+    const {data,error} = await sb.rpc('is_app_admin',{check_user:current.user.id});
+    return !error && data === true;
+  }
+
+  function escText(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+  function remoteSeenKey(id){return 'ni_remote_msg_seen_'+id;}
+
+  async function markRemoteRead(ids){
+    if(!session?.user || session.user.is_anonymous || !ids.length) return;
+    const rows=ids.map(id=>({message_id:id,user_id:session.user.id}));
+    await sb.from('app_message_reads').upsert(rows,{onConflict:'message_id,user_id'});
+  }
+
+  async function refreshRemoteNotifications(markRead=false){
+    if(!sb || !remoteNotifications) return;
+    const ok=await ensurePublicSession();
+    if(!ok) return;
+    const {data,error}=await sb.from('app_messages').select('id,title,body,created_at,target_user_id').order('created_at',{ascending:false}).limit(50);
+    if(error) return;
+    const rows=(data||[]).filter(m=>m.target_user_id===null || m.target_user_id===session.user.id);
+    remoteMessageIds=rows.map(m=>m.id);
+    remoteNotifications.innerHTML=rows.map(m=>{
+      const seen=localStorage.getItem(remoteSeenKey(m.id))==='1';
+      return `<article class="notification-card ni-remote-msg${seen?'':' unread'}" data-remote-id="${m.id}">${seen?'':'<span class="notification-unread-dot"></span>'}<div class="notification-card-kicker">${m.target_user_id?'Direct Message':'Global Message'}</div><h2 class="notification-card-title">${escText(m.title)}</h2><div class="notification-card-date">${new Date(m.created_at).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'})} · <span class="ni-remote-live">${m.target_user_id?'Mesaj':'Admin Duyurusu'}</span></div><p class="notification-card-text">${escText(m.body).replace(/\n/g,'<br>')}</p></article>`;
+    }).join('');
+    if(markRead && rows.length){
+      rows.forEach(m=>localStorage.setItem(remoteSeenKey(m.id),'1'));
+      await markRemoteRead(rows.map(m=>m.id));
+      refreshRemoteNotifications(false);
+    }
+    updateNotificationUnreadState();
+  }
+
+  async function openAdminEntry(){
+    if(!sb){ open(loginOverlay); loginStatus.textContent='Admin sistemi yüklenemedi.'; return; }
+    loginStatus.textContent='';
+    const already = await isCurrentAdmin();
+    if(already){ close(loginOverlay); open(panelOverlay); return; }
+    open(loginOverlay);
+    setTimeout(()=>loginEmail?.focus(),100);
+  }
+  window.openAdminEntry = openAdminEntry;
+
+  async function login(){
+    if(!sb) return;
+    const email=(loginEmail?.value||'').trim();
+    const password=loginPassword?.value||'';
+    loginStatus.textContent='Giriş kontrol ediliyor...';
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    if(error || !data?.session){ loginStatus.textContent='Giriş başarısız.'; return; }
+    session=data.session;
+    const admin=await isCurrentAdmin();
+    if(!admin){ await sb.auth.signOut(); session=null; loginStatus.textContent='Bu hesapta admin yetkisi yok.'; return; }
+    loginStatus.textContent='';
+    close(loginOverlay);
+    open(panelOverlay);
+  }
+
+  async function insertMessage(target, title, body, statusEl){
+    if(!session?.user){ statusEl.textContent='Admin oturumu bulunamadı.'; return; }
+    title=(title||'').trim(); body=(body||'').trim();
+    if(!title || !body){ statusEl.textContent='Başlık ve mesaj gerekli.'; return; }
+    const {error}=await sb.from('app_messages').insert({sender_user_id:session.user.id,target_user_id:target||null,title,body});
+    statusEl.textContent=error ? 'Mesaj gönderilemedi.' : 'Mesaj gönderildi.';
+    if(!error){
+      if(target===null){ if(msgTitle) msgTitle.value=''; if(msgBody) msgBody.value=''; }
+      else { if(personalTitle) personalTitle.value=''; if(personalBody) personalBody.value=''; }
+    }
+  }
+
+  async function changeAdmin(userId, shouldAdd){
+    const id=(userId||'').trim();
+    if(!id){ manageStatus.textContent='Kullanıcı UUID gerekli.'; return; }
+    const ok=await isCurrentAdmin();
+    if(!ok){ manageStatus.textContent='Admin oturumu geçersiz.'; return; }
+    if(id===session.user.id && !shouldAdd){ manageStatus.textContent='Kendini admin listesinden çıkaramazsın.'; return; }
+    const query = shouldAdd
+      ? sb.from('app_admins').insert({user_id:id})
+      : sb.from('app_admins').delete().eq('user_id',id);
+    const {error}=await query;
+    manageStatus.textContent = error ? 'İşlem başarısız.' : (shouldAdd ? 'Admin yetkisi verildi.' : 'Admin yetkisi kaldırıldı.');
+  }
+
+  closeLogin?.addEventListener('click',()=>close(loginOverlay));
+  closePanel?.addEventListener('click',()=>close(panelOverlay));
+  loginBtn?.addEventListener('click',login);
+  loginPassword?.addEventListener('keydown',e=>{if(e.key==='Enter') login();});
+  sendAll?.addEventListener('click',()=>insertMessage(null,msgTitle?.value,msgBody?.value,sendStatus));
+  sendPersonal?.addEventListener('click',()=>insertMessage((targetUser?.value||'').trim(),personalTitle?.value,personalBody?.value,personalStatus));
+  makeAdmin?.addEventListener('click',()=>changeAdmin(manageUser?.value,true));
+  removeAdmin?.addEventListener('click',()=>changeAdmin(manageUser?.value,false));
+  logoutBtn?.addEventListener('click',async()=>{if(sb) await sb.auth.signOut();session=null;close(panelOverlay);});
+
+  [loginOverlay,panelOverlay].forEach(overlay=>overlay?.addEventListener('click',e=>{if(e.target===overlay) close(overlay);}));
+
+  // Genel bildirimleri arka planda yükle. Admin olmayan kullanıcılar için de anon oturum kullanılır.
+  ensurePublicSession().then(()=>refreshRemoteNotifications(false)).catch(()=>{});
+  setInterval(()=>refreshRemoteNotifications(false), 60000);
+  window.__refreshRemoteNotifications = refreshRemoteNotifications;
+
+  // Mevcut bildirim paneli açıldığında uzaktan gelen mesajları da okundu işaretle.
+  document.getElementById('notification-btn')?.addEventListener('click',()=>{
+    setTimeout(()=>{
+      if(document.getElementById('notification-panel')?.classList.contains('open')) refreshRemoteNotifications(true);
+    },120);
+  });
+})();
+</script>
 
 </body>
 </html>
