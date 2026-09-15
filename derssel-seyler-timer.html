@@ -243,6 +243,38 @@
         transform: scale(.97);
     }
 
+
+    .station-wrap {
+        position: fixed;
+        top: 24px;
+        right: 26px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .station-wrap .station-btn {
+        position: static;
+    }
+    .study-bubble {
+        min-width: 150px;
+        height: 34px;
+        padding: 0 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.34);
+        color: rgba(255,255,255,.92);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
     /* Geçiş efekti */
     .warp {
         position: fixed;
@@ -329,13 +361,23 @@
     }
 
     @media (max-width: 600px) {
-        .station-btn {
+        .station-wrap {
             top: 14px;
             right: 14px;
+            gap: 6px;
+        }
+        .station-wrap .station-btn {
             height: 40px;
             padding: 0 13px;
             font-size: 13px;
             border-radius: 12px;
+        }
+        .study-bubble {
+            min-width: 124px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 10px;
+            border-radius: 9px;
         }
     }
 
@@ -343,7 +385,10 @@
 </head>
 
 <body>
-<button class="station-btn" id="stationBtn">Not İstasyonuma Git</button>
+<div class="station-wrap">
+    <button class="station-btn" id="stationBtn">Not İstasyonuma Git</button>
+    <div class="study-bubble" id="studyBubble" aria-live="polite">Etüt bitimine --:--</div>
+</div>
 <div class="warp" id="warp"></div>
 
 <div class="timer-wrap">
@@ -464,6 +509,51 @@
 
     const stationBtn = document.getElementById("stationBtn");
     const warp = document.getElementById("warp");
+    const studyBubble = document.getElementById("studyBubble");
+
+    const studySchedules = {
+        1: ["09:00-10:30","10:45-12:15","12:30-13:45","14:30-16:00","16:15-18:30","18:45-20:15","20:30-21:30"],
+        2: ["09:00-10:30","10:45-12:15","12:30-13:45","14:30-16:00","16:15-18:30","18:45-20:15","20:30-21:30"],
+        3: ["09:00-10:30","10:45-12:15","12:30-13:45","14:30-16:00","16:15-18:30","18:45-20:15","20:30-21:30"],
+        4: ["09:00-10:30","10:45-12:15","12:30-13:45","14:30-16:00","16:15-18:30","18:45-20:15","20:30-21:30"],
+        5: ["09:00-10:30","10:45-12:15","12:30-13:45","14:30-16:00","16:15-18:30","18:45-20:15","20:30-21:30"],
+        6: ["10:15-13:15","14:15-15:45","16:00-17:30","17:45-19:30"]
+    };
+
+    function updateStudyBubble(){
+        const now = new Date();
+        const day = now.getDay();
+        const schedule = studySchedules[day] || [];
+        const nowMinutes = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+        let activeEnd = null;
+        let activeName = null;
+        let nextStart = null;
+
+        for (let i=0;i<schedule.length;i++){
+            const [start,end] = schedule[i].split('-').map(v=>{
+                const [h,m] = v.split(':').map(Number);
+                return h*60+m;
+            });
+            if (nowMinutes >= start && nowMinutes < end){
+                activeEnd = end;
+                activeName = day === 6 && i === 0 ? 'Deneme' : `${i+1}. Etüt`;
+                break;
+            }
+            if (nowMinutes < start && nextStart === null) nextStart = start;
+        }
+
+        if (activeEnd !== null){
+            let remaining = Math.max(0, Math.ceil((activeEnd-nowMinutes)*60));
+            const mm = Math.floor(remaining/60);
+            const ss = remaining % 60;
+            studyBubble.textContent = `${activeName} · ${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+        } else {
+            studyBubble.textContent = schedule.length ? 'Etüt dışında' : 'Bugün etüt yok';
+        }
+    }
+
+    updateStudyBubble();
+    setInterval(updateStudyBubble, 1000);
 
     stationBtn.addEventListener("click", () => {
         if (document.body.classList.contains("leaving")) return;
