@@ -381,6 +381,290 @@
         }
     }
 
+
+
+    /* =========================================
+       GÜNLÜK ATTACK ON TITAN KOLEKSİYONU
+    ========================================= */
+    .card-dock{
+        position:fixed;
+        right:18px;
+        top:50%;
+        transform:translateY(-50%);
+        z-index:30;
+        width:42px;
+        height:58px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:1px solid rgba(255,255,255,.44);
+        border-radius:13px 0 0 13px;
+        background:rgba(255,255,255,.10);
+        box-shadow:0 10px 34px rgba(50,0,100,.16);
+        backdrop-filter:blur(12px);
+        -webkit-backdrop-filter:blur(12px);
+        transition:right .28s ease, background .28s ease, box-shadow .28s ease;
+    }
+    .card-dock:hover{
+        right:24px;
+        background:rgba(255,255,255,.16);
+        box-shadow:0 12px 40px rgba(50,0,100,.22);
+    }
+    .card-icon{
+        width:26px;
+        height:34px;
+        border:2px solid rgba(255,255,255,.96);
+        border-radius:5px;
+        position:relative;
+        transform:rotate(-7deg);
+        opacity:.96;
+    }
+    .card-icon::before{
+        content:"";
+        position:absolute;
+        inset:4px;
+        border:1px solid rgba(255,255,255,.48);
+        border-radius:2px;
+    }
+    .card-icon::after{
+        content:"";
+        position:absolute;
+        width:8px;
+        height:8px;
+        left:50%;
+        top:50%;
+        transform:translate(-50%,-50%);
+        border:1px solid rgba(255,255,255,.55);
+        border-radius:2px;
+    }
+    .card-new-dot{
+        position:absolute;
+        right:5px;
+        top:5px;
+        width:7px;
+        height:7px;
+        border-radius:50%;
+        background:#fff;
+        box-shadow:0 0 10px rgba(255,255,255,.9);
+        opacity:0;
+        transform:scale(.6);
+        transition:opacity .2s ease, transform .2s ease;
+    }
+    .card-dock.has-new .card-new-dot{
+        opacity:1;
+        transform:scale(1);
+    }
+    .card-peek{
+        position:absolute;
+        right:34px;
+        top:50%;
+        width:118px;
+        aspect-ratio:2/3;
+        transform:translate(34px,-50%) rotate(10deg) scale(.82);
+        transform-origin:right center;
+        opacity:0;
+        pointer-events:none;
+        transition:transform .38s cubic-bezier(.2,.8,.2,1), opacity .28s ease;
+        border-radius:12px;
+        overflow:hidden;
+        border:1px solid rgba(255,255,255,.55);
+        box-shadow:0 18px 44px rgba(37,0,70,.30);
+        background:#17131e;
+    }
+    .card-dock:hover .card-peek{
+        transform:translate(0,-50%) rotate(-6deg) scale(1);
+        opacity:1;
+    }
+    .card-peek img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+    }
+
+    .card-modal{
+        position:fixed;
+        inset:0;
+        z-index:120;
+        display:none;
+        align-items:center;
+        justify-content:center;
+        padding:22px;
+        background:rgba(16,6,24,.46);
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+    }
+    .card-modal.open{ display:flex; }
+    .card-panel{
+        width:min(860px, 94vw);
+        max-height:90vh;
+        overflow:auto;
+        border-radius:24px;
+        padding:22px;
+        background:rgba(35,17,43,.72);
+        border:1px solid rgba(255,255,255,.18);
+        box-shadow:0 30px 90px rgba(0,0,0,.35);
+    }
+    .card-panel-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+        margin-bottom:18px;
+    }
+    .card-panel-title{
+        font-size:20px;
+        font-weight:800;
+    }
+    .card-panel-sub{
+        margin-top:3px;
+        font-size:12px;
+        color:rgba(255,255,255,.60);
+    }
+    .card-close{
+        width:38px;
+        height:38px;
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,.16);
+        background:rgba(255,255,255,.08);
+        font-size:24px;
+        line-height:1;
+    }
+    .daily-stage{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:8px 0 22px;
+        perspective:1200px;
+    }
+    .collect-card{
+        width:min(250px, 63vw);
+        aspect-ratio:2/3;
+        position:relative;
+        transform-style:preserve-3d;
+        transition:transform .85s cubic-bezier(.2,.72,.18,1);
+        cursor:default;
+    }
+    .collect-card.flipped{ transform:rotateY(180deg); }
+    .collect-face{
+        position:absolute;
+        inset:0;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        border-radius:18px;
+        overflow:hidden;
+        border:2px solid rgba(255,255,255,.55);
+        box-shadow:0 24px 60px rgba(0,0,0,.33);
+    }
+    .collect-front{ transform:rotateY(180deg); background:#17131e; }
+    .collect-front img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .collect-back{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:
+            radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), transparent 28%),
+            radial-gradient(circle at 70% 75%, rgba(255,255,255,.07), transparent 30%),
+            linear-gradient(145deg,#25202e,#0f0b15);
+    }
+    .collect-back::before{
+        content:"";
+        position:absolute;
+        inset:16px;
+        border:1px solid rgba(255,255,255,.18);
+        border-radius:12px;
+    }
+    .collect-back-mark{
+        width:72px;
+        height:72px;
+        border:2px solid rgba(255,255,255,.42);
+        border-radius:15px;
+        transform:rotate(45deg);
+    }
+    .card-meta{
+        text-align:center;
+        min-height:68px;
+    }
+    .card-name{
+        font-size:24px;
+        font-weight:800;
+    }
+    .card-rarity{
+        margin-top:5px;
+        font-size:13px;
+        font-weight:800;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+    }
+    .rarity-1 .card-rarity{ color:#8fd3ff; }
+    .rarity-2 .card-rarity{ color:#c8a3ff; }
+    .rarity-3 .card-rarity{ color:#ffe67a; text-shadow:0 0 14px rgba(255,225,90,.45); }
+    .collection-section{ margin-top:20px; }
+    .collection-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:12px;
+    }
+    .collection-title{font-size:15px;font-weight:800;}
+    .collection-count{font-size:12px;color:rgba(255,255,255,.56);}
+    .collection-grid{
+        display:grid;
+        grid-template-columns:repeat(5,minmax(0,1fr));
+        gap:10px;
+    }
+    .collection-item{
+        position:relative;
+        aspect-ratio:2/3;
+        border-radius:11px;
+        overflow:hidden;
+        border:1px solid rgba(255,255,255,.16);
+        background:rgba(255,255,255,.05);
+    }
+    .collection-item img{width:100%;height:100%;object-fit:cover;display:block;}
+    .collection-item.locked::after{
+        content:"?";
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(10,7,13,.62);
+        color:rgba(255,255,255,.78);
+        font-size:26px;
+        font-weight:800;
+    }
+    .collection-item-label{
+        position:absolute;
+        left:6px; right:6px; bottom:6px;
+        padding:5px 6px;
+        border-radius:7px;
+        background:rgba(0,0,0,.38);
+        backdrop-filter:blur(7px);
+        -webkit-backdrop-filter:blur(7px);
+        font-size:10px;
+        font-weight:800;
+        text-align:center;
+    }
+    .open-collection-btn{
+        margin-top:13px;
+        width:100%;
+        height:42px;
+        border-radius:12px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.15);
+        font-size:13px;
+        font-weight:800;
+    }
+
+    @media (max-width:700px){
+        .card-dock{ right:10px; width:38px; height:52px; }
+        .card-peek{ display:none; }
+        .card-panel{ padding:16px; border-radius:20px; }
+        .collection-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+        .card-name{ font-size:21px; }
+    }
+
 </style>
 </head>
 
@@ -565,6 +849,200 @@
             window.location.href = "https://naxpages.github.io/notistasyonum/";
         }, 820);
     });
+</script>
+
+
+
+<!-- Günlük kart koleksiyonu -->
+<button class="card-dock" id="cardDock" aria-label="Günlük kart">
+    <span class="card-icon" aria-hidden="true"></span>
+    <span class="card-new-dot" aria-hidden="true"></span>
+    <span class="card-peek" id="cardPeek" aria-hidden="true"><img id="cardPeekImg" src="cards/levi.jpg" alt=""></span>
+</button>
+
+<div class="card-modal" id="cardModal" aria-hidden="true">
+    <section class="card-panel" role="dialog" aria-modal="true" aria-labelledby="cardPanelTitle">
+        <div class="card-panel-head">
+            <div>
+                <div class="card-panel-title" id="cardPanelTitle">Günlük Kart</div>
+                <div class="card-panel-sub" id="cardPanelSub">Bugünün kartını aç.</div>
+            </div>
+            <button class="card-close" id="cardClose" aria-label="Kapat">×</button>
+        </div>
+
+        <div class="daily-stage">
+            <div class="collect-card" id="collectCard">
+                <div class="collect-face collect-back">
+                    <div class="collect-back-mark" aria-hidden="true"></div>
+                </div>
+                <div class="collect-face collect-front" id="collectFront">
+                    <img id="collectImg" src="cards/levi.jpg" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-meta" id="cardMeta">
+            <div class="card-name" id="cardName">Bugünün kartı</div>
+            <div class="card-rarity" id="cardRarity">AÇMAK İÇİN BEKLEYİN</div>
+        </div>
+
+        <div class="collection-section">
+            <div class="collection-head">
+                <div class="collection-title">Koleksiyon</div>
+                <div class="collection-count" id="collectionCount">0 / 5</div>
+            </div>
+            <div class="collection-grid" id="collectionGrid"></div>
+            <button class="open-collection-btn" id="showCollectionBtn">Koleksiyonu Gör</button>
+        </div>
+    </section>
+</div>
+
+
+
+<script>
+/* =========================================
+   GÜNLÜK ATTACK ON TITAN KOLEKSİYONU
+========================================= */
+(() => {
+    const cards = [
+        { id:'levi',   name:'Levi',   rarity:3, label:'Ultra Nadir',  image:'cards/levi.jpg' },
+        { id:'eren',   name:'Eren',   rarity:2, label:'Çok Nadir',    image:'cards/eren.jpg' },
+        { id:'erwin',  name:'Erwin',  rarity:1, label:'Nadir',        image:'cards/erwin.jpg' },
+        { id:'hange',  name:'Hange',  rarity:1, label:'Nadir',        image:'cards/hange.jpg' },
+        { id:'mikasa', name:'Mikasa', rarity:1, label:'Nadir',        image:'cards/mikasa.jpg' }
+    ];
+
+    const cardDock = document.getElementById('cardDock');
+    const cardPeekImg = document.getElementById('cardPeekImg');
+    const cardModal = document.getElementById('cardModal');
+    const cardClose = document.getElementById('cardClose');
+    const collectCard = document.getElementById('collectCard');
+    const collectImg = document.getElementById('collectImg');
+    const cardName = document.getElementById('cardName');
+    const cardRarity = document.getElementById('cardRarity');
+    const cardPanelSub = document.getElementById('cardPanelSub');
+    const collectionGrid = document.getElementById('collectionGrid');
+    const collectionCount = document.getElementById('collectionCount');
+
+    const OWNED_KEY = 'aot_card_collection_v1';
+    const OPENED_KEY = 'aot_daily_card_opened_v1';
+    const DAILY_KEY = 'aot_daily_card_v1';
+
+    function todayKey(){
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function readOwned(){
+        try {
+            const data = JSON.parse(localStorage.getItem(OWNED_KEY) || '[]');
+            return Array.isArray(data) ? data.filter(id => cards.some(c => c.id === id)) : [];
+        } catch { return []; }
+    }
+
+    function saveOwned(ids){
+        localStorage.setItem(OWNED_KEY, JSON.stringify([...new Set(ids)]));
+    }
+
+    function dayNumber(key){
+        const [y,m,d] = key.split('-').map(Number);
+        return Math.floor(Date.UTC(y,m-1,d) / 86400000);
+    }
+
+    function chooseTodayCard(){
+        const key = todayKey();
+        const owned = readOwned();
+        const start = ((dayNumber(key) % cards.length) + cards.length) % cards.length;
+        for(let step=0; step<cards.length; step++){
+            const c = cards[(start + step) % cards.length];
+            if(!owned.includes(c.id)) return c;
+        }
+        return cards[start];
+    }
+
+    function getTodayCard(){
+        const key = todayKey();
+        const savedDate = localStorage.getItem(DAILY_KEY);
+        const savedId = localStorage.getItem(DAILY_KEY + '_id');
+        if(savedDate === key && cards.some(c => c.id === savedId)){
+            return cards.find(c => c.id === savedId);
+        }
+        const picked = chooseTodayCard();
+        localStorage.setItem(DAILY_KEY, key);
+        localStorage.setItem(DAILY_KEY + '_id', picked.id);
+        return picked;
+    }
+
+    function hasOpenedToday(){
+        return localStorage.getItem(OPENED_KEY) === todayKey();
+    }
+
+    function updatePeek(){
+        const today = getTodayCard();
+        if(cardPeekImg) cardPeekImg.src = today.image;
+        cardDock.classList.toggle('has-new', !hasOpenedToday());
+    }
+
+    function renderCollection(){
+        const owned = readOwned();
+        collectionCount.textContent = `${owned.length} / ${cards.length}`;
+        collectionGrid.innerHTML = cards.map(card => {
+            const isOwned = owned.includes(card.id);
+            return `<div class="collection-item ${isOwned ? '' : 'locked'}">
+                <img src="${card.image}" alt="${card.name}">
+                ${isOwned ? `<div class="collection-item-label">${card.name}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function openDailyCard(){
+        const card = getTodayCard();
+        collectCard.classList.remove('flipped');
+        collectImg.src = card.image;
+        collectImg.alt = card.name;
+        cardName.textContent = card.name;
+        cardRarity.textContent = card.label;
+        cardMetaClass(card.rarity);
+
+        const opened = hasOpenedToday();
+        cardPanelSub.textContent = opened ? 'Bugünün kartı koleksiyonda.' : 'Bugünün kartı hazır.';
+        renderCollection();
+        cardModal.classList.add('open');
+        cardModal.setAttribute('aria-hidden','false');
+
+        if(!opened){
+            setTimeout(() => {
+                collectCard.classList.add('flipped');
+                const owned = readOwned();
+                if(!owned.includes(card.id)) saveOwned([...owned, card.id]);
+                localStorage.setItem(OPENED_KEY, todayKey());
+                cardPanelSub.textContent = 'Bugünün kartı koleksiyona eklendi.';
+                renderCollection();
+                updatePeek();
+            }, 260);
+        } else {
+            setTimeout(() => collectCard.classList.add('flipped'), 120);
+        }
+    }
+
+    function cardMetaClass(rarity){
+        const meta = document.getElementById('cardMeta');
+        meta.className = `card-meta rarity-${rarity}`;
+    }
+
+    function closeCard(){
+        cardModal.classList.remove('open');
+        cardModal.setAttribute('aria-hidden','true');
+    }
+
+    cardDock.addEventListener('click', openDailyCard);
+    cardClose.addEventListener('click', closeCard);
+    cardModal.addEventListener('click', e => { if(e.target === cardModal) closeCard(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeCard(); });
+
+    updatePeek();
+    renderCollection();
+})();
 </script>
 
 </body>
