@@ -159,12 +159,6 @@
         height: 38px;
     }
 
-    .fullscreen-icon {
-        width: 38px;
-        height: 38px;
-    }
-
-
     @media (max-width: 600px) {
         .timer-wrap {
             width: 96vw;
@@ -207,10 +201,75 @@
         }
 
         .reset-icon,
-        .fullscreen-icon {
+        .pip-btn svg {
             width: 33px;
             height: 33px;
         }
+    }
+
+
+
+    /* Focus başlığı */
+    .focus-title-row {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+    }
+
+    .focus-title {
+        position: relative;
+        z-index: 2;
+        font-size: clamp(30px, 4vw, 45px);
+        font-weight: 700;
+        letter-spacing: .2px;
+        line-height: 1.05;
+        outline: none;
+        border: 0;
+        background: transparent;
+        color: #fff;
+        max-width: min(78vw, 760px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: text;
+    }
+
+    .focus-title-input {
+        font: inherit;
+        color: #fff;
+        width: min(70vw, 680px);
+        min-width: 160px;
+        border: 0;
+        outline: 0;
+        background: rgba(0,0,0,.10);
+        border-radius: 9px;
+        padding: 4px 8px;
+        text-align: center;
+    }
+
+    .pip-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translate(-50%, 12px);
+        padding: 9px 13px;
+        border-radius: 11px;
+        background: rgba(13,9,18,.82);
+        border: 1px solid rgba(255,255,255,.14);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease, transform .2s ease;
+        z-index: 1000;
+    }
+    .pip-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 600px){
+        .focus-title-row { margin-bottom: 18px; }
+        .focus-title { max-width: 86vw; }
     }
 
     .station-btn {
@@ -663,6 +722,45 @@
         .card-name{ font-size:21px; }
     }
 
+
+    .schedule-editor{
+        position:fixed;
+        inset:0;
+        z-index:160;
+        display:none;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        background:rgba(10,4,18,.42);
+    }
+    .schedule-editor.open{display:flex;}
+    .schedule-editor-panel{
+        width:min(520px,92vw);
+        max-height:82vh;
+        overflow:auto;
+        padding:20px;
+        border-radius:18px;
+        background:rgba(24,14,30,.96);
+        border:1px solid rgba(255,255,255,.16);
+        box-shadow:0 24px 70px rgba(0,0,0,.32);
+    }
+    .schedule-editor-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;}
+    .schedule-editor-title{font-size:20px;font-weight:800;}
+    .schedule-editor-note{margin-top:3px;font-size:12px;color:rgba(255,255,255,.55);}
+    .schedule-editor-close{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:23px;color:#fff;}
+    .schedule-editor-row{display:grid;grid-template-columns:1fr 96px 96px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+    .schedule-editor-row:last-child{border-bottom:0;}
+    .schedule-editor-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.86);}
+    .schedule-editor-row input{width:100%;height:38px;padding:0 10px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;font:inherit;}
+    .schedule-editor-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px;}
+    .schedule-editor-reset,.schedule-editor-save{height:40px;padding:0 14px;border-radius:10px;font-weight:800;}
+    .schedule-editor-reset{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);}
+    .schedule-editor-save{background:#7130ff;}
+    @media (max-width:600px){
+        .schedule-editor-row{grid-template-columns:1fr 84px 84px;gap:7px;}
+        .schedule-editor-panel{padding:16px;}
+    }
+
 </style>
 </head>
 
@@ -671,10 +769,41 @@
     <div class="study-bubble" id="studyBubble" aria-live="polite">Etüt bitimine --:--</div>
     <button class="station-btn" id="stationBtn">Not İstasyonuma Git</button>
 </div>
+<div class="schedule-editor" id="scheduleEditor" aria-hidden="true">
+    <div class="schedule-editor-panel" role="dialog" aria-modal="true" aria-labelledby="scheduleEditorTitle">
+        <div class="schedule-editor-head">
+            <div>
+                <div class="schedule-editor-title" id="scheduleEditorTitle">Sayaç Ayarı</div>
+                <div class="schedule-editor-note">Normal kronometreyi test için ayarla</div>
+            </div>
+            <button class="schedule-editor-close" id="scheduleEditorClose" type="button" aria-label="Kapat">×</button>
+        </div>
+        <div class="schedule-editor-list" id="scheduleEditorList">
+            <div class="schedule-editor-row" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="schedule-editor-label">Saat</div>
+                <div class="schedule-editor-label">Dakika</div>
+                <div class="schedule-editor-label">Saniye</div>
+            </div>
+            <div class="schedule-editor-row" style="grid-template-columns:1fr 1fr 1fr;">
+                <input id="timerEditHours" type="number" min="0" max="999" step="1" value="0" inputmode="numeric">
+                <input id="timerEditMinutes" type="number" min="0" max="59" step="1" value="0" inputmode="numeric">
+                <input id="timerEditSeconds" type="number" min="0" max="59" step="1" value="0" inputmode="numeric">
+            </div>
+        </div>
+        <div class="schedule-editor-actions">
+            <button class="schedule-editor-reset" id="scheduleEditorReset" type="button">Sıfırla</button>
+            <button class="schedule-editor-save" id="scheduleEditorSave" type="button">Kaydet</button>
+        </div>
+    </div>
+</div>
+
 <div class="warp" id="warp"></div>
+<div class="pip-toast" id="pipToast" role="status" aria-live="polite"></div>
 
 <div class="timer-wrap">
-    <div class="title">derssel şeyler</div>
+    <div class="focus-title-row">
+        <div class="focus-title" id="focusTitle" role="button" tabindex="0" aria-label="Yazıyı düzenle" title="Düzenlemek için tıkla">derssel şeyler</div>
+    </div>
 
     <div class="time" id="time">00:00</div>
 
@@ -694,10 +823,10 @@
             </svg>
         </button>
 
-        <button class="icon-btn" id="fullscreenBtn" aria-label="Tam ekran">
-            <svg class="fullscreen-icon" viewBox="0 0 48 48" fill="none">
-                <path d="M8 18V8h10M30 8h10v10M40 30v10H30M18 40H8V30"
-                      stroke="white" stroke-width="4" stroke-linecap="square"/>
+        <button class="icon-btn pip-btn" id="pipBtn" aria-label="Pencere içinde pencere" title="Pencere içinde pencere">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="6" y="8" width="36" height="30" rx="5" stroke="white" stroke-width="3.2"/>
+                <rect x="24" y="24" width="13" height="10" rx="2" fill="white"/>
             </svg>
         </button>
     </div>
@@ -705,88 +834,347 @@
 
 
 <script>
-    let elapsed = 0;
-    let currentElapsed = 0;
+    /* =========================================================
+       ODAK KRONOMETRESİ
+       - Süre 60 dakikadan sonra saat formatına geçer.
+       - Durum localStorage ile korunur; yenilemede sıfırlanmaz.
+       - Lap yalnızca Current'ı sıfırlar.
+       - Pencere içinde pencere ayrı uygulamalar üzerinde kalabilir.
+    ========================================================= */
+    let elapsedBase = 0;
+    let currentBase = 0;
     let running = false;
-    let lastTime = 0;
-    let animationFrame = null;
+    let runStartedAt = 0;
+    let currentRunStartedAt = 0;
+    let pipWindow = null;
+    let saveTimer = null;
+    let titleEditing = false;
+
+    const TIMER_STATE_KEY = 'derssel_focus_timer_v3';
+    const TITLE_KEY = 'derssel_focus_title_v1';
 
     const timeEl = document.getElementById("time");
     const currentEl = document.getElementById("current");
     const startBtn = document.getElementById("startBtn");
     const lapBtn = document.getElementById("lapBtn");
     const resetBtn = document.getElementById("resetBtn");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const pipBtn = document.getElementById("pipBtn");
+    const focusTitle = () => document.getElementById("focusTitle");
+    const pipToast = document.getElementById("pipToast");
+
+    function todayKey(){
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
 
     function format(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
 
-        return String(minutes).padStart(2, "0") + ":" +
-               String(seconds).padStart(2, "0");
+        if (hours > 0) {
+            return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        }
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function nowElapsed(){
+        return elapsedBase + (running ? Math.max(0, Date.now() - runStartedAt) : 0);
+    }
+
+    function nowCurrent(){
+        return currentBase + (running ? Math.max(0, Date.now() - currentRunStartedAt) : 0);
     }
 
     function render() {
-        timeEl.textContent = format(elapsed);
-        currentEl.textContent = format(currentElapsed);
+        const total = nowElapsed();
+        const current = nowCurrent();
+        timeEl.textContent = format(total);
+        currentEl.textContent = format(current);
+        startBtn.textContent = running ? 'Stop' : 'Start';
+        syncPip();
     }
 
-    function tick(timestamp) {
-        if (!running) return;
-
-        if (!lastTime) lastTime = timestamp;
-        const delta = timestamp - lastTime;
-        elapsed += delta;
-        currentElapsed += delta;
-        lastTime = timestamp;
-
-        render();
-        animationFrame = requestAnimationFrame(tick);
-    }
-
-    startBtn.addEventListener("click", () => {
-        running = !running;
-
-        if (running) {
-            startBtn.textContent = "Stop";
-            lastTime = 0;
-            animationFrame = requestAnimationFrame(tick);
-        } else {
-            startBtn.textContent = "Start";
-            cancelAnimationFrame(animationFrame);
+    function saveTimerState(forceFold = false){
+        if (forceFold && running) {
+            const now = Date.now();
+            elapsedBase += Math.max(0, now - runStartedAt);
+            currentBase += Math.max(0, now - currentRunStartedAt);
+            runStartedAt = now;
+            currentRunStartedAt = now;
         }
-    });
+
+        const state = {
+            elapsedBase,
+            currentBase,
+            running,
+            runStartedAt,
+            currentRunStartedAt,
+            savedAt: Date.now()
+        };
+        localStorage.setItem(TIMER_STATE_KEY, JSON.stringify(state));
+    }
+
+    function loadTimerState(){
+        try {
+            const state = JSON.parse(localStorage.getItem(TIMER_STATE_KEY) || 'null');
+            if (!state || typeof state !== 'object') {
+                const legacySeconds = Number(localStorage.getItem('yks_timer_active_seconds'));
+                if (Number.isFinite(legacySeconds) && legacySeconds > 0) {
+                    elapsedBase = legacySeconds * 1000;
+                    currentBase = 0;
+                    running = localStorage.getItem('yks_timer_running') === 'true';
+                    runStartedAt = running ? Date.now() : 0;
+                    currentRunStartedAt = running ? Date.now() : 0;
+                }
+                return;
+            }
+            elapsedBase = Math.max(0, Number(state.elapsedBase) || 0);
+            currentBase = Math.max(0, Number(state.currentBase) || 0);
+            running = state.running === true;
+            runStartedAt = Number(state.runStartedAt) || 0;
+            currentRunStartedAt = Number(state.currentRunStartedAt) || runStartedAt;
+
+            if (running && !runStartedAt) {
+                running = false;
+                runStartedAt = 0;
+                currentRunStartedAt = 0;
+            }
+        } catch {
+            elapsedBase = 0;
+            currentBase = 0;
+            running = false;
+            runStartedAt = 0;
+            currentRunStartedAt = 0;
+        }
+    }
+
+    function showPipToast(message){
+        if (!pipToast) return;
+        pipToast.textContent = message;
+        pipToast.classList.add('show');
+        clearTimeout(showPipToast.timer);
+        showPipToast.timer = setTimeout(() => pipToast.classList.remove('show'), 2400);
+    }
+
+    function startStop(){
+        const now = Date.now();
+        if (!running) {
+            running = true;
+            runStartedAt = now;
+            currentRunStartedAt = now;
+        } else {
+            elapsedBase += Math.max(0, now - runStartedAt);
+            currentBase += Math.max(0, now - currentRunStartedAt);
+            running = false;
+            runStartedAt = 0;
+            currentRunStartedAt = 0;
+        }
+        saveTimerState();
+        render();
+    }
+
+    startBtn.addEventListener("click", startStop);
 
     lapBtn.addEventListener("click", () => {
-        if (!running && currentElapsed === 0) return;
-        currentElapsed = 0;
-        currentEl.textContent = "00:00";
+        const current = nowCurrent();
+        if (!running && current === 0) return;
+
+        currentBase = current;
+        currentRunStartedAt = Date.now();
+        currentBase = 0;
+        if (!running) currentRunStartedAt = 0;
+
+        saveTimerState();
+        render();
     });
 
     resetBtn.addEventListener("click", () => {
         running = false;
-        cancelAnimationFrame(animationFrame);
-
-        elapsed = 0;
-        currentElapsed = 0;
-        lastTime = 0;
-
-        startBtn.textContent = "Start";
-
+        elapsedBase = 0;
+        currentBase = 0;
+        runStartedAt = 0;
+        currentRunStartedAt = 0;
+        localStorage.removeItem(TIMER_STATE_KEY);
         render();
     });
 
-    fullscreenBtn.addEventListener("click", async () => {
-        try {
-            if (!document.fullscreenElement) {
-                await document.documentElement.requestFullscreen();
-            } else {
-                await document.exitFullscreen();
-            }
-        } catch (e) {}
-    });
+    function readFocusTitle(){
+        const saved = localStorage.getItem(TITLE_KEY);
+        return saved && saved.trim() ? saved.trim().slice(0, 60) : 'derssel şeyler';
+    }
 
+    function saveFocusTitle(value){
+        const clean = String(value || '').trim().slice(0, 60) || 'derssel şeyler';
+        localStorage.setItem(TITLE_KEY, clean);
+        focusTitle().textContent = clean;
+        titleEditing = false;
+        syncPip();
+    }
+
+    function beginTitleEdit(){
+        if (titleEditing) return;
+        const titleEl = focusTitle();
+        if (!titleEl) return;
+        titleEditing = true;
+        const old = titleEl.textContent;
+        const input = document.createElement('input');
+        input.className = 'focus-title-input';
+        input.maxLength = 60;
+        input.value = old;
+        titleEl.replaceWith(input);
+        input.focus();
+        input.select();
+
+        const finish = (cancel=false) => {
+            if (!input.isConnected) return;
+            const value = cancel ? old : input.value;
+            const span = document.createElement('div');
+            span.className = 'focus-title';
+            span.id = 'focusTitle';
+            span.setAttribute('role','button');
+            span.setAttribute('tabindex','0');
+            span.setAttribute('aria-label','Yazıyı düzenle');
+            span.title = 'Düzenlemek için tıkla';
+            span.textContent = value || 'derssel şeyler';
+            input.replaceWith(span);
+            titleEditing = false;
+            if (!cancel) localStorage.setItem(TITLE_KEY, String(value || 'derssel şeyler').trim().slice(0,60) || 'derssel şeyler');
+            bindTitleEditor();
+            syncPip();
+        };
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); finish(false); }
+            if (e.key === 'Escape') { e.preventDefault(); finish(true); }
+        });
+        input.addEventListener('blur', () => finish(false));
+    }
+
+    function bindTitleEditor(){
+        const el = focusTitle();
+        if (!el || el.dataset.editBound === '1') return;
+        el.dataset.editBound = '1';
+        el.addEventListener('click', beginTitleEdit);
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); beginTitleEdit(); }
+        });
+    }
+
+    // İlk yüklemede kaydedilmiş yazıyı kullan.
+    focusTitle().textContent = readFocusTitle();
+    bindTitleEditor();
+
+    function clonePipStyles(pipDoc){
+        const mainStyle = document.querySelector('style')?.textContent || '';
+        pipDoc.head.innerHTML = `
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+            <title>derssel şeyler</title>
+            <style>${mainStyle}
+                html, body { width:100%; height:100%; min-width:0; overflow:hidden; }
+                body { display:flex; align-items:center; justify-content:center; }
+                .station-wrap, .warp, .pip-toast, .schedule-editor { display:none !important; }
+                .timer-wrap { width:min(94vw, 500px); transform:none; padding:14px 18px; }
+                .focus-title-row { margin-bottom:10px; }
+                .focus-title { max-width:88vw; font-size:clamp(24px, 6vw, 34px); cursor:default; }
+                .focus-title-input { width:min(86vw,420px); font-size:clamp(22px,6vw,32px); }
+                .time { font-size:clamp(70px, 16vw, 112px); margin-bottom:12px; letter-spacing:-2px; }
+                .current { font-size:clamp(22px, 5vw, 30px); margin-bottom:18px; }
+                .controls { gap:8px; }
+                .start { min-width:132px; height:52px; padding:0 20px; font-size:22px; border-radius:16px; }
+                .lap { min-width:84px; height:52px; padding:0 16px; font-size:22px; border-radius:16px; }
+                .icon-btn { width:52px; height:52px; }
+                .reset-icon, .pip-btn svg { width:36px !important; height:36px !important; }
+            </style>`;
+    }
+
+    function setupPipWindow(win){
+        clonePipStyles(win.document);
+        win.document.body.innerHTML = `
+            <div class="timer-wrap">
+                <div class="focus-title-row">
+                    <div class="focus-title" id="pipLabel">derssel şeyler</div>
+                </div>
+                <div class="time" id="pipTime">00:00</div>
+                <div class="current">Current: <span id="pipCurrent">00:00</span></div>
+                <div class="controls">
+                    <button class="start" id="pipStart">Start</button>
+                    <button class="lap" id="pipLap">Lap</button>
+                    <button class="icon-btn" id="pipReset" aria-label="Sıfırla" title="Sıfırla">
+                        <svg class="reset-icon" viewBox="0 0 48 48" fill="none">
+                            <path d="M12 19a17 17 0 1 1-1 13" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M12 10v10h10" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>`;
+
+        win.document.getElementById('pipStart').addEventListener('click', startStop);
+        win.document.getElementById('pipLap').addEventListener('click', () => lapBtn.click());
+        win.document.getElementById('pipReset').addEventListener('click', () => resetBtn.click());
+        win.addEventListener('pagehide', () => {
+            if (pipWindow === win) pipWindow = null;
+        });
+        syncPip();
+    }
+
+    async function openPip(){
+        if (!('documentPictureInPicture' in window) || !window.documentPictureInPicture?.requestWindow) {
+            showPipToast('Bu tarayıcı pencere içinde pencereyi desteklemiyor.');
+            return;
+        }
+        if (pipWindow && !pipWindow.closed) {
+            try { pipWindow.focus(); } catch {}
+            return;
+        }
+        try {
+            pipWindow = await window.documentPictureInPicture.requestWindow({
+                width: 500,
+                height: 330,
+                preferInitialWindowPlacement: true
+            });
+            setupPipWindow(pipWindow);
+        } catch (error) {
+            console.warn('Document PiP açılamadı:', error);
+            pipWindow = null;
+            showPipToast('Pencere içinde pencere açılamadı.');
+        }
+    }
+
+    pipBtn.addEventListener('click', openPip);
+
+    function syncPip(){
+        if (!pipWindow || pipWindow.closed) return;
+        try {
+            const total = nowElapsed();
+            const current = nowCurrent();
+            const pipTime = pipWindow.document.getElementById('pipTime');
+            const pipCurrent = pipWindow.document.getElementById('pipCurrent');
+            const pipLabel = pipWindow.document.getElementById('pipLabel');
+            const pipStart = pipWindow.document.getElementById('pipStart');
+            if (pipTime) pipTime.textContent = format(total);
+            if (pipCurrent) pipCurrent.textContent = format(current);
+            const mainTitleEl = document.getElementById('focusTitle');
+            const mainTitleInput = document.querySelector('.focus-title-input');
+            const mainTitleValue = mainTitleEl ? mainTitleEl.textContent : (mainTitleInput ? mainTitleInput.value : 'derssel şeyler');
+            if (pipLabel) pipLabel.textContent = mainTitleValue;
+            if (pipStart) pipStart.textContent = running ? 'Stop' : 'Start';
+        } catch {
+            pipWindow = null;
+        }
+    }
+
+    // Yüksek sıklıklı DOM güncellemesi yerine hafif 250 ms döngüsü.
+    setInterval(render, 250);
+    setInterval(() => { if (running) saveTimerState(true); }, 5000);
+    window.addEventListener('pagehide', () => saveTimerState(true));
+    document.addEventListener('visibilitychange', () => saveTimerState(true));
+
+    loadTimerState();
     render();
 
     const stationBtn = document.getElementById("stationBtn");
@@ -802,31 +1190,110 @@
         6: ["10:15-13:15","14:15-15:45","16:00-17:30","17:45-19:30"]
     };
 
+    const studyDayNames = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    const scheduleEditor = document.getElementById('scheduleEditor');
+    const scheduleEditorClose = document.getElementById('scheduleEditorClose');
+    const scheduleEditorSave = document.getElementById('scheduleEditorSave');
+    const scheduleEditorReset = document.getElementById('scheduleEditorReset');
+    const timerEditHours = document.getElementById('timerEditHours');
+    const timerEditMinutes = document.getElementById('timerEditMinutes');
+    const timerEditSeconds = document.getElementById('timerEditSeconds');
+
+    function openTimerEditor(){
+        const totalSeconds = Math.floor(nowElapsed() / 1000);
+        timerEditHours.value = Math.floor(totalSeconds / 3600);
+        timerEditMinutes.value = Math.floor((totalSeconds % 3600) / 60);
+        timerEditSeconds.value = totalSeconds % 60;
+        scheduleEditor.classList.add('open');
+        scheduleEditor.setAttribute('aria-hidden','false');
+        setTimeout(() => timerEditHours.focus(), 40);
+    }
+
+    function closeTimerEditor(){
+        scheduleEditor.classList.remove('open');
+        scheduleEditor.setAttribute('aria-hidden','true');
+    }
+
+    function clampInt(value, min, max){
+        const n = Number.parseInt(value, 10);
+        if (!Number.isFinite(n)) return min;
+        return Math.min(max, Math.max(min, n));
+    }
+
+    function saveTimerEditor(){
+        const hours = clampInt(timerEditHours.value, 0, 999);
+        const minutes = clampInt(timerEditMinutes.value, 0, 59);
+        const seconds = clampInt(timerEditSeconds.value, 0, 59);
+        const totalMs = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+        elapsedBase = totalMs;
+        if (running) runStartedAt = Date.now();
+        saveTimerState();
+        render();
+        closeTimerEditor();
+    }
+
+    function resetTimerEditor(){
+        elapsedBase = 0;
+        if (running) runStartedAt = Date.now();
+        saveTimerState();
+        render();
+        closeTimerEditor();
+    }
+
+    scheduleEditorClose.addEventListener('click', closeTimerEditor);
+    scheduleEditorSave.addEventListener('click', saveTimerEditor);
+    scheduleEditorReset.addEventListener('click', resetTimerEditor);
+    scheduleEditor.addEventListener('click', e => { if (e.target === scheduleEditor) closeTimerEditor(); });
+
+    [timerEditHours, timerEditMinutes, timerEditSeconds].forEach((el, index, arr) => {
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); saveTimerEditor(); }
+            if (e.key === 'Escape') { e.preventDefault(); closeTimerEditor(); }
+            if (e.key === 'ArrowRight' && arr[index + 1]) arr[index + 1].focus();
+            if (e.key === 'ArrowLeft' && arr[index - 1]) arr[index - 1].focus();
+        });
+    });
+
+    let scheduleSecretClicks = 0;
+    let scheduleSecretTimer = null;
+    studyBubble.addEventListener('click', () => {
+        scheduleSecretClicks += 1;
+        clearTimeout(scheduleSecretTimer);
+        if (scheduleSecretClicks >= 5) {
+            scheduleSecretClicks = 0;
+            openTimerEditor();
+            return;
+        }
+        scheduleSecretTimer = setTimeout(() => { scheduleSecretClicks = 0; }, 1800);
+    });
+
+    function parseStudyTime(value){
+        const [h,m] = String(value).split(':').map(Number);
+        return h * 60 + m;
+    }
+
     function updateStudyBubble(){
         const now = new Date();
         const day = now.getDay();
         const schedule = studySchedules[day] || [];
-        const nowMinutes = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+        const nowMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
         let activeEnd = null;
         let activeName = null;
-        let nextStart = null;
 
-        for (let i=0;i<schedule.length;i++){
-            const [start,end] = schedule[i].split('-').map(v=>{
-                const [h,m] = v.split(':').map(Number);
-                return h*60+m;
-            });
-            if (nowMinutes >= start && nowMinutes < end){
+        for (let i = 0; i < schedule.length; i++) {
+            const [startRaw, endRaw] = schedule[i].split('-');
+            const start = parseStudyTime(startRaw);
+            const end = parseStudyTime(endRaw);
+            if (nowMinutes >= start && nowMinutes < end) {
                 activeEnd = end;
-                activeName = day === 6 && i === 0 ? 'Deneme' : `${i+1}. Etüt`;
+                activeName = day === 6 && i === 0 ? 'Deneme' : `${i + 1}. Etüt`;
                 break;
             }
-            if (nowMinutes < start && nextStart === null) nextStart = start;
         }
 
-        if (activeEnd !== null){
-            let remaining = Math.max(0, Math.ceil((activeEnd-nowMinutes)*60));
-            const mm = Math.floor(remaining/60);
+        if (activeEnd !== null) {
+            const remaining = Math.max(0, Math.ceil((activeEnd - nowMinutes) * 60));
+            const mm = Math.floor(remaining / 60);
             const ss = remaining % 60;
             studyBubble.textContent = `${activeName} · ${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
         } else {
