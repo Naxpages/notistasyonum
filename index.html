@@ -460,6 +460,54 @@ body.focus-local-mode .content-track {
         @media (max-width:900px){.camp-library-head{grid-template-columns:1fr;align-items:stretch;}.camp-library-grid{grid-template-columns:1fr;}}
         @media (max-width:620px){.camp-filter-row{grid-template-columns:repeat(2,1fr);}.camp-filter[data-camp-filter="all"]{grid-column:span 2;}.playlist-link{grid-template-columns:92px minmax(0,1fr) 42px;}.playlist-thumb-wrap{width:92px;height:64px;}.teacher-visual{height:196px;}}
 
+        /* =====================================================
+           KAMP v4 — Sade, büyük, hızlı
+        ===================================================== */
+        .camp-library-head{display:block;margin:0 0 18px;}
+        .camp-library-head>div:first-child{display:none;}
+        .camp-library-tools{display:grid;grid-template-columns:minmax(190px,1fr) auto;align-items:center;gap:14px;}
+        .camp-search-wrap{position:relative;min-width:0;display:block;}
+        .camp-search-wrap svg{position:absolute;left:16px;top:50%;width:17px;height:17px;transform:translateY(-50%);fill:none;stroke:#8e9aa6;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+        .camp-library-search{height:52px;padding:0 16px 0 46px;border-radius:16px;background:rgba(255,255,255,.045);font-size:.78rem;}
+        .camp-library-search::placeholder{color:transparent;}
+        .camp-filter-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px;}
+        .camp-filter-row::-webkit-scrollbar{display:none;}
+        .camp-filter{height:44px;padding:0 15px;border-radius:13px;font-size:.64rem;letter-spacing:.01em;white-space:nowrap;flex:0 0 auto;color:#9ba6b1;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.075);}
+        .camp-filter[data-camp-filter="all"].active{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.17);}
+        .camp-filter[data-camp-filter="math"].active{background:rgba(79,150,224,.19);border-color:rgba(79,150,224,.38);}
+        .camp-filter[data-camp-filter="geometry"].active{background:rgba(232,151,73,.19);border-color:rgba(232,151,73,.40);}
+        .camp-filter[data-camp-filter="physics"].active{background:rgba(157,112,226,.19);border-color:rgba(157,112,226,.38);}
+        .camp-filter[data-camp-filter="chem"].active{background:rgba(63,179,200,.19);border-color:rgba(63,179,200,.38);}
+        .camp-filter[data-camp-filter="bio"].active{background:rgba(87,190,129,.19);border-color:rgba(87,190,129,.38);}
+        .camp-library-grid{gap:20px;}
+        .teacher-card{border-radius:22px;}
+        .teacher-visual{height:228px;}
+        .teacher-name{font-size:1.28rem;}
+        .playlist-link{min-height:92px;grid-template-columns:124px minmax(0,1fr) 48px;padding:9px;border-radius:15px;}
+        .playlist-thumb-wrap{width:124px;height:74px;border-radius:11px;}
+        .playlist-name{font-size:.90rem;}
+        .playlist-cta{width:48px;height:48px;border-radius:15px;}
+        .camp-premium-card{grid-column:1/-1;}
+        .camp-premium-card .teacher-visual{height:190px;}
+        .camp-premium-card .playlist-stack{grid-template-columns:repeat(2,minmax(0,1fr));}
+        .camp-premium-link.camp-premium-locked{opacity:.40;filter:saturate(.58);cursor:not-allowed;pointer-events:none;}
+        .camp-premium-link.camp-premium-locked .playlist-cta{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.08);}
+        .camp-premium-link.camp-premium-locked .playlist-copy{opacity:.72;}
+        .camp-contact{display:flex;flex-direction:column;align-items:center;gap:6px;margin:26px auto 2px;padding:9px 10px 0;text-align:center;color:#6e7984;font-size:.61rem;line-height:1.5;}
+        .camp-contact-main{display:inline-flex;align-items:center;justify-content:center;gap:8px;color:#858f99;text-decoration:none;transition:color .18s ease;}
+        .camp-contact-main:hover{color:#cbd3db;}
+        .camp-contact-main svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+        .camp-contact small{font-size:.53rem;color:#4f5963;}
+        @media (max-width:900px){.camp-library-tools{grid-template-columns:1fr;}.camp-premium-card .playlist-stack{grid-template-columns:1fr;}}
+        @media (max-width:620px){.camp-library-pane{padding-bottom:32px;}.camp-filter{height:42px;padding:0 13px;}.teacher-visual{height:202px;}.playlist-link{grid-template-columns:94px minmax(0,1fr) 44px;min-height:84px;}.playlist-thumb-wrap{width:94px;height:62px;}.playlist-cta{width:44px;height:44px;}.camp-premium-card .teacher-visual{height:180px;}.camp-contact{margin-top:22px;}}
+
+        /* Not editörü — biçimlendirme davranışı sade ve kalıcı. */
+        .editable-area{white-space:normal;}
+        .editable-area>div,.editable-area>p{margin:0 0 8px;min-height:1.55em;}
+        .editable-area ul,.editable-area ol{margin:0 0 8px;padding-left:24px;}
+        .editable-area li{margin:0 0 4px;}
+        .note-action-btn.note-highlight-btn.active{color:#171717;background:rgba(255,241,118,.88);border-color:rgba(255,241,118,.90);}
+
         .camp-no-result {
             display: none;
             margin-top: 16px;
@@ -3018,127 +3066,161 @@ body.pro-active .motivation-label {
             <section class="content-pane camp-library-pane" id="camp-library-pane" aria-label="Kamp" aria-hidden="true">
                 <div class="camp-library-shell">
                     <div class="camp-library-head">
-                        <div>
-                            <div class="camp-library-title-row">
-                                <span class="camp-library-title-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2Z"></path><path d="M9 7h6M9 10h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
-                                </span>
-                                <div class="camp-library-title">Kamp</div>
-                            </div>
-                        </div>
                         <div class="camp-library-tools">
-                            <input class="camp-library-search" id="camp-library-search" type="search" placeholder="Hoca veya ders ara..." autocomplete="off">
+                            <label class="camp-search-wrap" aria-label="Kamp içinde ara">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+                                <input class="camp-library-search" id="camp-library-search" type="search" placeholder="" autocomplete="off" aria-label="Hoca veya ders ara">
+                            </label>
                             <div class="camp-filter-row" id="camp-filter-row" aria-label="Ders filtreleri">
                                 <button class="camp-filter active" type="button" data-camp-filter="all">Tümü</button>
                                 <button class="camp-filter" type="button" data-camp-filter="math">Matematik</button>
-                                <button class="camp-filter" type="button" data-camp-filter="bio">Biyoloji</button>
+                                <button class="camp-filter" type="button" data-camp-filter="geometry">Geometri</button>
                                 <button class="camp-filter" type="button" data-camp-filter="physics">Fizik</button>
                                 <button class="camp-filter" type="button" data-camp-filter="chem">Kimya</button>
+                                <button class="camp-filter" type="button" data-camp-filter="bio">Biyoloji</button>
                             </div>
                         </div>
                     </div>
-
                     <div class="camp-library-grid" id="camp-library-grid">
-                        <article class="teacher-card" data-subject="math" data-camp-search="soner akıncı matematik tyt ayt">
+<article class="teacher-card" data-camp-id="soner" data-subject="math" data-camp-search="soner akıncı matematik tyt ayt">
                             <div class="teacher-visual">
-                                <img src="https://i.ytimg.com/vi/ZOfHZpCjZ4o/hq720.jpg" alt="Soner Akıncı ders videosu önizlemesi" loading="eager" referrerpolicy="no-referrer">
-                                <div class="teacher-overlay">
-                                    <div class="teacher-identity">
-                                        <div class="teacher-name">Soner Akıncı</div>
-                                    </div>
-                                    <div class="subject-badge">MATEMATİK</div>
-                                </div>
+                                <img src="https://i.ytimg.com/vi/ZOfHZpCjZ4o/hq720.jpg" alt="Soner Akıncı" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Soner Akıncı</div></div><div class="subject-badge">MATEMATİK</div></div>
                             </div>
-                            <div class="teacher-body">
-                                <div class="playlist-stack">
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLSKqG1c0berdV6kF83_8lH4YiGYFjzuM3" target="_blank" rel="noopener noreferrer">
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLSKqG1c0berdV6kF83_8lH4YiGYFjzuM3" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/ZOfHZpCjZ4o/hq720.jpg" alt="TYT Matematik Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">TYT Matematik Kampı</div><div class="playlist-meta">TYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
                                     </a>
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLSKqG1c0berddAhjB_ICrzpZi7uAisE9V" target="_blank" rel="noopener noreferrer">
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLSKqG1c0berddAhjB_ICrzpZi7uAisE9V" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/iaPHeI5OdMM/hq720.jpg" alt="AYT Matematik Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">AYT Matematik Kampı</div><div class="playlist-meta">AYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
-                                    </a>
-                                </div>
-                            </div>
+                                    </a></div></div>
                         </article>
-
-                        <article class="teacher-card" data-subject="bio" data-camp-search="biosem biyoloji tyt ayt">
+<article class="teacher-card" data-camp-id="eyup-b" data-subject="math" data-camp-search="eyüp b eyup boncuk matematik tyt ayt">
                             <div class="teacher-visual">
-                                <img src="https://i.ytimg.com/vi/2VPQjUvzn4A/hq720.jpg" alt="Biosem ders videosu önizlemesi" loading="lazy" referrerpolicy="no-referrer">
-                                <div class="teacher-overlay">
-                                    <div class="teacher-identity">
-                                        <div class="teacher-name">Biosem</div>
-                                    </div>
-                                    <div class="subject-badge">BİYOLOJİ</div>
-                                </div>
+                                <img src="https://i.ytimg.com/vi/Oh1bVlBS0jg/hq720.jpg" alt="Eyüp B." loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Eyüp B.</div></div><div class="subject-badge">MATEMATİK</div></div>
                             </div>
-                            <div class="teacher-body">
-                                <div class="playlist-stack">
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLqLwBmByktJWEP58XKgI5LE1BeMTOkhjJ" target="_blank" rel="noopener noreferrer">
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLyiXTl2rW_wrvZYVh9-A5pHeVhF4xdeO4" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/Oh1bVlBS0jg/hq720.jpg" alt="TYT Matematik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">TYT Matematik</div><div class="playlist-meta">TYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a>
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLyiXTl2rW_wrZGIFdO99RnVKVUjhrtPyK" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/Oh1bVlBS0jg/hq720.jpg" alt="AYT Matematik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">AYT Matematik</div><div class="playlist-meta">AYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a></div></div>
+                        </article>
+<article class="teacher-card" data-camp-id="rehber" data-subject="math geometry" data-camp-search="rehber matematik matematik geometri tyt ayt">
+                            <div class="teacher-visual">
+                                <img src="https://i.ytimg.com/vi/CjZlv1GmFWU/hq720.jpg" alt="Rehber Matematik" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Rehber Matematik</div></div><div class="subject-badge">MATEMATİK · GEOMETRİ</div></div>
+                            </div>
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLVoSZ0D0CB3pXrBmYoppjf2fwi3vqF-vY" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/CjZlv1GmFWU/hq720.jpg" alt="49 Günde TYT Matematik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">49 Günde TYT Matematik</div><div class="playlist-meta">TYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a>
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLVoSZ0D0CB3pxinv46pTICYKU7B_MX-pW" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/CjZlv1GmFWU/hq720.jpg" alt="65 Günde AYT Matematik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">65 Günde AYT Matematik</div><div class="playlist-meta">AYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a>
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLVoSZ0D0CB3ovGqsyyKyl129FIZEXQm60" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/iBfDj4zCZV4/hq720.jpg" alt="49 Günde TYT Geometri" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">49 Günde TYT Geometri</div><div class="playlist-meta">GEOMETRİ</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a></div></div>
+                        </article>
+<article class="teacher-card" data-camp-id="biosem" data-subject="bio" data-camp-search="biosem biyoloji tyt ayt">
+                            <div class="teacher-visual">
+                                <img src="https://i.ytimg.com/vi/2VPQjUvzn4A/hq720.jpg" alt="Biosem" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Biosem</div></div><div class="subject-badge">BİYOLOJİ</div></div>
+                            </div>
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLqLwBmByktJWEP58XKgI5LE1BeMTOkhjJ" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/2VPQjUvzn4A/hq720.jpg" alt="39 Günde TYT Biyoloji" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">39 Günde TYT Biyoloji</div><div class="playlist-meta">TYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
                                     </a>
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLqLwBmByktJXYLOn2HhcXWpIH0fuIa_pk" target="_blank" rel="noopener noreferrer">
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLqLwBmByktJXYLOn2HhcXWpIH0fuIa_pk" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/4gbxoMHYNJ8/hq720.jpg" alt="AYT Biyoloji Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">AYT Biyoloji Kampı</div><div class="playlist-meta">AYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
-                                    </a>
-                                </div>
-                            </div>
+                                    </a></div></div>
                         </article>
-
-                        <article class="teacher-card" data-subject="physics" data-camp-search="altuğ güneş fizik tyt">
+<article class="teacher-card" data-camp-id="altug" data-subject="physics" data-camp-search="altuğ güneş fizik tyt">
                             <div class="teacher-visual">
-                                <img src="https://i.ytimg.com/vi/XpL2sYzSwRs/hq720.jpg" alt="Altuğ Güneş ders videosu önizlemesi" loading="lazy" referrerpolicy="no-referrer">
-                                <div class="teacher-overlay">
-                                    <div class="teacher-identity">
-                                        <div class="teacher-name">Altuğ Güneş</div>
-                                    </div>
-                                    <div class="subject-badge">FİZİK</div>
-                                </div>
+                                <img src="https://i.ytimg.com/vi/XpL2sYzSwRs/hq720.jpg" alt="Altuğ Güneş" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Altuğ Güneş</div></div><div class="subject-badge">FİZİK</div></div>
                             </div>
-                            <div class="teacher-body">
-                                <div class="playlist-stack">
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLjMK0Mww73Cc4v8HI329cVSd7U4cMAEVZ" target="_blank" rel="noopener noreferrer">
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLjMK0Mww73Cc4v8HI329cVSd7U4cMAEVZ" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/XpL2sYzSwRs/hq720.jpg" alt="TYT Fizik Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">TYT Fizik Kampı</div><div class="playlist-meta">TYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
-                                    </a>
-                                </div>
-                            </div>
+                                    </a></div></div>
                         </article>
-
-                        <article class="teacher-card" data-subject="chem" data-camp-search="görkem şahin kimya tyt ayt">
+<article class="teacher-card" data-camp-id="ozcan" data-subject="physics" data-camp-search="özcan aykın fizik tyt ayt">
                             <div class="teacher-visual">
-                                <img src="https://i.ytimg.com/vi/ayDKtjR1Rm8/hq720.jpg" alt="Görkem Şahin ders videosu önizlemesi" loading="lazy" referrerpolicy="no-referrer">
-                                <div class="teacher-overlay">
-                                    <div class="teacher-identity">
-                                        <div class="teacher-name">Görkem Şahin</div>
-                                    </div>
-                                    <div class="subject-badge">KİMYA</div>
-                                </div>
+                                <img src="https://i.ytimg.com/vi/1Hg2eF907YA/hq720.jpg" alt="Özcan Aykın" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Özcan Aykın</div></div><div class="subject-badge">FİZİK</div></div>
                             </div>
-                            <div class="teacher-body">
-                                <div class="playlist-stack">
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PLYLBaDBvPgfo" target="_blank" rel="noopener noreferrer">
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLhhV4F6NB0-uEPdZncMf_qb0tSKyBM-Lf" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/1Hg2eF907YA/hq720.jpg" alt="55 Günde TYT Fizik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">55 Günde TYT Fizik</div><div class="playlist-meta">TYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a>
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PLhhV4F6NB0-tU__PwCFhnaK-Gg_I3JG_4" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
+                                        <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/1Hg2eF907YA/hq720.jpg" alt="88 Günde AYT Fizik" loading="lazy" referrerpolicy="no-referrer"></span>
+                                        <div class="playlist-copy"><div class="playlist-name">88 Günde AYT Fizik</div><div class="playlist-meta">AYT</div></div>
+                                        <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                                    </a></div></div>
+                        </article>
+<article class="teacher-card" data-camp-id="gorkem" data-subject="chem" data-camp-search="görkem şahin kimya tyt ayt">
+                            <div class="teacher-visual">
+                                <img src="https://i.ytimg.com/vi/ayDKtjR1Rm8/hq720.jpg" alt="Görkem Şahin" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Görkem Şahin</div></div><div class="subject-badge">KİMYA</div></div>
+                            </div>
+                            <div class="teacher-body"><div class="playlist-stack"><a class="playlist-link" href="https://www.youtube.com/playlist?list=PLYLBaDBvPgfo" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/ayDKtjR1Rm8/hq720.jpg" alt="TYT Kimya Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">TYT Kimya Kampı</div><div class="playlist-meta">TYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
                                     </a>
-                                    <a class="playlist-link" href="https://www.youtube.com/playlist?list=PL5kIOunpmSBOaWNDVqqwfRoEyfl9Vp7RC" target="_blank" rel="noopener noreferrer">
+<a class="playlist-link" href="https://www.youtube.com/playlist?list=PL5kIOunpmSBOaWNDVqqwfRoEyfl9Vp7RC" target="_blank" rel="noopener noreferrer" data-camp-playlist="1">
                                         <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/FYhDqYwtzGQ/hq720.jpg" alt="AYT Kimya Kampı" loading="lazy" referrerpolicy="no-referrer"></span>
                                         <div class="playlist-copy"><div class="playlist-name">AYT Kimya Kampı</div><div class="playlist-meta">AYT</div></div>
                                         <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
-                                    </a>
-                                </div>
+                                    </a></div></div>
+                        </article>
+<article class="teacher-card camp-premium-card" data-camp-id="orijinal" data-subject="math" data-camp-search="orijinal yayınları soner akıncı tyt ayt soru bankası">
+                            <div class="teacher-visual">
+                                <img src="https://i.ytimg.com/vi/RxsNAHd7N-k/hq720.jpg" alt="Orijinal Yayınları" loading="lazy" referrerpolicy="no-referrer">
+                                <div class="teacher-overlay"><div class="teacher-identity"><div class="teacher-name">Orijinal Yayınları</div></div><div class="subject-badge">MATEMATİK · PRO / PLUS</div></div>
                             </div>
+                            <div class="teacher-body"><div class="playlist-stack">
+                                <a class="playlist-link camp-premium-link camp-premium-locked" data-camp-premium="true" data-camp-url="https://www.youtube.com/watch?v=RxsNAHd7N-k" aria-disabled="true">
+                                    <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/RxsNAHd7N-k/hq720.jpg" alt="TYT Soru Bankası" loading="lazy" referrerpolicy="no-referrer"></span>
+                                    <div class="playlist-copy"><div class="playlist-name">TYT Soru Bankası</div><div class="playlist-meta">PRO · PLUS</div></div>
+                                    <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg></span>
+                                </a>
+                                <a class="playlist-link camp-premium-link camp-premium-locked" data-camp-premium="true" data-camp-url="https://www.youtube.com/watch?v=RnoigKvU7_E" aria-disabled="true">
+                                    <span class="playlist-thumb-wrap"><img class="playlist-thumb" src="https://i.ytimg.com/vi/RnoigKvU7_E/hq720.jpg" alt="AYT Soru Bankası" loading="lazy" referrerpolicy="no-referrer"></span>
+                                    <div class="playlist-copy"><div class="playlist-name">AYT Soru Bankası</div><div class="playlist-meta">PRO · PLUS</div></div>
+                                    <span class="playlist-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg></span>
+                                </a>
+                            </div></div>
                         </article>
                     </div>
-                    <div class="camp-no-result" id="camp-no-result">Aradığın hoca veya ders bulunamadı.</div>
+                    <div class="camp-contact" aria-label="İletişim">
+                        <a class="camp-contact-main" href="https://www.instagram.com/ege.kisisel/" target="_blank" rel="noopener noreferrer">
+                            <span>Aradığın listeyi bulamadın mı? Bize ulaş; talebini ilet, uygun içeriği ekleyelim.</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="12" cy="12" r="3.5"></circle><circle cx="17.2" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle></svg>
+                        </a>
+                        <small>(Soru çözüm videolarına erişim yalnızca Pro ve Plus üyeleri için açıktır.)</small>
+                    </div>
+                    <div class="camp-no-result" id="camp-no-result">Sonuç bulunamadı.</div>
                 </div>
             </section>
         </div>
@@ -3874,6 +3956,7 @@ const dragHandle = document.getElementById('timer-drag-handle');
             localStorage.setItem('yks_pro_active', 'true');
             proMessage.textContent = '✓ Plus aktif.';
             applyProTheme();
+            window.updateCampPremiumAccess?.();
             syncLeaderStats(false);
             return;
         }
@@ -3883,6 +3966,7 @@ const dragHandle = document.getElementById('timer-drag-handle');
             localStorage.setItem('yks_pro_active', 'true');
             proMessage.textContent = '✓ Pro aktif.';
             applyProTheme();
+            window.updateCampPremiumAccess?.();
             syncLeaderStats(false);
             return;
         }
@@ -4026,7 +4110,7 @@ updateDailyMotivation();
         template.innerHTML = String(rawHtml || '');
 
         const allowed = new Set([
-            'UL','OL','LI','P','DIV','BR','STRONG','B','EM','I','U','S','STRIKE','SPAN','BIG','SMALL','MARK','FONT','IMG'
+            'UL','OL','LI','P','DIV','BR','STRONG','B','EM','I','U','S','STRIKE','SPAN','MARK','IMG'
         ]);
 
         template.content.querySelectorAll('*').forEach(el => {
@@ -4042,12 +4126,11 @@ updateDailyMotivation();
                 if (el.tagName === 'IMG' && name === 'src') {
                     const safeImage = /^(data:image\/(png|jpeg|jpg|gif|webp);base64,|https?:\/\/)/i.test(value);
                     if (!safeImage) el.removeAttribute('src');
-                } else if (el.tagName === 'FONT' && name === 'size') {
-                    el.removeAttribute(attr.name);
                 } else if (el.tagName === 'SPAN' && name === 'style') {
                     const m = value.match(/(?:^|;)\s*background-color\s*:\s*([^;]+)\s*(?:;|$)/i);
-                    if (m && /^(?:rgb\([^)]*\)|rgba\([^)]*\)|#[0-9a-f]{3,8}|(?:yellow|lemonchiffon))$/i.test(m[1].trim())) {
-                        el.setAttribute('style', 'background-color:#fff176;');
+                    const bg = m ? m[1].trim() : '';
+                    if (bg && /^(?:rgb\([^)]*\)|rgba\([^)]*\)|#[0-9a-f]{3,8}|(?:yellow|lemonchiffon|transparent))$/i.test(bg)) {
+                        el.setAttribute('style', 'background-color:' + bg + ';');
                     } else {
                         el.removeAttribute('style');
                     }
@@ -4068,14 +4151,15 @@ updateDailyMotivation();
             }
         });
 
-        template.content.querySelectorAll('BIG,SMALL').forEach(el => el.replaceWith(...Array.from(el.childNodes)));
         template.content.querySelectorAll('STRIKE').forEach(el => {
             const s = document.createElement('s');
             while (el.firstChild) s.appendChild(el.firstChild);
             el.replaceWith(s);
         });
+
         template.content.querySelectorAll('SPAN').forEach(el => {
-            if (!el.getAttribute('style') && !el.attributes.length) el.replaceWith(...Array.from(el.childNodes));
+            const hasStyle = !!el.getAttribute('style');
+            if (!hasStyle && !el.attributes.length) el.replaceWith(...Array.from(el.childNodes));
         });
         return template.innerHTML.trim();
     }
@@ -4307,7 +4391,20 @@ updateDailyMotivation();
                 area.focus();
             }
 
-            ['mouseup','keyup','focus','input'].forEach(type => area.addEventListener(type, rememberSelection));
+            ['mouseup','keyup','focus'].forEach(type => area.addEventListener(type, rememberSelection));
+
+            area.addEventListener('keydown', e => {
+                if (e.key !== 'Enter' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return;
+                const selection = window.getSelection();
+                const node = selection && selection.anchorNode;
+                const element = node && (node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement);
+                const listItem = element && element.closest ? element.closest('li') : null;
+                if (listItem && area.contains(listItem)) return;
+                e.preventDefault();
+                restoreSelection();
+                document.execCommand('insertParagraph', false);
+                saveAreaSoon();
+            });
 
             function saveAreaSoon() {
                 clearTimeout(area._saveTimer);
@@ -4355,6 +4452,7 @@ updateDailyMotivation();
                     rememberSelection();
                     restoreSelection();
                     const mode = btn.dataset.noteFormat;
+                    document.execCommand('styleWithCSS', false, true);
                     if (mode === 'bold') document.execCommand('bold', false);
                     else if (mode === 'italic') document.execCommand('italic', false);
                     else if (mode === 'underline') document.execCommand('underline', false);
@@ -4365,7 +4463,7 @@ updateDailyMotivation();
                         const isHighlighted = existing.includes('255, 241, 118') || existing.includes('255,241,118') || existing.includes('#fff176');
                         document.execCommand('hiliteColor', false, isHighlighted ? 'transparent' : '#fff176');
                     }
-                    rememberSelection();
+                    updateFormatState();
                     saveArea();
                 });
             });
@@ -4761,6 +4859,7 @@ updateDailyMotivation();
                             });
                         }
                         applyProTheme();
+                        window.updateCampPremiumAccess?.();
                         syncLeaderStats(false);
 
 
@@ -5088,23 +5187,89 @@ updateDailyMotivation();
     campViewBtn.addEventListener('click', () => setView('camp'));
 
     const campLibrarySearch = document.getElementById('camp-library-search');
+    const campLibraryGrid = document.getElementById('camp-library-grid');
     const campLibraryCards = [...document.querySelectorAll('.teacher-card')];
     const campNoResult = document.getElementById('camp-no-result');
     const campFilterButtons = [...document.querySelectorAll('.camp-filter')];
+    const CAMP_RECENTS_KEY = 'yks_camp_recent_teachers_v1';
     let activeCampFilter = 'all';
 
+    function readCampRecents() {
+        try {
+            const raw = JSON.parse(localStorage.getItem(CAMP_RECENTS_KEY) || '[]');
+            return Array.isArray(raw) ? raw.filter(v => typeof v === 'string').slice(0, 8) : [];
+        } catch (_) { return []; }
+    }
+
+    campLibraryCards.forEach((card, index) => card.dataset.campOrder = String(index));
+
+    function reorderCampLibrary() {
+        if (!campLibraryGrid) return;
+        const recents = readCampRecents();
+        const rank = new Map(recents.map((id, index) => [id, index]));
+        [...campLibraryGrid.querySelectorAll('.teacher-card')]
+            .sort((a, b) => {
+                const ar = rank.has(a.dataset.campId) ? rank.get(a.dataset.campId) : 999;
+                const br = rank.has(b.dataset.campId) ? rank.get(b.dataset.campId) : 999;
+                if (ar !== br) return ar - br;
+                return Number(a.dataset.campOrder || 0) - Number(b.dataset.campOrder || 0);
+            })
+            .forEach(card => campLibraryGrid.appendChild(card));
+    }
+
+    function touchCampTeacher(card) {
+        const id = card?.dataset.campId;
+        if (!id) return;
+        const recents = readCampRecents().filter(item => item !== id);
+        recents.unshift(id);
+        localStorage.setItem(CAMP_RECENTS_KEY, JSON.stringify(recents.slice(0, 8)));
+        reorderCampLibrary();
+    }
+
+    function updateCampPremiumAccess() {
+        const unlocked = !!(proActive || plusActive);
+        document.querySelectorAll('.camp-premium-link').forEach(link => {
+            const cta = link.querySelector('.playlist-cta');
+            if (unlocked) {
+                if (!link.getAttribute('href')) link.setAttribute('href', link.dataset.campUrl || '#');
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.classList.remove('camp-premium-locked');
+                link.removeAttribute('aria-disabled');
+                if (cta) cta.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';
+            } else {
+                link.removeAttribute('href');
+                link.removeAttribute('target');
+                link.removeAttribute('rel');
+                link.classList.add('camp-premium-locked');
+                link.setAttribute('aria-disabled', 'true');
+                if (cta) cta.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>';
+            }
+        });
+    }
+    window.updateCampPremiumAccess = updateCampPremiumAccess;
+
     function renderCampLibrary() {
+        reorderCampLibrary();
         const q = (campLibrarySearch?.value || '').toLocaleLowerCase('tr-TR').trim();
         let shown = 0;
         campLibraryCards.forEach(card => {
             const textHit = !q || (card.dataset.campSearch || '').toLocaleLowerCase('tr-TR').includes(q);
-            const subjectHit = activeCampFilter === 'all' || card.dataset.subject === activeCampFilter;
+            const subjects = (card.dataset.subject || '').split(/\s+/).filter(Boolean);
+            const subjectHit = activeCampFilter === 'all' || subjects.includes(activeCampFilter);
             const hit = textHit && subjectHit;
             card.style.display = hit ? '' : 'none';
             if (hit) shown++;
         });
         if (campNoResult) campNoResult.style.display = shown ? 'none' : 'block';
+        updateCampPremiumAccess();
     }
+
+    campLibraryCards.forEach(card => {
+        card.querySelectorAll('.playlist-link').forEach(link => {
+            link.addEventListener('click', () => touchCampTeacher(card));
+        });
+    });
 
     campLibrarySearch?.addEventListener('input', renderCampLibrary);
     campFilterButtons.forEach(btn => {
@@ -5114,6 +5279,9 @@ updateDailyMotivation();
             renderCampLibrary();
         });
     });
+
+    updateCampPremiumAccess();
+    renderCampLibrary();
 
     /* =========================================================
        ÇALIŞMA KAYDI
