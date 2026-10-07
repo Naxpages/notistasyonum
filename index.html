@@ -3876,6 +3876,7 @@ body.ai-page-open .menu-trigger{display:none!important;}
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-4 16-4.5-6.2L4 12Z"></path><path d="m11.5 13.8 4.1-3.7"></path></svg>
     </button>
   </div>
+</div>
 <div class="welcome-overlay" id="welcome-overlay">
     <div class="welcome-window">
         <div class="welcome-topline">İSTASYON AI · ONLINE</div>
@@ -4301,8 +4302,8 @@ const dragHandle = document.getElementById('timer-drag-handle');
 
     if (openLeaderBtn && leaderOverlay && closeLeaderBtn && leaderList && leaderRefreshBtn) {
         openLeaderBtn.addEventListener('click',()=>{ closeExclusiveUi(); leaderOverlay.style.display='flex'; leaderOverlay.setAttribute('aria-hidden','false'); loadLeaderStats(); });
-        closeLeaderBtn.addEventListener('click',()=>leaderOverlay.style.display='none');
-        leaderOverlay.addEventListener('click',e=>{ if(e.target===leaderOverlay) leaderOverlay.style.display='none'; });
+        closeLeaderBtn.addEventListener('click',()=>{ leaderOverlay.style.display='none'; leaderOverlay.setAttribute('aria-hidden','true'); });
+        leaderOverlay.addEventListener('click',e=>{ if(e.target===leaderOverlay){ leaderOverlay.style.display='none'; leaderOverlay.setAttribute('aria-hidden','true'); } });
         leaderRefreshBtn.addEventListener('click',loadLeaderStats);
     }
 
@@ -4372,12 +4373,14 @@ const dragHandle = document.getElementById('timer-drag-handle');
         if (avatarEffectOptions) avatarEffectOptions.querySelectorAll('.avatar-effect-option').forEach(btn=>btn.classList.toggle('selected',btn.dataset.effect===selectedAvatarEffect));
     applyProTheme();
         proOverlay.style.display = 'flex';
+        proOverlay.setAttribute('aria-hidden','false');
         proMessage.textContent = '';
         setTimeout(() => proCodeInput.focus(), 100);
     }
 
     function closePro() {
         proOverlay.style.display = 'none';
+        proOverlay.setAttribute('aria-hidden','true');
     }
 
     function activatePro() {
@@ -6724,6 +6727,7 @@ updateDailyMotivation();
             closeExclusiveUi();
             aboutOverlay.style.display =
                 'flex';
+            aboutOverlay.setAttribute('aria-hidden','false');
 
         }
     );
@@ -6735,6 +6739,7 @@ updateDailyMotivation();
 
             aboutOverlay.style.display =
                 'none';
+            aboutOverlay.setAttribute('aria-hidden','true');
 
         }
     );
@@ -6776,6 +6781,7 @@ updateDailyMotivation();
 
                 if (examAnalysisOverlay) {
                     examAnalysisOverlay.style.display = 'none';
+                    examAnalysisOverlay.setAttribute('aria-hidden','true');
                 }
 
             }
