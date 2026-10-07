@@ -3214,7 +3214,6 @@ body.program-local-mode #search-bar,body.program-local-mode #add-card-btn{displa
 .program-day.today::after{content:'BUGÜN';font-size:.40rem;letter-spacing:.8px;font-weight:950;color:#66b6ff;margin-top:1px;}
 .program-date-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 12px;padding:0 2px;}
 .program-date-label{color:#8fa0ae;font-size:.66rem;font-weight:800;}
-.program-bound-count{color:#667684;font-size:.58rem;font-weight:800;}
 .program-sessions{display:grid;gap:9px;}
 .program-session{display:grid;grid-template-columns:118px minmax(0,1fr) auto;gap:14px;align-items:stretch;padding:13px 14px;border:1px solid rgba(255,255,255,.075);border-radius:16px;background:linear-gradient(145deg,rgba(21,27,33,.80),rgba(11,15,19,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.02);transition:.18s ease;}
 .program-session:hover{border-color:rgba(101,158,205,.20);transform:translateY(-1px);}
@@ -3309,6 +3308,198 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
     .program-session{grid-template-columns:82px minmax(0,1fr) 38px;gap:9px;padding:11px 10px;}.program-session-time{font-size:.66rem;}.program-session-name{font-size:.66rem;}.program-session-status{font-size:.49rem;}.program-task-chip{font-size:.55rem;padding:6px 7px;}.program-task-chip span{max-width:170px;}.program-done-btn{width:36px;height:36px;border-radius:10px;}
     .tasks-shell{width:94%;padding:16px 0 50px;}.tasks-title{font-size:1.2rem;}.tasks-head{margin-bottom:12px;}.tasks-new-group-btn{width:42px;padding:0;justify-content:center;font-size:0;}.task-group-head{padding:11px 10px;}.task-group-actions{gap:5px;}.task-group-action{font-size:0;width:34px;padding:0;justify-content:center;}.task-group-bound{padding-left:50px;}.task-rows{padding:3px 8px 6px;}.task-row{grid-template-columns:26px 26px minmax(0,1fr) auto;gap:5px;min-height:44px;}.task-smart-link{width:27px;height:27px;}.task-add-row{padding:7px 10px 11px;}
 }
+</style>
+
+
+<style id="program-v13-style">
+/* =========================================================
+   PROGRAMIM v13 — daha görsel, daha net, mobil uyumlu
+   ========================================================= */
+.program-pane{padding:18px 0 54px;min-height:620px;}
+.program-shell{width:min(1120px,94%);margin:0 auto;}
+.program-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0 14px;}
+.program-hero-main{display:flex;align-items:center;gap:13px;min-width:0;}
+.program-hero-icon{width:54px;height:54px;flex:0 0 54px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(76,151,224,.28),rgba(123,89,194,.20));border:1px solid rgba(126,190,239,.18);box-shadow:0 16px 40px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.06);}
+.program-hero-icon svg{width:25px;height:25px;fill:none;stroke:#fff;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;}
+.program-hero-copy{min-width:0;}
+.program-kicker{font-size:.47rem;letter-spacing:1.25px;font-weight:950;color:#66b6ff;text-transform:uppercase;margin-bottom:3px;}
+.program-title{font-size:clamp(1.55rem,2.9vw,2.25rem);font-weight:950;letter-spacing:-.055em;color:#f7f9fb;line-height:1;}
+.program-date-label{margin-top:6px;color:#738391;font-size:.62rem;font-weight:800;text-transform:none;}
+.program-bind-main{height:44px;padding:0 14px;border-radius:13px;border:1px solid rgba(106,173,232,.28);background:linear-gradient(145deg,rgba(67,135,201,.14),rgba(27,49,71,.14));color:#c3e2f7;font-size:.63rem;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 12px 34px rgba(0,0,0,.12);transition:.18s ease;white-space:nowrap;}
+.program-bind-main:hover{transform:translateY(-1px);border-color:rgba(106,173,232,.46);background:linear-gradient(145deg,rgba(67,135,201,.20),rgba(27,49,71,.20));color:#fff;}
+.program-bind-main svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-focus-card{position:relative;overflow:hidden;margin:0 0 10px;padding:16px 17px 19px;border-radius:19px;border:1px solid rgba(110,181,236,.16);background:radial-gradient(circle at 92% 12%,rgba(83,163,229,.18),transparent 38%),linear-gradient(145deg,rgba(25,47,66,.88),rgba(12,17,22,.94));box-shadow:0 20px 60px rgba(0,0,0,.21),inset 0 1px 0 rgba(255,255,255,.035);}
+.program-focus-card::after{content:'';position:absolute;inset:auto -12% -55% 36%;height:100%;background:radial-gradient(circle,rgba(103,174,233,.10),transparent 63%);pointer-events:none;}
+.program-focus-copy{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;position:relative;z-index:1;}
+.program-focus-time{font-size:clamp(1.45rem,3.4vw,2.3rem);font-weight:950;letter-spacing:-.06em;color:#eaf6ff;line-height:1;white-space:nowrap;}
+.program-focus-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:0;text-align:right;}
+.program-focus-meta strong{font-size:.78rem;font-weight:950;color:#f0f5f8;max-width:54vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.program-focus-meta span{font-size:.55rem;color:#7f95a7;font-weight:800;}
+.program-focus-progress{height:4px;margin-top:14px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;position:relative;z-index:1;}
+.program-focus-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#55a9e8,#90d2ff);box-shadow:0 0 18px rgba(85,169,232,.4);transition:width .35s ease;}
+.program-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px;}
+.program-stat{min-height:60px;padding:10px 11px;border:1px solid rgba(255,255,255,.065);border-radius:14px;background:linear-gradient(145deg,rgba(23,28,34,.80),rgba(12,16,20,.78));display:flex;align-items:flex-end;justify-content:space-between;gap:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.02);}
+.program-stat strong{font-size:1.1rem;font-weight:950;color:#edf3f7;line-height:1;}
+.program-stat span{font-size:.52rem;color:#687886;font-weight:850;text-transform:lowercase;}
+.program-bound-stat strong{color:#8ccaf0;}
+.program-days{padding:1px 1px 10px;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.program-days::-webkit-scrollbar{display:none;}
+.program-day{flex:0 0 86px;height:58px;border-radius:15px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.017);}
+.program-day.active{background:linear-gradient(145deg,rgba(62,139,205,.18),rgba(42,61,82,.15));border-color:rgba(96,175,234,.34);box-shadow:0 8px 24px rgba(53,139,207,.08);}
+.program-day.today::after{content:'BUGÜN';font-size:.36rem;letter-spacing:1px;font-weight:950;color:#68baff;margin-top:1px;}
+.program-timeline-title{display:flex;align-items:center;justify-content:space-between;margin:1px 2px 9px;color:#e8eef2;font-size:.66rem;font-weight:950;letter-spacing:.02em;}
+.program-timeline-title span:last-child{color:#6a7c8b;font-size:.51rem;font-weight:800;}
+.program-sessions{gap:10px;}
+.program-session{position:relative;display:grid;grid-template-columns:102px minmax(0,1fr) auto;gap:14px;align-items:center;padding:13px 13px 13px 11px;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(145deg,rgba(20,26,32,.90),rgba(10,14,18,.84));box-shadow:inset 0 1px 0 rgba(255,255,255,.022),0 12px 38px rgba(0,0,0,.12);transition:.20s ease;overflow:hidden;}
+.program-session::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(115,132,144,.16);}
+.program-session.current{border-color:rgba(89,168,230,.34);background:linear-gradient(145deg,rgba(24,61,88,.38),rgba(11,17,23,.92));box-shadow:0 12px 40px rgba(44,115,173,.09);}
+.program-session.current::before{background:linear-gradient(180deg,#74c7ff,#4b92d2);box-shadow:0 0 18px rgba(86,167,227,.38);}
+.program-session.done{opacity:.76;background:linear-gradient(145deg,rgba(17,25,22,.72),rgba(10,14,13,.74));}
+.program-session.done::before{background:rgba(104,196,145,.44);}
+.program-session.exam{border-style:dashed;}
+.program-session-time{font-size:.88rem;font-weight:950;color:#e8eff4;display:flex;align-items:center;justify-content:center;padding:10px 8px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.045);}
+.program-session.current .program-session-time{color:#91d5ff;background:rgba(75,146,207,.10);border-color:rgba(97,170,229,.13);}
+.program-session.done .program-session-time{text-decoration:line-through;color:#7a8790;}
+.program-session-body{min-width:0;}
+.program-session-line{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;}
+.program-session-name{font-size:.79rem;font-weight:950;color:#eef4f7;min-width:0;}
+.program-session-status{margin-top:4px;color:#6e7f8c;font-size:.52rem;font-weight:800;}
+.program-session.current .program-session-status{color:#83a8c4;}
+.program-task-stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.program-task-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:5px 7px 5px 5px;border-radius:11px;background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.052);color:#c1ccd4;font-size:.58rem;font-weight:780;transition:.22s ease;overflow:hidden;}
+.program-task-chip:hover{border-color:rgba(93,170,230,.20);background:rgba(75,145,204,.06);}
+.program-task-chip > span.program-task-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px;}
+.program-task-chip small{color:#667784;font-size:.46rem;font-weight:900;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;}
+.program-task-thumb{width:0;opacity:0;transform:translateX(-5px) scale(.96);overflow:hidden;flex:0 0 auto;border-radius:7px;transition:.25s cubic-bezier(.2,.75,.3,1);position:relative;height:30px;}
+.program-task-thumb img{width:100%;height:100%;display:block;object-fit:cover;}
+.program-task-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,10,13,.10),rgba(7,10,13,.46));}
+.program-task-chip:hover .program-task-thumb,.program-session.current .program-task-thumb{width:48px;opacity:.86;transform:none;}
+.program-task-thumb.locked::before{content:'';position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(7,10,13,.48);}
+.program-task-thumb.locked::after{content:'•';z-index:3;color:#d8a25a;font-size:14px;position:absolute;inset:0;display:grid;place-items:center;background:rgba(7,10,13,.22);}
+.program-task-open{width:25px;height:25px;border:0;border-radius:8px;background:rgba(67,143,214,.11);color:#90ccf2;display:grid;place-items:center;cursor:pointer;flex:0 0 25px;transition:.18s ease;}
+.program-task-open:hover{background:rgba(67,143,214,.19);color:#fff;transform:scale(1.04);}
+.program-task-open svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-session-action{align-self:center;display:flex;}
+.program-done-btn{width:43px;height:43px;border-radius:13px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.026);color:#73838e;display:grid;place-items:center;cursor:pointer;transition:.18s ease;}
+.program-done-btn:hover{border-color:rgba(108,173,226,.32);color:#fff;background:rgba(108,173,226,.08);transform:scale(1.03);}
+.program-session.done .program-done-btn{color:#87d4ab;border-color:rgba(96,198,143,.24);background:rgba(96,198,143,.08);}
+.program-done-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.program-empty{padding:34px 20px;border:1px dashed rgba(255,255,255,.08);border-radius:17px;text-align:center;color:#6c7c88;font-size:.64rem;background:rgba(255,255,255,.012);}
+.program-foot-note{display:none;}
+
+/* Görevler ile ortak ölçek */
+.task-group{background:linear-gradient(145deg,rgba(20,26,32,.92),rgba(10,14,18,.88));}
+.tasks-page{background:radial-gradient(circle at 85% 8%,rgba(69,140,204,.08),transparent 28%),linear-gradient(180deg,#0c1014 0%,#090c10 100%);}
+
+@media (max-width:760px){
+  .program-pane{padding-top:11px;}
+  .program-shell{width:min(94%,680px);}
+  .program-hero{align-items:flex-start;}
+  .program-bind-main{height:40px;padding:0 11px;font-size:.58rem;}
+  .program-hero-icon{width:48px;height:48px;flex-basis:48px;border-radius:15px;}
+  .program-title{font-size:1.55rem;}
+  .program-focus-copy{align-items:flex-start;flex-direction:column;gap:8px;}
+  .program-focus-meta{text-align:left;align-items:flex-start;}
+  .program-focus-meta strong{max-width:82vw;}
+  .program-stats{grid-template-columns:repeat(2,1fr);}
+  .program-session{grid-template-columns:1fr auto;gap:10px;padding:12px 10px;}
+  .program-session-time{grid-column:1 / -1;justify-content:flex-start;font-size:.72rem;padding:7px 9px;width:max-content;}
+  .program-session-body{grid-column:1 / -1;}
+  .program-session-action{grid-column:2;grid-row:2;align-self:end;}
+  .program-task-chip{max-width:100%;}
+  .program-task-chip > span.program-task-text{max-width:55vw;}
+  .program-task-chip small{display:none;}
+  .program-task-thumb{width:46px;opacity:.80;transform:none;}
+}
+</style>
+
+<style id="program-v14-redesign">
+/* V14 — Programım tamamen yeniden tasarım */
+.program-pane{padding:18px 0 64px;min-height:680px;background:radial-gradient(circle at 50% 0%,rgba(63,130,194,.07),transparent 34%),linear-gradient(180deg,rgba(9,13,17,.25),rgba(7,10,13,.10));}
+.program-shell{width:min(1160px,94%);margin:0 auto;}
+.program-topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:4px 0 18px;}
+.program-topbar-left{display:flex;align-items:center;gap:12px;min-width:0;}
+.program-mark{width:50px;height:50px;flex:0 0 50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(84,155,221,.20),rgba(132,99,202,.12));border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 38px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04);}
+.program-mark svg{width:23px;height:23px;fill:none;stroke:#fff;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;}
+.program-topbar-copy{min-width:0;}
+.program-kicker{font-size:.45rem;letter-spacing:1.35px;font-weight:950;color:#6dbaf3;line-height:1;text-transform:uppercase;margin-bottom:5px;}
+.program-title{font-size:clamp(1.55rem,2.8vw,2.2rem);font-weight:950;letter-spacing:-.055em;color:#f7f9fb;line-height:.98;}
+.program-date-label{margin-top:6px;color:#71818f;font-size:.60rem;font-weight:800;}
+.program-bind-main{height:44px;padding:0 15px;border-radius:14px;border:1px solid rgba(110,183,236,.25);background:linear-gradient(145deg,rgba(52,122,184,.14),rgba(22,38,53,.18));color:#b9dff7;font:inherit;font-size:.61rem;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:9px;box-shadow:0 10px 28px rgba(0,0,0,.14);transition:.2s ease;}
+.program-bind-main:hover{transform:translateY(-1px);border-color:rgba(124,196,245,.40);background:linear-gradient(145deg,rgba(52,122,184,.22),rgba(22,38,53,.24));color:#fff;}
+.program-bind-main svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.program-hero-card{position:relative;min-height:270px;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:#0a0f14;box-shadow:0 24px 70px rgba(0,0,0,.26);margin-bottom:16px;}
+.program-hero-bg{position:absolute;inset:0;background-image:url('https://cdn.pixabay.com/video/2025/04/13/271841_tiny.jpg');background-size:cover;background-position:center 58%;filter:saturate(.82) contrast(.98);transform:scale(1.04);animation:programHeroFloat 22s ease-in-out infinite alternate;}
+.program-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,10,14,.96) 0%,rgba(7,11,15,.88) 35%,rgba(8,11,15,.45) 62%,rgba(5,9,13,.30) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.42));}
+.program-hero-content{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;min-height:270px;padding:30px;max-width:690px;}
+.program-live-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(9,14,19,.54);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#b7c9d6;font-size:.50rem;font-weight:900;letter-spacing:.35px;}
+.program-live-dot{width:6px;height:6px;border-radius:50%;background:#6bc6ff;box-shadow:0 0 13px rgba(107,198,255,.8);}
+.program-focus-time{margin-top:14px;font-size:clamp(3.1rem,7vw,5.6rem);font-weight:950;letter-spacing:-.085em;line-height:.88;color:#f5fbff;text-shadow:0 10px 30px rgba(0,0,0,.28);}
+.program-focus-name{margin-top:11px;font-size:clamp(1.1rem,2.4vw,1.75rem);font-weight:900;letter-spacing:-.035em;color:#eaf3f8;line-height:1.08;max-width:72%;}
+.program-focus-progress{height:5px;margin-top:18px;width:min(530px,92%);border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;}
+.program-focus-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#6cbfff,#a7dbff);box-shadow:0 0 22px rgba(94,181,241,.46);transition:width .35s ease;}
+@keyframes programHeroFloat{0%{transform:scale(1.04) translate3d(-.5%,0,0);}100%{transform:scale(1.08) translate3d(.8%,-.5%,0);}}
+.program-days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 1px 14px;}
+.program-days::-webkit-scrollbar{display:none;}
+.program-day{flex:0 0 92px;height:64px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(145deg,rgba(18,24,29,.84),rgba(9,13,17,.78));color:#748390;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:.18s ease;box-shadow:inset 0 1px 0 rgba(255,255,255,.02);}
+.program-day strong{font-size:.67rem;color:#c7d3dd;}.program-day span{font-size:.52rem;color:#667581;}
+.program-day:hover{transform:translateY(-1px);border-color:rgba(99,171,226,.28);}
+.program-day.active{background:linear-gradient(145deg,rgba(50,123,186,.18),rgba(23,38,52,.22));border-color:rgba(105,188,242,.38);box-shadow:0 10px 25px rgba(54,137,201,.09);}
+.program-day.active strong{color:#fff;}.program-day.today::after{content:'BUGÜN';font-size:.34rem;letter-spacing:1px;font-weight:950;color:#6ec1fa;margin-top:1px;}
+.program-schedule-head{display:flex;align-items:center;gap:10px;margin:0 3px 10px;color:#e7eef3;font-size:.68rem;font-weight:950;}
+.program-schedule-line{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.08),transparent);}
+.program-sessions{display:grid;gap:9px;}
+.program-session{position:relative;display:grid;grid-template-columns:94px minmax(0,1fr) 42px;gap:14px;align-items:center;padding:12px 12px 12px 10px;border:1px solid rgba(255,255,255,.07);border-radius:18px;background:linear-gradient(145deg,rgba(19,25,31,.90),rgba(9,13,17,.88));box-shadow:0 14px 36px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.025);overflow:hidden;transition:.2s ease;}
+.program-session::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(108,126,141,.16);}
+.program-session:hover{transform:translateY(-1px);border-color:rgba(105,173,225,.22);}
+.program-session.current{border-color:rgba(92,178,237,.36);background:linear-gradient(145deg,rgba(20,58,84,.34),rgba(10,16,21,.93));box-shadow:0 16px 40px rgba(44,117,170,.10);}
+.program-session.current::before{background:linear-gradient(180deg,#7acbff,#4b95d6);box-shadow:0 0 18px rgba(86,167,227,.38);}
+.program-session.done{border-color:rgba(93,193,141,.16);background:linear-gradient(145deg,rgba(14,24,19,.82),rgba(9,14,12,.82));}
+.program-session.done::before{background:rgba(105,199,148,.50);}
+.program-session.exam{border-style:dashed;}
+.program-session-rail{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;}
+.program-session-time{min-width:76px;text-align:center;padding:10px 7px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.045);font-size:.80rem;font-weight:950;color:#e8eff4;}
+.program-session.current .program-session-time{color:#9bd8ff;border-color:rgba(99,176,234,.16);background:rgba(67,144,208,.10);}
+.program-session.done .program-session-time{text-decoration:line-through;color:#77848d;}
+.program-session-marker{width:7px;height:7px;border-radius:50%;background:#687884;box-shadow:0 0 0 4px rgba(104,120,132,.07);}
+.program-session.current .program-session-marker{background:#79c9ff;box-shadow:0 0 0 4px rgba(121,201,255,.09),0 0 14px rgba(121,201,255,.42);}
+.program-session.done .program-session-marker{background:#75c99d;box-shadow:0 0 0 4px rgba(117,201,157,.08);}
+.program-session-main{min-width:0;}
+.program-session-head{display:flex;align-items:center;justify-content:space-between;gap:9px;min-width:0;}
+.program-session-name{font-size:.82rem;font-weight:950;color:#edf4f7;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.program-session-state{color:#72c3fb;font-size:.44rem;font-weight:950;letter-spacing:1px;white-space:nowrap;}
+.program-session.done .program-session-state{color:#7ccda3;}
+.program-task-stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.program-task-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:4px 6px 4px 4px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.052);color:#c2cfd8;font-size:.57rem;font-weight:790;overflow:hidden;transition:.22s ease;}
+.program-task-chip:hover{background:rgba(84,151,207,.06);border-color:rgba(92,165,222,.20);}
+.program-task-chip > span.program-task-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:380px;}
+.program-task-chip small{display:none;}
+.program-task-thumb{width:0;height:30px;opacity:0;transform:translateX(-7px) scale(.93);overflow:hidden;flex:0 0 auto;border-radius:8px;position:relative;transition:width .34s cubic-bezier(.2,.75,.3,1),opacity .24s ease,transform .34s cubic-bezier(.2,.75,.3,1);}
+.program-task-chip:hover .program-task-thumb,.program-task-thumb:not(:empty){width:52px;opacity:1;transform:translateX(0) scale(1);}
+.program-task-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.program-task-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,12,16,.05),rgba(8,12,16,.33));pointer-events:none;}
+.program-task-thumb.locked{filter:grayscale(.6);opacity:.55;}
+.program-task-open{width:24px;height:24px;border:0;border-radius:8px;background:rgba(67,143,214,.09);color:#80c4ef;display:grid;place-items:center;cursor:pointer;flex:0 0 24px;transition:.18s ease;}
+.program-task-open:hover{background:rgba(67,143,214,.17);color:#fff;}
+.program-task-open svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-session-action{display:flex;align-items:center;justify-content:center;}
+.program-done-btn{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);color:#74848f;display:grid;place-items:center;cursor:pointer;transition:.18s ease;}
+.program-done-btn:hover{color:#fff;border-color:rgba(105,179,233,.35);background:rgba(78,151,212,.08);}
+.program-session.done .program-done-btn{color:#7fd0a5;border-color:rgba(100,200,147,.23);background:rgba(100,200,147,.08);}
+.program-done-btn:disabled{opacity:.34;cursor:default;}
+.program-done-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.program-session.no-tasks:not(.current){background:linear-gradient(145deg,rgba(16,21,25,.78),rgba(9,12,15,.82));}
+.program-session.no-tasks .program-session-main{padding:2px 0;}
+.program-empty{padding:34px;border:1px dashed rgba(255,255,255,.08);border-radius:18px;text-align:center;color:#687985;font-size:.66rem;background:rgba(255,255,255,.012);}
+@media(max-width:700px){
+  .program-pane{padding-top:12px;min-height:720px;}
+  .program-shell{width:94%;}
+  .program-topbar{margin-bottom:12px;}.program-mark{width:43px;height:43px;flex-basis:43px;border-radius:14px;}.program-mark svg{width:20px;height:20px;}.program-title{font-size:1.45rem;}.program-date-label{font-size:.56rem;}.program-bind-main{width:42px;height:42px;padding:0;justify-content:center;font-size:0;border-radius:13px;}.program-bind-main svg{width:18px;height:18px;}
+  .program-hero-card{min-height:260px;border-radius:20px;}.program-hero-content{min-height:260px;padding:22px 20px;}.program-focus-time{font-size:3.1rem;}.program-focus-name{max-width:92%;font-size:1rem;}.program-live-pill{font-size:.47rem;}
+  .program-day{flex-basis:78px;height:58px;border-radius:14px;}
+  .program-session{grid-template-columns:62px minmax(0,1fr) 36px;gap:8px;padding:10px 8px 10px 7px;border-radius:16px;}.program-session-time{min-width:58px;padding:9px 5px;font-size:.64rem;}.program-session-name{font-size:.68rem;}.program-task-chip{font-size:.53rem;max-width:100%;}.program-task-chip > span.program-task-text{max-width:180px;}.program-task-thumb{height:28px;}.program-task-chip:hover .program-task-thumb,.program-task-thumb:not(:empty){width:44px;}.program-done-btn{width:34px;height:34px;border-radius:10px;}.program-schedule-head{font-size:.62rem;margin-bottom:8px;}
+}
+@media(prefers-reduced-motion:reduce){.program-hero-bg{animation:none!important;}.program-session,.program-bind-main,.program-task-thumb{transition:none!important;}}
 </style>
 
 </head>
@@ -3789,17 +3980,40 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 
             <section class="content-pane program-pane" id="program-pane" aria-label="Programım" aria-hidden="true">
                 <div class="program-shell">
-                    <div class="program-head">
-                        <div class="program-title-wrap">
-                            <div class="program-title-icon">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 16h3"></path></svg>
+                    <div class="program-topbar">
+                        <div class="program-topbar-left">
+                            <div class="program-mark" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 16h3"></path></svg>
                             </div>
-                            <div><div class="program-title">Programım</div></div>
+                            <div class="program-topbar-copy">
+                                <div class="program-kicker" id="program-hero-kicker">BUGÜN</div>
+                                <div class="program-title">Programım</div>
+                                <div class="program-date-label" id="program-date-label"></div>
+                            </div>
                         </div>
-                        <button class="program-bind-main" id="program-bind-main" type="button" title="Görevleri bağla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>Görev bağla</span></button>
+                        <button class="program-bind-main" id="program-bind-main" type="button" title="Görevler">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h6M9 10h6M9 14h3"></path><path d="M5 4h14v16H5z"></path><path d="M16 14v5l2-1.3 2 1.3v-5"></path></svg>
+                            <span>Görevler</span>
+                        </button>
                     </div>
+
+                    <div class="program-hero-card" id="program-focus-card">
+                        <div class="program-hero-bg" aria-hidden="true"></div>
+                        <div class="program-hero-overlay"></div>
+                        <div class="program-hero-content">
+                            <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">Sıradaki etüt</span></div>
+                            <div class="program-focus-time" id="program-focus-time">--:--</div>
+                            <div class="program-focus-name" id="program-focus-name">Program hazır</div>
+                            <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
+                        </div>
+                    </div>
+
                     <div class="program-days" id="program-days"></div>
-                    <div class="program-date-bar"><div class="program-date-label" id="program-date-label"></div><div class="program-bound-count" id="program-bound-count"></div></div>
+
+                    <div class="program-schedule-head">
+                        <span>Bugünün akışı</span>
+                        <span class="program-schedule-line"></span>
+                    </div>
                     <div class="program-sessions" id="program-sessions"></div>
                 </div>
             </section>
@@ -7205,9 +7419,11 @@ updateDailyMotivation();
     function campCurrentIndex(schedule,date=new Date()){ const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; return schedule.findIndex(item=>now>=campTimeToMinutes(item.time)&&now<campEndMinutes(item.time)); }
     function campRemainingText(schedule,index,date=new Date()){ if(index<0||!schedule[index])return ''; const end=campEndMinutes(schedule[index].time); const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; let sec=Math.max(0,Math.round((end-now)*60)); const h=Math.floor(sec/3600);sec%=3600;const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0'); return h?`${h}s ${m}:${s}`:`${m}:${s}`; }
     let campCompleted=(()=>{try{const x=JSON.parse(localStorage.getItem('yks_camp_completed')||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
+    const CAMP_AUTO_DONE_KEY='yks_camp_auto_done_v1';
+    let campAutoDone=(()=>{try{const x=JSON.parse(localStorage.getItem(CAMP_AUTO_DONE_KEY)||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
+    function saveCampAutoDone(){localStorage.setItem(CAMP_AUTO_DONE_KEY,JSON.stringify(campAutoDone));}
     const programDays = document.getElementById('program-days');
     const programDateLabel = document.getElementById('program-date-label');
-    const programBoundCount = document.getElementById('program-bound-count');
     const programSessions = document.getElementById('program-sessions');
     const programBindMain = document.getElementById('program-bind-main');
     const programQuickMain = document.getElementById('program-quick-main');
@@ -7234,7 +7450,7 @@ updateDailyMotivation();
         try{ const raw=JSON.parse(localStorage.getItem(TASK_GROUPS_KEY)||'[]'); return Array.isArray(raw)?raw.map(normalizeTaskGroup):[]; }catch(_){ return []; }
     }
     function normalizeTaskGroup(g){
-        const group={id:String(g?.id||('g_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(g?.title||'Yeni görev grubu'),programDate:g?.programDate||null,tasks:Array.isArray(g?.tasks)?g.tasks.map(t=>({id:String(t?.id||('t_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(t?.title||''),done:!!t?.done,createdAt:Number(t?.createdAt||Date.now())})):[]};
+        const group={id:String(g?.id||('g_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(g?.title||'Yeni görev grubu'),programDate:g?.programDate||null,tasks:Array.isArray(g?.tasks)?g.tasks.map(t=>({id:String(t?.id||('t_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(t?.title||''),done:!!t?.done,autoDone:!!t?.autoDone,createdAt:Number(t?.createdAt||Date.now())})):[]};
         return group;
     }
     function saveTaskGroups(){ localStorage.setItem(TASK_GROUPS_KEY,JSON.stringify(taskGroups)); }
@@ -7249,19 +7465,84 @@ updateDailyMotivation();
         const order=[1,2,3,4,5,6,0];
         order.forEach(day=>{ const key=weekDateKey(day); const dt=dateFromKey(key); const b=document.createElement('button'); b.type='button'; b.className='tasks-date'+(key===taskSelectedDateKey?' active':'')+(key===todayKey?' today':''); b.innerHTML=`<strong>${['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'][day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`; b.addEventListener('click',()=>{ taskSelectedDateKey=key; localStorage.setItem(TASK_SELECTED_DATE_KEY,key); renderTaskDateRow(); renderTasks(); }); tasksDateRow.appendChild(b); });
     }
+    const CAMP_PLAYLIST_CLICKS_KEY='yks_camp_playlist_clicks_v1';
+    let campPlaylistClicks=(()=>{try{const x=JSON.parse(localStorage.getItem(CAMP_PLAYLIST_CLICKS_KEY)||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
+    function saveCampPlaylistClicks(){localStorage.setItem(CAMP_PLAYLIST_CLICKS_KEY,JSON.stringify(campPlaylistClicks));}
     function normalizeTaskText(text){ return String(text||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c'); }
+    const SMART_TEACHERS=[
+        {id:'soner',aliases:['soner','soner akinici','soner akinci','soner akıncı']},
+        {id:'eyup',aliases:['eyup','eyüp','eyup b','eyup boncuk']},
+        {id:'ozcan',aliases:['ozcan','özcan','ozcan aykin','özcan aykın']},
+        {id:'rehber',aliases:['rehber','rehber matematik']},
+        {id:'biosem',aliases:['biosem']},
+        {id:'altug',aliases:['altug','altuğ','altug gunes','altuğ güneş']},
+        {id:'gorkem',aliases:['gorkem','görkem','gorkem sahin','görkem şahin']},
+        {id:'orijinal',aliases:['orijinal','orijinal yayinlari','orijinal yayınları']}
+    ];
+    const TEACHER_NORMAL_NAMES={soner:'soner akinici',eyup:'eyup b',ozcan:'ozcan aykin',rehber:'rehber matematik',biosem:'biosem',altug:'altug gunes',gorkem:'gorkem sahin',orijinal:'orijinal yayinlari'};
     function campPlaylistIndex(){
         return [...document.querySelectorAll('.teacher-card[data-camp-id] .playlist-link[data-camp-playlist]')].map(link=>{
-            const card=link.closest('.teacher-card'); const teacher=card?.querySelector('.teacher-name')?.textContent?.trim()||''; const name=link.querySelector('.playlist-name')?.textContent?.trim()||''; const meta=link.querySelector('.playlist-meta')?.textContent?.trim()||''; const url=link.getAttribute('href')||link.dataset.campUrl||''; const premium=link.classList.contains('camp-premium-link'); return {teacher,name,meta,url,premium,search:normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher)};
+            const card=link.closest('.teacher-card');
+            const teacher=card?.querySelector('.teacher-name')?.textContent?.trim()||'';
+            const teacherNorm=normalizeTaskText(teacher);
+            const teacherId=SMART_TEACHERS.find(t=>teacherNorm===TEACHER_NORMAL_NAMES[t.id] || t.aliases.some(a=>teacherNorm===normalizeTaskText(a)))?.id || card?.dataset?.campId || '';
+            const name=link.querySelector('.playlist-name')?.textContent?.trim()||'';
+            const meta=link.querySelector('.playlist-meta')?.textContent?.trim()||'';
+            const url=link.getAttribute('href')||link.dataset.campUrl||'';
+            const premium=link.classList.contains('camp-premium-link');
+            const thumb=link.querySelector('.playlist-thumb')?.getAttribute('src') || card?.querySelector('.teacher-visual img')?.getAttribute('src') || '';
+            const subject=card?.dataset?.subject||'';
+            return {teacher,name,meta,url,premium,thumb,subject,teacherId,search:normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher)};
         });
     }
+    function registerCampPlaylistClick(link){
+        const url=link?.getAttribute('href')||link?.dataset?.campUrl;
+        if(!url || link.classList.contains('camp-premium-locked'))return;
+        const card=link.closest('.teacher-card');
+        const teacher=normalizeTaskText(card?.querySelector('.teacher-name')?.textContent||'');
+        campPlaylistClicks[url]=(Number(campPlaylistClicks[url])||0)+1;
+        if(teacher){campPlaylistClicks['teacher:'+teacher]=(Number(campPlaylistClicks['teacher:'+teacher])||0)+1;}
+        saveCampPlaylistClicks();
+    }
+    document.addEventListener('click',e=>{const link=e.target.closest?.('.playlist-link[data-camp-playlist]');if(link)registerCampPlaylistClick(link);});
+    function teacherMentionIds(text){
+        const t=normalizeTaskText(text);
+        return SMART_TEACHERS.filter(item=>item.aliases.some(alias=>t.includes(normalizeTaskText(alias)))).map(item=>item.id);
+    }
+    function subjectFromText(t){
+        const map=[['matematik','matematik'],['geometri','geometri'],['fizik','fizik'],['kimya','kimya'],['biyoloji','biyoloji']];
+        return map.filter(([k])=>t.includes(k)).map(([,v])=>v);
+    }
     function inferTaskMeta(title){
-        const t=normalizeTaskText(title); const level=t.match(/\b(tyt|ayt)\b/)?.[1]||''; const subjects=['matematik','geometri','fizik','kimya','biyoloji'].filter(v=>t.includes(v)); const teachers=['soner akinici','eyup b','eyup boncuk','ozcan aykin','rehber matematik','biosem','altug gunes','gorkem sahin'].filter(v=>t.includes(normalizeTaskText(v))); const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi)\b/.test(t); const lesson=/\b(video|ders|kamp|konu|konu anlatimi|izle)\b/.test(t); return {level,subjects,teachers,question,lesson,text:t};
+        const t=normalizeTaskText(title);
+        const level=t.match(/\b(tyt|ayt)\b/)?.[1]||'';
+        const subjects=subjectFromText(t);
+        const teachers=teacherMentionIds(t);
+        const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi|cozum|çözüm)\b/.test(t);
+        const lesson=/\b(video|ders|kamp|konu|konu anlatimi|anlatim|izle)\b/.test(t);
+        return {level,subjects,teachers,question,lesson,text:t};
+    }
+    function teacherWatchScore(entry){
+        const urlCount=Number(campPlaylistClicks[entry.url])||0;
+        const teacherKey='teacher:'+normalizeTaskText(entry.teacher||'');
+        const teacherCount=Number(campPlaylistClicks[teacherKey])||0;
+        return Math.min(8,urlCount)+Math.min(8,teacherCount)*1.15;
     }
     function smartMatch(title){
-        const m=inferTaskMeta(title); const entries=campPlaylistIndex(); if(!entries.length)return null; let best=null;
-        for(const e of entries){ const x=e.search; let score=0; if(m.level && x.includes(m.level))score+=3; if(m.subjects.some(v=>x.includes(v)))score+=2; if(m.teachers.some(v=>x.includes(v)))score+=6; if(m.lesson && /kamp/.test(x))score+=1; if(m.question && /soru bankasi|cozum|soru/.test(x))score+=1; if(x.includes(m.text)&&m.text.length>8)score+=2; if(!best||score>best.score)best={...e,score}; }
-        return best && best.score>=5 ? best : null;
+        const m=inferTaskMeta(title); const entries=campPlaylistIndex(); if(!entries.length)return null;
+        let best=null;
+        for(const e of entries){
+            const x=e.search; let score=0;
+            if(m.teachers.length){ if(!m.teachers.includes(e.teacherId)) continue; score+=10; }
+            if(m.level){ if(!x.includes(m.level)) continue; score+=4; }
+            if(m.subjects.length){ const subjectHit=m.subjects.some(v=>x.includes(v)||normalizeTaskText(e.subject).includes(v)); if(!subjectHit)continue; score+=5; }
+            if(m.lesson && /kamp|ders|video/.test(x))score+=1.5;
+            if(m.question && /soru bankasi|cozum|soru/.test(x))score+=2.5;
+            if(!m.teachers.length)score+=teacherWatchScore(e)*0.8;
+            if(/\borijinal\b/.test(m.text) && e.teacherId==='orijinal')score+=5;
+            if(!best || score>best.score || (Math.abs(score-best.score)<0.01 && teacherWatchScore(e)>teacherWatchScore(best))) best={...e,score};
+        }
+        return best && best.score>=4 ? best : null;
     }
     function renderSmartLink(task){
         const match=smartMatch(task.title); if(!match) return '';
@@ -7277,7 +7558,7 @@ updateDailyMotivation();
             card.querySelector('.task-delete-group').addEventListener('click',()=>{ if(confirm('Bu görev grubu silinsin mi?')){ taskGroups=taskGroups.filter(g=>g.id!==group.id); saveTaskGroups(); renderTasks(); renderProgramPage(); } });
             const rows=card.querySelector('.task-rows');
             group.tasks.forEach(task=>{ const row=document.createElement('div'); row.className='task-row'+(task.done?' done':''); row.draggable=true; row.dataset.taskId=task.id; row.innerHTML=`<div class="task-drag" title="Sürükle"><svg viewBox="0 0 24 24"><path d="M8 6h8M8 12h8M8 18h8"></path></svg></div><button type="button" class="task-check" title="Tamamlandı"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button><div class="task-text" contenteditable="true" spellcheck="false">${escapeHtml(task.title)}</div>${renderSmartLink(task)}`;
-                row.querySelector('.task-check').addEventListener('click',()=>{task.done=!task.done;saveTaskGroups();renderTasks();renderProgramPage();});
+                row.querySelector('.task-check').addEventListener('click',()=>{task.done=!task.done;task.autoDone=false;saveTaskGroups();renderTasks();renderProgramPage();});
                 const txt=row.querySelector('.task-text'); txt.addEventListener('input',()=>{task.title=txt.textContent||'';saveTaskGroups();}); txt.addEventListener('blur',()=>{task.title=(txt.textContent||'').trim();saveTaskGroups();renderTasks();});
                 const smart=row.querySelector('[data-task-smart-url]'); if(smart) smart.addEventListener('click',()=>{ const u=smart.dataset.taskSmartUrl; if(u) window.open(u,'_blank','noopener'); });
                 rows.appendChild(row);
@@ -7357,11 +7638,148 @@ updateDailyMotivation();
     function renderProgramDays(){
         programDays.innerHTML=''; const today=new Date().getDay(); const order=[1,2,3,4,5,6,0]; order.forEach(day=>{const key=weekDateKey(day);const dt=dateFromKey(key);const b=document.createElement('button');b.type='button';b.className='program-day'+(day===programSelectedDay?' active':'')+(day===today?' today':'');b.innerHTML=`<strong>${CAMP_DAY_SHORT[day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`;b.addEventListener('click',()=>{programSelectedDay=day;renderProgramDays();renderProgramPage();});programDays.appendChild(b);});
     }
+    function programTaskIdsForSession(dateKey, sessionId){
+        const allocations=allocateProgramUnits(dateKey);
+        const schedule=CAMP_SCHEDULE[dateFromKey(dateKey).getDay()]||[];
+        const idx=schedule.findIndex(x=>x.id===sessionId);
+        if(idx<0)return [];
+        const units=allocations.get(idx)||[];
+        return units.flatMap(unit=>unit.items.map(task=>({task,group:unit.group})));
+    }
+    function setProgramSessionDone(dateKey, sessionId, nextDone){
+        const set=Array.isArray(campCompleted[dateKey])?[...campCompleted[dateKey]]:[];
+        const p=set.indexOf(sessionId);
+        const autoKey=dateKey+'|'+sessionId;
+        if(nextDone){
+            if(p<0)set.push(sessionId);
+            const assigned=programTaskIdsForSession(dateKey,sessionId);
+            const ids=[];
+            assigned.forEach(({task})=>{
+                const live=taskGroups.flatMap(g=>g.tasks).find(t=>t.id===task.id);
+                if(!live || live.done) return;
+                live.done=true; live.autoDone=true; ids.push(live.id);
+            });
+            campAutoDone[autoKey]=ids;
+        }else{
+            if(p>=0)set.splice(p,1);
+            const ids=Array.isArray(campAutoDone[autoKey])?campAutoDone[autoKey]:[];
+            taskGroups.forEach(g=>g.tasks.forEach(t=>{
+                if(ids.includes(t.id) && t.autoDone){t.done=false;t.autoDone=false;}
+            }));
+            delete campAutoDone[autoKey];
+        }
+        campCompleted[dateKey]=set;
+        localStorage.setItem('yks_camp_completed',JSON.stringify(campCompleted));
+        saveCampAutoDone();
+        saveTaskGroups();
+    }
+    function appendProgramTaskChip(stack, task, groupName, currentSession){
+        const chip=document.createElement('div');
+        chip.className='program-task-chip';
+        const match=smartMatch(task.title);
+        const thumbWrap=document.createElement('span');
+        thumbWrap.className='program-task-thumb'+(match?.premium && !(proActive||plusActive)?' locked':'');
+        if(match?.thumb){
+            const img=document.createElement('img'); img.src=match.thumb; img.alt=''; img.loading='lazy'; img.referrerPolicy='no-referrer';
+            img.addEventListener('error',()=>{ if(!img.dataset.fallback){img.dataset.fallback='1';img.src=img.src.includes('/maxresdefault.jpg')?img.src.replace('/maxresdefault.jpg','/hqdefault.jpg'):'';} else thumbWrap.style.display='none'; });
+            thumbWrap.appendChild(img);
+        }
+        if(match?.thumb) chip.appendChild(thumbWrap);
+        const text=document.createElement('span'); text.className='program-task-text'; text.textContent=task.title; text.title=task.title; chip.appendChild(text);
+        const groupEl=document.createElement('small');groupEl.textContent=groupName;groupEl.title=groupName;chip.appendChild(groupEl);
+        if(match && (!match.premium || proActive||plusActive)){
+            const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',e=>{e.stopPropagation();window.open(match.url,'_blank','noopener');});chip.appendChild(btn);
+        }
+        if(match?.premium && !(proActive||plusActive)){
+            const lock=document.createElement('span');lock.className='program-task-open';lock.setAttribute('aria-hidden','true');lock.style.cursor='default';lock.innerHTML='<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>';chip.appendChild(lock);
+        }
+        stack.appendChild(chip);
+    }
     function renderProgramPage(){
-        if(!programSessions)return; renderProgramDays(); const key=programSelectedDateKey(); const dt=dateFromKey(key); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; const doneSet=campCompleted[key]||[]; const allocations=allocateProgramUnits(key); const bound=taskGroups.filter(g=>g.programDate===key); programDateLabel.textContent=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});programBoundCount.textContent=bound.length?`${bound.length} görev grubu`:'Görev bağlı değil'; programSessions.innerHTML=''; if(!schedule.length){programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';return;}
-        const now=new Date(); const currentIndex=now.getDay()===day?campCurrentIndex(schedule,now):-1;
-        schedule.forEach((item,index)=>{ const done=doneSet.includes(item.id); const current=index===currentIndex; const row=document.createElement('div'); row.className='program-session'+(current?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':''); const assigned=allocations.get(index)||[]; row.innerHTML=`<div class="program-session-time">${escapeHtml(item.time)}</div><div class="program-session-body"><div class="program-session-name">${escapeHtml(item.name)}</div><div class="program-session-status">${done?'Tamamlandı':current?`Bitmesine ${campRemainingText(schedule,index,now)}`:item.id==='exam'?'Deneme':'Etüt'}</div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="Etüdü ${done?'yeniden aç':'tamamla'}"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`; const stack=row.querySelector('.program-task-stack'); assigned.forEach(unit=>unit.items.forEach(task=>{const chip=document.createElement('div');chip.className='program-task-chip';const groupName=unit.group.title;chip.innerHTML=`<span title="${escapeHtml(task.title)}">${escapeHtml(task.title)}</span><small>${escapeHtml(groupName)}</small>`;const match=smartMatch(task.title);if(match && (!match.premium || proActive||plusActive)){const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',()=>window.open(match.url,'_blank','noopener'));chip.appendChild(btn);}stack.appendChild(chip);})); const db=row.querySelector('.program-done-btn');db.addEventListener('click',()=>{const set=Array.isArray(campCompleted[key])?[...campCompleted[key]]:[];const p=set.indexOf(item.id);if(p>=0)set.splice(p,1);else set.push(item.id);campCompleted[key]=set;localStorage.setItem('yks_camp_completed',JSON.stringify(campCompleted));renderProgramPage();});programSessions.appendChild(row); });
-        updateProgramQuick(); updateContentSwitchHeight();
+        if(!programSessions)return;
+        renderProgramDays();
+        const key=programSelectedDateKey();
+        const dt=dateFromKey(key);
+        const day=dt.getDay();
+        const schedule=CAMP_SCHEDULE[day]||[];
+        const doneSet=campCompleted[key]||[];
+        const allocations=allocateProgramUnits(key);
+        const now=new Date();
+        const currentIndex=now.getDay()===day?campCurrentIndex(schedule,now):-1;
+        const isToday=key===campTodayKey();
+        const dateText=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
+        programDateLabel.textContent=dateText;
+        const kicker=document.getElementById('program-hero-kicker');
+        if(kicker) kicker.textContent=isToday?'BUGÜN':dt.toLocaleDateString('tr-TR',{weekday:'long'}).toLocaleUpperCase('tr-TR');
+
+        const focusName=document.getElementById('program-focus-name');
+        const focusTime=document.getElementById('program-focus-time');
+        const focusRemaining=document.getElementById('program-focus-remaining');
+        const focusFill=document.getElementById('program-focus-progress-fill');
+        const todayFloor=new Date(); todayFloor.setHours(0,0,0,0);
+        const futureDate=dt.getTime()>todayFloor.getTime();
+        const pastDate=dt.getTime()<todayFloor.getTime();
+        let focusItem=null;
+        if(isToday){
+            focusItem=currentIndex>=0?schedule[currentIndex]:schedule.find(x=>campTimeToMinutes(x.time)>now.getHours()*60+now.getMinutes())||null;
+        }else if(futureDate){
+            focusItem=schedule.find(x=>x.id!=='exam')||schedule[0]||null;
+        }else if(pastDate){
+            focusItem=schedule[schedule.length-1]||null;
+        }
+        if(focusItem){
+            focusTime.textContent=focusItem.time||'--:--';
+            focusName.textContent=focusItem.name||'Program';
+            const idx=schedule.indexOf(focusItem);
+            const live=isToday&&currentIndex>=0&&idx===currentIndex;
+            if(live) focusRemaining.textContent=`Bitmesine ${campRemainingText(schedule,idx,now)}`;
+            else if(futureDate) focusRemaining.textContent='Sıradaki etüt';
+            else if(pastDate) focusRemaining.textContent='Günün son etüdü';
+            else focusRemaining.textContent='Program';
+            const start=campTimeToMinutes(focusItem.time||'00:00');
+            const end=campEndMinutes(focusItem.time||'00:00');
+            const minute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+            const pct=Math.max(0,Math.min(100,((minute-start)/(end-start))*100));
+            focusFill.style.width=(live?pct:(pastDate?100:0))+'%';
+        }else if(schedule.length){
+            const last=schedule[schedule.length-1];
+            focusTime.textContent=last.time||'--:--';
+            focusName.textContent='Program tamamlandı';
+            focusRemaining.textContent='Bugünün etütleri bitti.';
+            focusFill.style.width='100%';
+        }else{
+            focusTime.textContent='--:--';
+            focusName.textContent='Program hazır';
+            focusRemaining.textContent='Bu gün için etüt yok.';
+            focusFill.style.width='0%';
+        }
+
+        programSessions.innerHTML='';
+        if(!schedule.length){
+            programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';
+            updateProgramQuick();
+            updateContentSwitchHeight();
+            return;
+        }
+
+        schedule.forEach((item,index)=>{
+            const done=doneSet.includes(item.id);
+            const current=index===currentIndex;
+            const row=document.createElement('div');
+            row.className='program-session'+(current?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
+            const assigned=allocations.get(index)||[];
+            const flatTasks=assigned.flatMap(unit=>unit.items.map(task=>({task,group:unit.group})));
+            const hasTasks=flatTasks.length>0;
+            row.innerHTML=`<div class="program-session-rail"><div class="program-session-time">${escapeHtml(item.time)}</div><div class="program-session-marker"></div></div><div class="program-session-main"><div class="program-session-head"><div class="program-session-name">${escapeHtml(item.name)}</div><div class="program-session-state">${done?'✓':current?'ŞİMDİ':''}</div></div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="Etüdü ${done?'yeniden aç':'tamamla'}" ${item.id==='exam'?'disabled':''}><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`;
+            const stack=row.querySelector('.program-task-stack');
+            flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current));
+            const db=row.querySelector('.program-done-btn');
+            if(item.id!=='exam') db.addEventListener('click',()=>{setProgramSessionDone(key,item.id,!done);renderProgramPage();renderTasks();});
+            row.classList.toggle('no-tasks',!hasTasks);
+            programSessions.appendChild(row);
+        });
+        updateProgramQuick();
+        updateContentSwitchHeight();
     }
     function updateProgramQuick(){
         if(!programQuickMain||!programQuickTime)return; const today=new Date(); const day=today.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; if(!schedule.length){programQuickMain.textContent='Program';programQuickTime.textContent='--:--';return;} const idx=campCurrentIndex(schedule,today); let item=idx>=0?schedule[idx]:null; if(!item){const now=today.getHours()*60+today.getMinutes(); const next=schedule.find(s=>campTimeToMinutes(s.time)>now); item=next||schedule[schedule.length-1];} programQuickMain.textContent=item.name; programQuickTime.textContent=(item.time||'').split('–').pop()||'--:--';
