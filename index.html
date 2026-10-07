@@ -3602,6 +3602,493 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 </style>
 </style>
 
+
+<style id="program-v16-final-style">
+/* =========================================================
+   PROGRAMIM v16 — clean command-center redesign
+   Principle: one focal state, then a readable schedule.
+========================================================= */
+.program-pane{padding:20px 0 54px!important;background:transparent;}
+.program-shell{width:min(1160px,94%);margin:0 auto;}
+.program-topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:3px 0 16px;}
+.program-topbar-left{gap:12px;}
+.program-mark{width:46px;height:46px;flex:0 0 46px;border-radius:15px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);box-shadow:none;}
+.program-mark svg{width:21px;height:21px;}
+.program-kicker{font-size:.43rem;letter-spacing:1.45px;color:#70bdf3;margin-bottom:6px;}
+.program-title{font-size:clamp(1.45rem,2.7vw,2rem);letter-spacing:-.05em;}
+.program-date-label{font-size:.56rem;color:#6f808d;margin-top:5px;}
+.program-bind-main{height:40px;width:40px;padding:0;justify-content:center;border-radius:12px;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.07);color:#d4e3ec;box-shadow:none;font-size:0;}
+.program-bind-main:hover{background:rgba(79,148,208,.10);border-color:rgba(100,177,229,.28);}
+.program-bind-main svg{width:17px;height:17px;}
+
+.program-hero-card{min-height:330px;border-radius:26px;margin-bottom:18px;box-shadow:0 26px 80px rgba(0,0,0,.26);}
+.program-hero-bg{background-position:center 54%;filter:saturate(.9) contrast(1.02);}
+.program-hero-overlay{background:linear-gradient(90deg,rgba(5,9,13,.93) 0%,rgba(5,9,13,.78) 38%,rgba(5,9,13,.34) 70%,rgba(5,9,13,.25) 100%),linear-gradient(180deg,rgba(0,0,0,.03),rgba(0,0,0,.44));}
+.program-hero-content{min-height:330px;padding:34px 36px 31px;max-width:760px;justify-content:flex-end;}
+.program-live-pill{padding:7px 10px;font-size:.48rem;letter-spacing:.9px;background:rgba(8,13,18,.56);}
+.program-focus-time{margin-top:14px;font-size:clamp(2.6rem,6.5vw,5.1rem);line-height:.9;letter-spacing:-.075em;text-shadow:0 14px 34px rgba(0,0,0,.30);}
+.program-focus-name{margin-top:13px;font-size:clamp(1rem,2.1vw,1.45rem);font-weight:850;letter-spacing:-.025em;color:#d9e6ee;max-width:none;}
+.program-focus-range{margin-top:6px;color:#8facc0;font-size:clamp(.82rem,1.55vw,1.05rem);font-weight:850;letter-spacing:-.01em;}
+.program-focus-progress{height:4px;margin-top:21px;width:min(560px,92%);background:rgba(255,255,255,.11);}
+
+.program-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;padding:0 0 18px;overflow:visible;}
+.program-day{width:auto;min-width:0;height:76px;border-radius:16px;background:rgba(255,255,255,.022);border:1px solid rgba(255,255,255,.055);box-shadow:none;justify-content:center;gap:6px;}
+.program-day strong{font-size:.73rem;letter-spacing:.4px;color:#aebbc5;}
+.program-day span{font-size:.52rem;color:#5f6e79;}
+.program-day.today::after{content:'';width:4px;height:4px;border-radius:50%;background:#6dbdf1;box-shadow:0 0 12px rgba(109,189,241,.50);margin-top:2px;}
+.program-day.active{background:linear-gradient(145deg,rgba(64,137,194,.16),rgba(255,255,255,.028));border-color:rgba(112,190,242,.27);box-shadow:0 12px 30px rgba(47,117,165,.08);}
+.program-day.active strong{color:#f2f6f9;}
+.program-day.active span{color:#7ea7bf;}
+
+.program-schedule-head{margin:0 2px 10px;color:#7f8e99;font-size:.51rem;font-weight:950;letter-spacing:1.4px;text-transform:uppercase;}
+.program-schedule-line{background:linear-gradient(90deg,rgba(255,255,255,.07),transparent);}
+.program-sessions{display:grid;gap:8px;}
+.program-session{grid-template-columns:96px minmax(0,1fr) 44px;gap:15px;padding:13px 13px 13px 14px;min-height:86px;border-radius:17px;border:1px solid rgba(255,255,255,.055);background:#0d1318;box-shadow:0 10px 28px rgba(0,0,0,.11);}
+.program-session::after{display:none!important;}
+.program-session::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:2px;border-radius:99px;background:rgba(111,129,142,.18);box-shadow:none;}
+.program-session:hover{transform:translateY(-1px);border-color:rgba(105,175,224,.20);}
+.program-session.current{min-height:100px;border-color:rgba(103,182,235,.34);background:linear-gradient(135deg,rgba(30,68,95,.42),rgba(10,16,21,.97));box-shadow:0 18px 44px rgba(35,107,158,.09);}
+.program-session.current::before{background:linear-gradient(180deg,#79cbff,#4c8fc8);box-shadow:0 0 16px rgba(81,166,225,.35);}
+.program-session.done{background:#0b1110;border-color:rgba(97,187,137,.13);opacity:.72;}
+.program-session.done::before{background:rgba(107,197,149,.38);}
+.program-session.exam{background:#111316;}
+.program-session-rail{height:100%;justify-content:center;align-items:flex-start;}
+.program-session-time{min-width:0;padding:0;background:transparent;border:0;font-size:.82rem;font-weight:950;line-height:1.05;color:#e9f0f4;text-align:left;}
+.program-session.current .program-session-time{color:#a6dcff;}
+.program-session.done .program-session-time{text-decoration:line-through;color:#74838d;}
+.program-session-main{padding-top:1px;}
+.program-session-head{display:block;}
+.program-session-name{font-size:.87rem;line-height:1.08;letter-spacing:-.015em;}
+.program-session-state{display:none;}
+.program-task-stack{gap:6px;margin-top:9px;}
+.program-task-chip{padding:5px 7px 5px 5px;min-height:30px;border-radius:10px;background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.06);font-size:.57rem;backdrop-filter:none;}
+.program-task-chip.matched{background:rgba(70,135,190,.045);border-color:rgba(88,158,213,.12);}
+.program-task-chip > span.program-task-text{max-width:400px;}
+.program-task-thumb{width:0!important;height:28px;opacity:0!important;transform:translateX(-8px) scale(.92)!important;}
+.program-task-chip .program-task-thumb.has-thumb{width:52px!important;opacity:.9!important;transform:none!important;}
+.program-task-thumb img{border-radius:7px;}
+.program-task-open{width:25px;height:25px;border-radius:8px;}
+.program-session-action{align-self:center;}
+.program-done-btn{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.022);border-color:rgba(255,255,255,.07);}
+.program-session.done .program-done-btn{color:#8bd3aa;background:rgba(91,178,130,.07);border-color:rgba(91,178,130,.20);}
+.program-empty{padding:30px 12px;color:#63727c;text-align:center;font-size:.67rem;}
+
+@media(max-width:860px){
+  .program-days{grid-template-columns:repeat(7,84px);overflow-x:auto;scrollbar-width:none;padding-bottom:16px;}
+  .program-days::-webkit-scrollbar{display:none;}
+}
+@media(max-width:700px){
+  .program-pane{padding-top:14px!important;}
+  .program-shell{width:92%;}
+  .program-topbar{margin-bottom:12px;}
+  .program-mark{width:42px;height:42px;flex-basis:42px;border-radius:13px;}
+  .program-title{font-size:1.42rem;}
+  .program-date-label{font-size:.53rem;}
+  .program-bind-main{width:40px;height:40px;}
+  .program-hero-card{min-height:255px;border-radius:20px;}
+  .program-hero-content{min-height:255px;padding:24px 22px 23px;}
+  .program-focus-time{font-size:clamp(2.4rem,14vw,4rem);}
+  .program-focus-name{font-size:.92rem;}
+  .program-focus-range{font-size:.82rem;}
+  .program-session{grid-template-columns:72px minmax(0,1fr) 38px;gap:10px;min-height:80px;padding:12px 10px 12px 12px;}
+  .program-session.current{min-height:92px;}
+  .program-session-time{font-size:.71rem;}
+  .program-session-name{font-size:.78rem;}
+  .program-task-chip{font-size:.53rem;}
+  .program-task-chip > span.program-task-text{max-width:49vw;}
+  .program-task-chip .program-task-thumb.has-thumb{width:44px!important;height:25px;}
+  .program-done-btn{width:34px;height:34px;}
+}
+</style>
+
+<style id="smart-task-link-v16">
+.task-smart-link{display:inline-flex;align-items:center;gap:6px;margin-left:2px;color:#85c8f1;text-decoration:none;vertical-align:middle;cursor:pointer;transition:opacity .22s ease,transform .22s ease,background .22s ease;}
+.task-smart-link:not(.locked):hover{transform:translateY(-1px);}
+.task-smart-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(69,143,208,.10);border:1px solid rgba(97,177,230,.17);}
+.task-smart-icon svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.task-smart-thumb{width:0;height:28px;opacity:0;overflow:hidden;border-radius:8px;display:inline-block;transition:width .34s cubic-bezier(.2,.75,.3,1),opacity .25s ease;}
+.task-smart-link:not(.locked) .task-smart-thumb{width:46px;opacity:.9;}
+.task-smart-thumb img{display:block;width:100%;height:100%;object-fit:cover;border-radius:8px;}
+.task-smart-thumb.locked{filter:grayscale(.65);opacity:.45!important;}
+.task-smart-link.locked{cursor:default;opacity:.55;}
+</style>
+
+<style id="program-v17-clean-redesign">
+/* =========================================================
+   PROGRAMIM v17 — sakin, okunaklı, pastel çalışma planı
+   Bilgi önce; dekor sadece yönlendirmek için.
+========================================================= */
+.program-pane{
+  padding:18px 0 58px!important;
+  min-height:680px;
+  background:transparent!important;
+}
+.program-shell{
+  width:min(1080px,92%)!important;
+  margin:0 auto!important;
+}
+.program-topbar{
+  margin:2px 0 16px!important;
+  justify-content:flex-start!important;
+}
+.program-mark{
+  width:44px!important;
+  height:44px!important;
+  flex:0 0 44px!important;
+  border-radius:13px!important;
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+}
+.program-mark svg{width:20px!important;height:20px!important;}
+.program-topbar-copy{min-width:0;}
+.program-kicker{
+  font-size:.44rem!important;
+  font-weight:650!important;
+  letter-spacing:1.4px!important;
+  color:#9ec6dc!important;
+  margin-bottom:5px!important;
+}
+.program-title{
+  font-size:clamp(1.45rem,2.8vw,1.95rem)!important;
+  font-weight:650!important;
+  letter-spacing:-.04em!important;
+  line-height:1.02!important;
+}
+.program-date-label{display:none!important;}
+.program-bind-main{display:none!important;}
+
+/* Büyük üst kart */
+.program-hero-card{
+  min-height:340px!important;
+  margin:0 0 16px!important;
+  border-radius:27px!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.24)!important;
+}
+.program-hero-bg{
+  background-position:center 52%!important;
+  filter:saturate(.98) contrast(1.01)!important;
+}
+.program-hero-overlay{
+  background:
+    linear-gradient(90deg,rgba(5,9,13,.94) 0%,rgba(5,9,13,.78) 36%,rgba(5,9,13,.38) 68%,rgba(5,9,13,.22) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.46))!important;
+}
+.program-hero-content{
+  min-height:340px!important;
+  padding:32px 34px 30px!important;
+  max-width:760px!important;
+}
+.program-live-pill{
+  padding:7px 10px!important;
+  font-size:.48rem!important;
+  font-weight:650!important;
+  letter-spacing:.55px!important;
+  background:rgba(8,13,18,.52)!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+.program-live-dot{width:6px!important;height:6px!important;}
+.program-focus-time{
+  margin-top:17px!important;
+  font-size:clamp(2.55rem,6.2vw,4.65rem)!important;
+  font-weight:650!important;
+  letter-spacing:-.065em!important;
+  line-height:.96!important;
+  text-shadow:0 12px 28px rgba(0,0,0,.30)!important;
+}
+.program-focus-name{
+  display:block!important;
+  margin-top:13px!important;
+  font-size:clamp(.95rem,1.8vw,1.2rem)!important;
+  font-weight:500!important;
+  color:#cfdde5!important;
+  letter-spacing:-.01em!important;
+}
+.program-focus-range{
+  margin-top:6px!important;
+  font-size:clamp(.86rem,1.6vw,1rem)!important;
+  font-weight:500!important;
+  color:#abd1e7!important;
+  letter-spacing:0!important;
+}
+.program-focus-progress{
+  height:4px!important;
+  margin-top:19px!important;
+  width:min(540px,90%)!important;
+  background:rgba(255,255,255,.10)!important;
+}
+
+/* Günler: yalnızca seçim, süs değil */
+.program-days{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  gap:8px!important;
+  padding:0 0 20px!important;
+  overflow:visible!important;
+}
+.program-day{
+  min-width:0!important;
+  height:70px!important;
+  border-radius:17px!important;
+  background:rgba(255,255,255,.022)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  box-shadow:none!important;
+  gap:2px!important;
+}
+.program-day strong{
+  font-size:.86rem!important;
+  font-weight:600!important;
+  letter-spacing:.1px!important;
+  color:#c4d0d8!important;
+}
+.program-day span{
+  display:block!important;
+  font-size:.54rem!important;
+  font-weight:450!important;
+  color:#697987!important;
+}
+.program-day.today::after{display:none!important;}
+.program-day.active{
+  transform:none!important;
+  background:linear-gradient(145deg,rgba(112,187,231,.15),rgba(255,255,255,.035))!important;
+  border-color:rgba(121,191,231,.32)!important;
+  box-shadow:0 10px 26px rgba(56,124,165,.08)!important;
+}
+.program-day.active strong{color:#f0f5f7!important;}
+.program-day.active span{color:#94bacf!important;}
+
+/* Etüt listesi — büyük, bütünlük gösteren satırlar */
+.program-schedule-head{display:none!important;}
+.program-sessions{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+.program-session{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:114px minmax(0,1fr) 44px!important;
+  gap:17px!important;
+  align-items:center!important;
+  min-height:104px!important;
+  padding:15px 15px 15px 16px!important;
+  border-radius:21px!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  background:#0e1419!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.13)!important;
+  overflow:hidden!important;
+  transform:none!important;
+}
+.program-session::after{display:none!important;}
+.program-session::before{
+  content:''!important;
+  position:absolute!important;
+  left:0!important;
+  top:14px!important;
+  bottom:14px!important;
+  width:3px!important;
+  border-radius:99px!important;
+  background:rgba(255,255,255,.12)!important;
+  box-shadow:none!important;
+}
+.program-session.morning{
+  background:
+   radial-gradient(circle at 96% 12%,rgba(255,199,167,.11),transparent 30%),
+   #101519!important;
+}
+.program-session.day{
+  background:
+   radial-gradient(circle at 96% 12%,rgba(176,231,201,.10),transparent 30%),
+   #0f1715!important;
+}
+.program-session.evening{
+  background:
+   radial-gradient(circle at 96% 12%,rgba(205,180,255,.11),transparent 30%),
+   #12131a!important;
+}
+.program-session.night{
+  background:
+   radial-gradient(circle at 96% 12%,rgba(157,198,255,.12),transparent 30%),
+   #0f141b!important;
+}
+.program-session.current{
+  min-height:118px!important;
+  border-color:rgba(119,193,237,.30)!important;
+  background:
+   radial-gradient(circle at 92% 16%,rgba(144,217,255,.17),transparent 31%),
+   linear-gradient(135deg,rgba(27,61,83,.54),rgba(9,15,20,.97))!important;
+  box-shadow:0 18px 46px rgba(37,111,159,.10)!important;
+}
+.program-session.current::before{
+  top:14px!important;
+  bottom:14px!important;
+  width:4px!important;
+  background:linear-gradient(180deg,#8fd7ff,#5a9acc)!important;
+}
+.program-session.done{
+  opacity:.68!important;
+  background:#0b1110!important;
+  border-color:rgba(112,191,146,.13)!important;
+}
+.program-session.done::before{background:rgba(117,200,153,.45)!important;}
+.program-session-rail{
+  height:100%!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+}
+.program-session-time{
+  padding:0!important;
+  min-width:0!important;
+  background:transparent!important;
+  border:0!important;
+  text-align:left!important;
+  font-size:.94rem!important;
+  font-weight:560!important;
+  line-height:1.15!important;
+  color:#e1ebef!important;
+}
+.program-session.current .program-session-time{color:#a9dcf6!important;}
+.program-session.done .program-session-time{color:#7f8d95!important;}
+.program-session-main{min-width:0!important;padding-top:1px!important;}
+.program-session-head{display:block!important;}
+.program-session-name{
+  font-size:1rem!important;
+  font-weight:590!important;
+  letter-spacing:-.015em!important;
+  line-height:1.12!important;
+  color:#e7eef1!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.program-task-stack{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:5px!important;
+  margin-top:10px!important;
+}
+.program-task-chip{
+  width:100%!important;
+  min-height:42px!important;
+  padding:7px 9px!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.033)!important;
+  border:1px solid rgba(255,255,255,.055)!important;
+  color:#c3d0d8!important;
+  font-size:.70rem!important;
+  font-weight:480!important;
+  overflow:hidden!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.program-task-chip.matched{
+  background:rgba(101,160,201,.065)!important;
+  border-color:rgba(108,182,224,.14)!important;
+}
+.program-task-chip > span.program-task-text{
+  max-width:none!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.program-task-thumb,
+.program-task-chip .program-task-thumb.has-thumb{
+  width:54px!important;
+  height:34px!important;
+  opacity:.92!important;
+  transform:none!important;
+  border-radius:8px!important;
+}
+.program-task-open{
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  border-radius:8px!important;
+  background:rgba(112,177,218,.10)!important;
+  color:#91cbed!important;
+}
+.program-session-action{align-self:center!important;}
+.program-done-btn{
+  width:40px!important;
+  height:40px!important;
+  border-radius:13px!important;
+  background:rgba(255,255,255,.022)!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  color:#82929b!important;
+}
+.program-session.done .program-done-btn{
+  color:#9ed8b5!important;
+  background:rgba(88,174,126,.085)!important;
+  border-color:rgba(105,198,149,.20)!important;
+}
+.program-empty{
+  padding:36px 18px!important;
+  border-radius:18px!important;
+  font-size:.74rem!important;
+  font-weight:450!important;
+}
+
+/* Hızlı erişim: eski kompakt yapı, sadece MM:SS */
+.program-quick{
+  left:76px!important;
+  top:18px!important;
+  height:44px!important;
+  min-width:92px!important;
+  padding:0 12px!important;
+  gap:8px!important;
+  border-radius:13px!important;
+  background:rgba(15,20,25,.82)!important;
+}
+.program-quick-time{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:.74rem!important;
+  font-weight:500!important;
+  letter-spacing:.02em!important;
+  color:#dcecf7!important;
+}
+
+@media(max-width:860px){
+  .program-days{grid-template-columns:repeat(7,84px)!important;overflow-x:auto!important;scrollbar-width:none!important;}
+  .program-days::-webkit-scrollbar{display:none!important;}
+}
+@media(max-width:700px){
+  .program-pane{padding:14px 0 44px!important;}
+  .program-shell{width:93%!important;}
+  .program-topbar{margin-bottom:12px!important;}
+  .program-mark{width:42px!important;height:42px!important;flex-basis:42px!important;}
+  .program-title{font-size:1.38rem!important;font-weight:640!important;}
+  .program-hero-card{min-height:248px!important;border-radius:21px!important;}
+  .program-hero-content{min-height:248px!important;padding:23px 20px 22px!important;}
+  .program-focus-time{font-size:clamp(2.2rem,12vw,3.7rem)!important;}
+  .program-focus-name{font-size:.86rem!important;margin-top:11px!important;}
+  .program-focus-range{font-size:.84rem!important;}
+  .program-days{gap:7px!important;padding-bottom:13px!important;}
+  .program-day{height:62px!important;min-width:72px!important;border-radius:15px!important;}
+  .program-day strong{font-size:.76rem!important;font-weight:600!important;}
+  .program-session{
+    grid-template-columns:78px minmax(0,1fr) 38px!important;
+    gap:9px!important;
+    min-height:96px!important;
+    padding:12px 9px 12px 12px!important;
+    border-radius:18px!important;
+  }
+  .program-session.current{min-height:112px!important;}
+  .program-session-time{font-size:.70rem!important;font-weight:550!important;}
+  .program-session-name{font-size:.84rem!important;font-weight:580!important;}
+  .program-task-stack{gap:4px!important;margin-top:8px!important;}
+  .program-task-chip{min-height:39px!important;font-size:.61rem!important;padding:6px 7px!important;}
+  .program-task-thumb,.program-task-chip .program-task-thumb.has-thumb{width:48px!important;height:30px!important;}
+  .program-task-open{width:25px!important;height:25px!important;flex-basis:25px!important;}
+  .program-done-btn{width:34px!important;height:34px!important;border-radius:10px!important;}
+  .program-quick{left:62px!important;top:10px!important;height:42px!important;min-width:78px!important;padding:0 9px!important;gap:6px!important;}
+  .program-quick svg{width:18px!important;height:18px!important;}
+  .program-quick-time{font-size:.67rem!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  .program-session,.program-task-thumb{transition:none!important;animation:none!important;}
+}
+</style>
+
 </head>
 
 <body>
@@ -4090,30 +4577,21 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                                 <div class="program-date-label" id="program-date-label"></div>
                             </div>
                         </div>
-                        <button class="program-bind-main" id="program-bind-main" type="button" title="Görevler">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h6M9 10h6M9 14h3"></path><path d="M5 4h14v16H5z"></path><path d="M16 14v5l2-1.3 2 1.3v-5"></path></svg>
-                            <span>Görevler</span>
-                        </button>
                     </div>
 
                     <div class="program-hero-card" id="program-focus-card">
                         <div class="program-hero-bg" aria-hidden="true"></div>
                         <div class="program-hero-overlay"></div>
                         <div class="program-hero-content">
-                            <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">Sıradaki etüt</span></div>
+                            <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">ŞU AN</span></div>
                             <div class="program-focus-time" id="program-focus-time">Program hazır</div>
-                            <div class="program-focus-name" id="program-focus-name">--:--</div>
-                            <div class="program-focus-range" id="program-focus-range">--:-- — --:--</div>
+                            <div class="program-focus-name" id="program-focus-name">--:-- — --:--</div>
+                            <div class="program-focus-range" id="program-focus-range">-- dk</div>
                             <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
                         </div>
                     </div>
 
                     <div class="program-days" id="program-days"></div>
-
-                    <div class="program-schedule-head">
-                        <span>Bugünün akışı</span>
-                        <span class="program-schedule-line"></span>
-                    </div>
                     <div class="program-sessions" id="program-sessions"></div>
                 </div>
             </section>
@@ -7569,7 +8047,7 @@ updateDailyMotivation();
     const CAMP_PLAYLIST_CLICKS_KEY='yks_camp_playlist_clicks_v1';
     let campPlaylistClicks=(()=>{try{const x=JSON.parse(localStorage.getItem(CAMP_PLAYLIST_CLICKS_KEY)||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
     function saveCampPlaylistClicks(){localStorage.setItem(CAMP_PLAYLIST_CLICKS_KEY,JSON.stringify(campPlaylistClicks));}
-    function normalizeTaskText(text){ return String(text||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c'); }
+    function normalizeTaskText(text){return String(text||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c');}
     const SMART_TEACHERS=[
         {id:'soner',aliases:['soner','soner akinici','soner akinci','soner akıncı']},
         {id:'eyup',aliases:['eyup','eyüp','eyup b','eyup boncuk']},
@@ -7593,9 +8071,10 @@ updateDailyMotivation();
             const premium=link.classList.contains('camp-premium-link');
             const thumb=link.querySelector('.playlist-thumb')?.getAttribute('src') || card?.querySelector('.teacher-visual img')?.getAttribute('src') || '';
             const subject=card?.dataset?.subject||'';
-            const search=normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher+' '+meta);
-            const questionContent=/soru|cozum|test|problem|soru bankasi|soru cozumu/.test(search);
+            const contentName=normalizeTaskText(name+' '+meta);
+            const questionContent=/\b(soru|sorular|test|problem|problemler|soru bankasi|soru cozumu|cozum)\b/.test(contentName);
             const lessonContent=!questionContent;
+            const search=normalizeTaskText(name+' '+teacher+' '+meta+' '+subject);
             return {teacher,name,meta,url,premium,thumb,subject,teacherId,questionContent,lessonContent,search};
         });
     }
@@ -7605,16 +8084,13 @@ updateDailyMotivation();
         const card=link.closest('.teacher-card');
         const teacher=normalizeTaskText(card?.querySelector('.teacher-name')?.textContent||'');
         campPlaylistClicks[url]=(Number(campPlaylistClicks[url])||0)+1;
-        if(teacher){campPlaylistClicks['teacher:'+teacher]=(Number(campPlaylistClicks['teacher:'+teacher])||0)+1;}
+        if(teacher)campPlaylistClicks['teacher:'+teacher]=(Number(campPlaylistClicks['teacher:'+teacher])||0)+1;
         saveCampPlaylistClicks();
     }
     document.addEventListener('click',e=>{const link=e.target.closest?.('.playlist-link[data-camp-playlist]');if(link)registerCampPlaylistClick(link);});
-    function teacherMentionIds(text){
-        const t=normalizeTaskText(text);
-        return SMART_TEACHERS.filter(item=>item.aliases.some(alias=>t.includes(normalizeTaskText(alias)))).map(item=>item.id);
-    }
+    function teacherMentionIds(text){const t=normalizeTaskText(text);return SMART_TEACHERS.filter(item=>item.aliases.some(alias=>t.includes(normalizeTaskText(alias)))).map(item=>item.id);}
     function subjectFromText(t){
-        const map=[['matematik','matematik'],['geometri','geometri'],['fizik','fizik'],['kimya','kimya'],['biyoloji','biyoloji']];
+        const map=[['matematik','matematik'],['geometri','geometri'],['fizik','fizik'],['kimya','kimya'],['biyoloji','biyoloji'],['turkce','turkce'],['edebiyat','edebiyat']];
         return map.filter(([k])=>t.includes(k)).map(([,v])=>v);
     }
     function inferTaskMeta(title){
@@ -7622,41 +8098,69 @@ updateDailyMotivation();
         const level=t.match(/\b(tyt|ayt)\b/)?.[1]||'';
         const subjects=subjectFromText(t);
         const teachers=teacherMentionIds(t);
-        const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi|cozum|çözüm)\b/.test(t);
-        const lesson=/\b(video|ders|kamp|konu|konu anlatimi|anlatim|izle)\b/.test(t);
-        return {level,subjects,teachers,question,lesson,text:t};
+        const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi|cozum|cozumle|coz)\b/.test(t);
+        const lesson=/\b(video|ders|kamp|konu|konu anlatimi|anlatim|izle|izlenecek)\b/.test(t);
+        const original=/\borijinal\b/.test(t);
+        return {level,subjects,teachers,question,lesson,original,text:t};
     }
     function teacherWatchScore(entry){
         const urlCount=Number(campPlaylistClicks[entry.url])||0;
         const teacherKey='teacher:'+normalizeTaskText(entry.teacher||'');
         const teacherCount=Number(campPlaylistClicks[teacherKey])||0;
-        return Math.min(8,urlCount)+Math.min(8,teacherCount)*1.15;
+        return Math.min(10,urlCount)+Math.min(12,teacherCount)*1.3;
+    }
+    function candidateRelation(meta,entry){
+        let score=0;
+        const x=entry.search;
+        const subjectHits=meta.subjects.filter(v=>x.includes(v)||normalizeTaskText(entry.subject).includes(v)).length;
+        if(meta.level){if(!x.includes(meta.level))return -999;score+=5;}
+        if(subjectHits){score+=7*subjectHits;} else if(meta.subjects.length){return -999;}
+        if(meta.teachers.length){if(!meta.teachers.includes(entry.teacherId))return -999;score+=14;}
+        if(meta.original){if(entry.teacherId==='orijinal')score+=12;else score-=4;}
+        if(meta.question){if(!entry.questionContent)return -999;score+=12;}
+        else if(meta.lesson){if(!entry.lessonContent)return -999;score+=4;}
+        else if(entry.questionContent){score-=6;}
+        if(!meta.teachers.length)score+=teacherWatchScore(entry)*0.9;
+        if(!meta.level && !meta.subjects.length && !meta.teachers.length && !meta.question && !meta.lesson)score+=teacherWatchScore(entry)*0.4;
+        return score;
     }
     function smartMatch(title){
-        const m=inferTaskMeta(title); const entries=campPlaylistIndex(); if(!entries.length)return null;
+        const meta=inferTaskMeta(title);
+        const entries=campPlaylistIndex();
+        if(!entries.length)return null;
+        // A completely generic word such as "soru" or "video" is not enough to guess a playlist.
+        // Require at least one useful anchor so the interface never sends a user somewhere arbitrary.
+        if(!meta.level&&!meta.subjects.length&&!meta.teachers.length&&!meta.original)return null;
         let best=null;
         for(const e of entries){
-            const x=e.search; let score=0;
-            // Soru/test görevleri yalnızca soru çözüm / soru bankası içeriklerine bağlanır.
-            if(m.question && !e.questionContent) continue;
-            if(m.lesson && e.questionContent) continue;
-            if(m.teachers.length){ if(!m.teachers.includes(e.teacherId)) continue; score+=10; }
-            if(m.level){ if(!x.includes(m.level)) continue; score+=4; }
-            if(m.subjects.length){ const subjectHit=m.subjects.some(v=>x.includes(v)||normalizeTaskText(e.subject).includes(v)); if(!subjectHit)continue; score+=5; }
-            if(m.lessonContent && e.lessonContent)score+=1.5;
-            if(m.question && e.questionContent)score+=5;
-            // Explicit question intent always beats ordinary lesson playlists.
-            if(!m.question && e.questionContent)score-=4;
-            if(!m.teachers.length)score+=teacherWatchScore(e)*0.8;
-            if(/\borijinal\b/.test(m.text) && e.teacherId==='orijinal')score+=5;
+            const score=candidateRelation(meta,e);
+            if(score<0)continue;
             if(!best || score>best.score || (Math.abs(score-best.score)<0.01 && teacherWatchScore(e)>teacherWatchScore(best))) best={...e,score};
         }
-        return best && best.score>=4 ? best : null;
+        return best && best.score>=6 ? best : null;
     }
     function renderSmartLink(task){
-        const match=smartMatch(task.title); if(!match) return '';
-        if(match.premium && !(proActive||plusActive)) return `<span class="task-smart-link locked" title="Üyelik gerekli"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg></span>`;
-        return `<button type="button" class="task-smart-link" title="${escapeHtml(match.name)}" data-task-smart-url="${escapeHtml(match.url)}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></button>`;
+        const match=smartMatch(task.title); if(!match)return '';
+        const locked=match.premium && !(proActive||plusActive);
+        const thumb=match.thumb?`<span class="task-smart-thumb ${locked?'locked':''}"><img src="${escapeHtml(match.thumb)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`:'';
+        const icon=locked?'<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';
+        return `<span class="task-smart-link ${locked?'locked':''}" ${locked?'aria-disabled="true"':'role="button" tabindex="0" data-task-smart-url="'+escapeHtml(match.url)+'" title="'+escapeHtml(match.name)+'"'}>${thumb}<span class="task-smart-icon">${icon}</span></span>`;
+    }
+    function refreshTaskSmartLink(row,task){
+        const existing=row.querySelector('.task-smart-link');
+        const temp=document.createElement('span');
+        temp.innerHTML=renderSmartLink(task);
+        const next=temp.firstElementChild;
+        if(existing && next){existing.replaceWith(next);}
+        else if(existing && !next){existing.remove();}
+        else if(next){row.appendChild(next);}
+        const smart=row.querySelector('[data-task-smart-url]');
+        if(smart && !smart.dataset.bound){
+            smart.dataset.bound='1';
+            const open=()=>{const u=smart.dataset.taskSmartUrl;if(u)window.open(u,'_blank','noopener');};
+            smart.addEventListener('click',open);
+            smart.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+        }
     }
     function renderTasks(){
         if(!tasksList)return; tasksList.innerHTML=''; if(!taskGroups.length){ tasksList.innerHTML='<div class="tasks-empty">Henüz görev yok.</div>'; return; }
@@ -7668,8 +8172,8 @@ updateDailyMotivation();
             const rows=card.querySelector('.task-rows');
             group.tasks.forEach(task=>{ const row=document.createElement('div'); row.className='task-row'+(task.done?' done':''); row.draggable=true; row.dataset.taskId=task.id; row.innerHTML=`<div class="task-drag" title="Sürükle"><svg viewBox="0 0 24 24"><path d="M8 6h8M8 12h8M8 18h8"></path></svg></div><button type="button" class="task-check" title="Tamamlandı"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button><div class="task-text" contenteditable="true" spellcheck="false">${escapeHtml(task.title)}</div>${renderSmartLink(task)}`;
                 row.querySelector('.task-check').addEventListener('click',()=>{task.done=!task.done;task.autoDone=false;saveTaskGroups();renderTasks();renderProgramPage();});
-                const txt=row.querySelector('.task-text'); txt.addEventListener('input',()=>{task.title=txt.textContent||'';saveTaskGroups();}); txt.addEventListener('blur',()=>{task.title=(txt.textContent||'').trim();saveTaskGroups();renderTasks();});
-                const smart=row.querySelector('[data-task-smart-url]'); if(smart) smart.addEventListener('click',()=>{ const u=smart.dataset.taskSmartUrl; if(u) window.open(u,'_blank','noopener'); });
+                const txt=row.querySelector('.task-text'); txt.addEventListener('input',()=>{task.title=txt.textContent||'';saveTaskGroups();refreshTaskSmartLink(row,task);}); txt.addEventListener('blur',()=>{task.title=(txt.textContent||'').trim();saveTaskGroups();renderTasks();});
+                const smart=row.querySelector('[data-task-smart-url]'); if(smart){const open=()=>{const u=smart.dataset.taskSmartUrl;if(u)window.open(u,'_blank','noopener');};smart.addEventListener('click',open);smart.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();open();}});}
                 rows.appendChild(row);
             });
             const input=card.querySelector('.task-add-input'); const add=()=>{const title=input.value.trim(); if(!title)return; group.tasks.push({id:'t_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),title,done:false,createdAt:Date.now()}); input.value=''; saveTaskGroups(); renderTasks(); renderProgramPage();}; card.querySelector('.task-add-btn').addEventListener('click',add); input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add();}});
@@ -7732,17 +8236,70 @@ updateDailyMotivation();
         groups.forEach(group=>{
             const pending=group.tasks.filter(t=>!t.done);
             const used=new Set();
-            pending.forEach(task=>{ if(used.has(task.id))return; const meta=inferTaskMeta(task.title); let partner=null;
-                if(meta.lesson||(!meta.question&&!meta.lesson)){ partner=pending.find(other=>{if(other.id===task.id||used.has(other.id))return false; const om=inferTaskMeta(other.title); if(!om.question)return false; const sameTeacher=meta.teachers.length&&om.teachers.some(v=>meta.teachers.includes(v)); const sameSubject=meta.subjects.length&&om.subjects.some(v=>meta.subjects.includes(v)); const sameLevel=meta.level&&meta.level===om.level; return sameTeacher||sameSubject||(!meta.teachers.length&&!meta.subjects.length&&(!meta.level||sameLevel));}); }
-                if(partner){used.add(task.id);used.add(partner.id);units.push({group,title:task.title,items:[task,partner]});} else {used.add(task.id);units.push({group,title:task.title,items:[task]});}
-            });
+            for(const task of pending){
+                if(used.has(task.id))continue;
+                const meta=inferTaskMeta(task.title);
+                let bestPartner=null,bestPartnerScore=-1;
+                if(!meta.question){
+                    for(const other of pending){
+                        if(other.id===task.id||used.has(other.id))continue;
+                        const om=inferTaskMeta(other.title);
+                        if(!om.question)continue;
+                        let relation=0;
+                        if(meta.subjects.length&&om.subjects.some(v=>meta.subjects.includes(v)))relation+=5;
+                        if(meta.level&&om.level===meta.level)relation+=4;
+                        if(meta.teachers.length&&om.teachers.some(v=>meta.teachers.includes(v)))relation+=7;
+                        if(meta.original&&om.original)relation+=4;
+                        if(!meta.subjects.length&&!meta.teachers.length&&!meta.level&&!meta.original&&!om.subjects.length&&!om.teachers.length&&!om.level)relation+=1;
+                        if(relation>bestPartnerScore){bestPartnerScore=relation;bestPartner=other;}
+                    }
+                }
+                if(bestPartner && bestPartnerScore>=5){
+                    used.add(task.id);used.add(bestPartner.id);
+                    units.push({group,items:[task,bestPartner],kind:'lesson-question'});
+                }else{
+                    used.add(task.id);
+                    units.push({group,items:[task],kind:meta.question?'question':'lesson'});
+                }
+            }
         });
         return units;
     }
+    function programStudySlots(dateKey){
+        const dt=dateFromKey(dateKey); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[];
+        return schedule.map((item,index)=>({item,index})).filter(x=>x.item.id!=='exam');
+    }
+    function programStartIndex(dateKey,slots){
+        if(dateKey!==campTodayKey())return 0;
+        const now=new Date();
+        const schedule=CAMP_SCHEDULE[now.getDay()]||[];
+        const current=campCurrentIndex(schedule,now);
+        if(current>=0){const ix=slots.findIndex(x=>x.index===current);return ix>=0?ix:0;}
+        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+        const next=slots.findIndex(x=>campTimeToMinutes(x.item.time)>nowMinute);
+        return next>=0?next:Math.max(0,slots.length-1);
+    }
     function allocateProgramUnits(dateKey){
-        const dt=dateFromKey(dateKey); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; const study=schedule.map((item,index)=>({item,index})).filter(x=>x.item.id!=='exam'); if(!study.length)return new Map(); const bound=taskGroups.filter(g=>g.programDate===dateKey); const units=taskUnitsForGroups(bound); const doneSet=campCompleted[dateKey]||[]; const today=dateKey===campTodayKey();
-        let start=0; if(today){const now=new Date(); const current=schedule.findIndex(x=>now.getHours()*60+now.getMinutes()+now.getSeconds()/60>=campTimeToMinutes(x.time)&&now.getHours()*60+now.getMinutes()+now.getSeconds()/60<campEndMinutes(x.time)); if(current>=0){start=Math.max(0,study.findIndex(x=>x.index===current));} else {const next=schedule.findIndex(x=>campTimeToMinutes(x.time)>now.getHours()*60+now.getMinutes()); const idx=study.findIndex(x=>x.index===next); if(idx>=0)start=idx; else start=Math.max(0,study.length-1);}}
-        const remaining=study.slice(start).filter(x=>!doneSet.includes(x.item.id)); const map=new Map(remaining.map(x=>[x.index,[]])); if(!units.length)return map; const n=remaining.length||1; const base=Math.floor(units.length/n),extra=units.length%n; let cursor=0; remaining.forEach((slot,i)=>{const count=base+(i<extra?1:0); map.set(slot.index,units.slice(cursor,cursor+count));cursor+=count;}); if(cursor<units.length&&remaining.length){const last=remaining[remaining.length-1].index;map.get(last).push(...units.slice(cursor));} return map;
+        const slots=programStudySlots(dateKey); const map=new Map(slots.map(x=>[x.index,[]]));
+        if(!slots.length)return map;
+        const bound=taskGroups.filter(g=>g.programDate===dateKey);
+        const units=taskUnitsForGroups(bound);
+        if(!units.length)return map;
+        const doneSet=new Set(campCompleted[dateKey]||[]);
+        const start=programStartIndex(dateKey,slots);
+        const remaining=slots.filter((x,i)=>i>=start&&!doneSet.has(x.item.id));
+        if(!remaining.length)return map;
+        // Each lesson (+ its linked question task) is one work unit.
+        // Spread units as evenly as possible; never split a linked pair.
+        const base=Math.floor(units.length/remaining.length);
+        const extra=units.length%remaining.length;
+        let cursor=0;
+        remaining.forEach((slot,i)=>{
+            const count=base+(i<extra?1:0);
+            if(count>0)map.set(slot.index,units.slice(cursor,cursor+count));
+            cursor+=count;
+        });
+        return map;
     }
     function renderProgramDays(){
         programDays.innerHTML=''; const today=new Date().getDay(); const order=[1,2,3,4,5,6,0]; order.forEach(day=>{const key=weekDateKey(day);const dt=dateFromKey(key);const b=document.createElement('button');b.type='button';b.className='program-day'+(day===programSelectedDay?' active':'')+(day===today?' today':'');b.innerHTML=`<strong>${CAMP_DAY_SHORT[day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`;b.addEventListener('click',()=>{programSelectedDay=day;renderProgramDays();renderProgramPage();});programDays.appendChild(b);});
@@ -7788,152 +8345,121 @@ updateDailyMotivation();
         const chip=document.createElement('div');
         const match=smartMatch(task.title);
         chip.className='program-task-chip'+(match?' matched':'');
-        const thumbWrap=document.createElement('span');
-        thumbWrap.className='program-task-thumb'+(match?.premium && !(proActive||plusActive)?' locked':'');
         if(match?.thumb){
-            const img=document.createElement('img'); img.src=match.thumb; img.alt=''; img.loading='lazy'; img.referrerPolicy='no-referrer';
-            img.addEventListener('error',()=>{ if(!img.dataset.fallback){img.dataset.fallback='1';img.src=img.src.includes('/maxresdefault.jpg')?img.src.replace('/maxresdefault.jpg','/hqdefault.jpg'):'';} else thumbWrap.style.display='none'; });
-            thumbWrap.appendChild(img);
+            const thumbWrap=document.createElement('span');thumbWrap.className='program-task-thumb has-thumb'+(match.premium&&!(proActive||plusActive)?' locked':'');
+            const img=document.createElement('img');img.src=match.thumb;img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';
+            img.addEventListener('error',()=>{thumbWrap.remove();});
+            thumbWrap.appendChild(img);chip.appendChild(thumbWrap);
         }
-        if(match?.thumb) chip.appendChild(thumbWrap);
-        const text=document.createElement('span'); text.className='program-task-text'; text.textContent=task.title; text.title=task.title; chip.appendChild(text);
-        const groupEl=document.createElement('small');groupEl.textContent=groupName;groupEl.title=groupName;chip.appendChild(groupEl);
-        if(match && (!match.premium || proActive||plusActive)){
-            const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',e=>{e.stopPropagation();window.open(match.url,'_blank','noopener');});chip.appendChild(btn);
-        }
-        if(match?.premium && !(proActive||plusActive)){
-            const lock=document.createElement('span');lock.className='program-task-open';lock.setAttribute('aria-hidden','true');lock.style.cursor='default';lock.innerHTML='<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>';chip.appendChild(lock);
+        const text=document.createElement('span');text.className='program-task-text';text.textContent=task.title;text.title=task.title;chip.appendChild(text);
+        if(match){
+            if(match.premium&&!(proActive||plusActive)){
+                const lock=document.createElement('span');lock.className='program-task-open';lock.setAttribute('aria-hidden','true');lock.innerHTML='<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>';chip.appendChild(lock);
+            }else{
+                const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',e=>{e.stopPropagation();window.open(match.url,'_blank','noopener');});chip.appendChild(btn);
+            }
         }
         stack.appendChild(chip);
+    }
+    function formatRemainingText(totalSeconds){
+        const sec=Math.max(0,Math.round(Number(totalSeconds)||0));
+        const mins=Math.floor(sec/60), s=sec%60;
+        return `${mins} dk ${s} sn kaldı`;
     }
     function renderProgramPage(){
         if(!programSessions)return;
         renderProgramDays();
-        const key=programSelectedDateKey();
-        const dt=dateFromKey(key);
-        const day=dt.getDay();
-        const schedule=CAMP_SCHEDULE[day]||[];
-        const doneSet=campCompleted[key]||[];
-        const allocations=allocateProgramUnits(key);
-        const now=new Date();
-        const currentIndex=now.getDay()===day?campCurrentIndex(schedule,now):-1;
-        const isToday=key===campTodayKey();
+        const key=programSelectedDateKey(); const dt=dateFromKey(key); const day=dt.getDay();
+        const schedule=CAMP_SCHEDULE[day]||[]; const doneSet=new Set(campCompleted[key]||[]); const allocations=allocateProgramUnits(key);
+        const now=new Date(); const isToday=key===campTodayKey(); const currentIndex=isToday?campCurrentIndex(schedule,now):-1;
         const dateText=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
         programDateLabel.textContent=dateText;
-        const kicker=document.getElementById('program-hero-kicker');
-        if(kicker) kicker.textContent=isToday?'BUGÜN':dt.toLocaleDateString('tr-TR',{weekday:'long'}).toLocaleUpperCase('tr-TR');
-
-        const focusName=document.getElementById('program-focus-name');
+        const kicker=document.getElementById('program-hero-kicker');if(kicker)kicker.textContent=isToday?'BUGÜN':dt.toLocaleDateString('tr-TR',{weekday:'long'}).toLocaleUpperCase('tr-TR');
         const focusTime=document.getElementById('program-focus-time');
+        const focusName=document.getElementById('program-focus-name');
         const focusRemaining=document.getElementById('program-focus-remaining');
         const focusRange=document.getElementById('program-focus-range');
         const focusFill=document.getElementById('program-focus-progress-fill');
-        const todayFloor=new Date(); todayFloor.setHours(0,0,0,0);
-        const futureDate=dt.getTime()>todayFloor.getTime();
-        const pastDate=dt.getTime()<todayFloor.getTime();
-        let focusItem=null;
-        if(isToday){
-            focusItem=currentIndex>=0?schedule[currentIndex]:schedule.find(x=>campTimeToMinutes(x.time)>now.getHours()*60+now.getMinutes())||null;
-        }else if(futureDate){
-            focusItem=schedule.find(x=>x.id!=='exam')||schedule[0]||null;
-        }else if(pastDate){
-            focusItem=schedule[schedule.length-1]||null;
-        }
+        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+        let focusItem=null,focusIndex=-1,focusMode='';
+        if(isToday && currentIndex>=0){focusIndex=currentIndex;focusItem=schedule[currentIndex];focusMode='current';}
+        else if(isToday){focusIndex=schedule.findIndex(x=>campTimeToMinutes(x.time)>nowMinute);if(focusIndex>=0){focusItem=schedule[focusIndex];focusMode='next';}else if(schedule.length){focusIndex=schedule.length-1;focusItem=schedule[focusIndex];focusMode='done';}}
+        else if(dt.getTime()>new Date(new Date().setHours(0,0,0,0)).getTime()){focusIndex=schedule.findIndex(x=>x.id!=='exam');if(focusIndex<0)focusIndex=0;focusItem=schedule[focusIndex];focusMode='future';}
+        else if(schedule.length){focusIndex=schedule.length-1;focusItem=schedule[focusIndex];focusMode='past';}
         if(focusItem){
-            const idx=schedule.indexOf(focusItem);
-            const live=isToday&&currentIndex>=0&&idx===currentIndex;
-            const nextUp=isToday&&!live&&campTimeToMinutes(focusItem.time||'00:00')>now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
             focusTime.textContent=focusItem.name||'Etüt';
-            focusName.textContent='';
-            if(focusRange) focusRange.textContent=focusItem.time||'--:--';
-            if(live){
-                focusRemaining.textContent=`${campRemainingMinutes(schedule,idx,now)} dk kaldı`;
-            }else if(nextUp){
-                focusRemaining.textContent=`${campUntilMinutes(schedule,idx,now)} dk sonra`;
-            }else if(futureDate){
-                focusRemaining.textContent='İlk etüt';
-            }else if(pastDate){
-                focusRemaining.textContent='Gün tamamlandı';
-            }else{
-                focusRemaining.textContent='Program';
-            }
-            const start=campTimeToMinutes(focusItem.time||'00:00');
-            const end=campEndMinutes(focusItem.time||'00:00');
-            const minute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-            const pct=Math.max(0,Math.min(100,((minute-start)/(end-start))*100));
-            focusFill.style.width=(live?pct:(pastDate?100:0))+'%';
-        }else if(schedule.length){
-            const last=schedule[schedule.length-1];
-            focusTime.textContent=last.name||'Program';
-            focusName.textContent='';
-            if(focusRange) focusRange.textContent=last.time||'--:--';
-            focusRemaining.textContent='Gün tamamlandı';
-            focusFill.style.width='100%';
+            focusName.textContent=focusItem.time||'--:-- — --:--';
+            const start=campTimeToMinutes(focusItem.time||'00:00'); const end=campEndMinutes(focusItem.time||'00:00');
+            if(focusMode==='current'){
+                const secondsLeft=Math.max(0,Math.round(end*60-(now.getHours()*3600+now.getMinutes()*60+now.getSeconds())));
+                focusRemaining.textContent='ŞU AN'; focusRange.textContent=`${Math.max(1,Math.floor(secondsLeft/60))} dk kaldı`;
+                const pct=Math.max(0,Math.min(100,((nowMinute-start)/(end-start))*100));focusFill.style.width=pct+'%';
+            }else if(focusMode==='next'){
+                const secondsUntil=Math.max(0,Math.round(start*60-(now.getHours()*3600+now.getMinutes()*60+now.getSeconds())));
+                focusRemaining.textContent='SIRADAKİ';focusRange.textContent=`${Math.max(1,Math.ceil(secondsUntil/60))} dk sonra`;focusFill.style.width='0%';
+            }else if(focusMode==='future'){focusRemaining.textContent='İLK ETÜT';focusRange.textContent='Günlük plan';focusFill.style.width='0%';}
+            else {focusRemaining.textContent='TAMAMLANDI';focusRange.textContent='Gün tamamlandı';focusFill.style.width='100%';}
         }else{
-            focusTime.textContent='Program hazır';
-            focusName.textContent='';
-            if(focusRange) focusRange.textContent='--:--';
-            focusRemaining.textContent='Bu gün için etüt yok';
-            focusFill.style.width='0%';
+            focusTime.textContent='Program hazır';focusName.textContent='--:-- — --:--';focusRemaining.textContent='BUGÜN';focusRange.textContent='Bu gün için etüt yok';focusFill.style.width='0%';
         }
 
         programSessions.innerHTML='';
-        if(!schedule.length){
-            programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';
-            updateProgramQuick();
-            updateContentSwitchHeight();
-            return;
-        }
-
-        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+        if(!schedule.length){programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';updateProgramQuick();updateContentSwitchHeight();return;}
+        const currentOrNext=currentIndex>=0?currentIndex:schedule.findIndex(x=>isToday&&campTimeToMinutes(x.time)>nowMinute);
         const ordered=[...schedule.keys()].sort((a,b)=>{
-            const score=(i)=>{
-                if(i===currentIndex)return 0;
-                if(isToday && currentIndex<0 && campTimeToMinutes(schedule[i].time)<nowMinute)return 3;
-                if(doneSet.includes(schedule[i].id))return 3;
-                if(isToday && campTimeToMinutes(schedule[i].time)>=nowMinute)return 1;
-                return 2;
+            const rank=i=>{
+                if(i===currentOrNext&&currentOrNext>=0)return 0;
+                if(doneSet.has(schedule[i].id))return 3;
+                if(isToday && campTimeToMinutes(schedule[i].time)>nowMinute)return 1;
+                if(isToday)return 2;
+                return i;
             };
-            return score(a)-score(b) || a-b;
+            return rank(a)-rank(b)||a-b;
         });
         ordered.forEach(index=>{
-            const item=schedule[index];
-            const done=doneSet.includes(item.id);
-            const current=index===currentIndex;
-            const nextUp=isToday&&currentIndex<0&&!done&&campTimeToMinutes(item.time)>nowMinute;
+            const item=schedule[index]; const done=doneSet.has(item.id); const current=index===currentIndex; const nextUp=isToday&&currentIndex<0&&index===currentOrNext;
             const row=document.createElement('div');
-            const start=campTimeToMinutes(item.time);
-            const tone=start<12?'morning':start<17?'day':start<20?'evening':'night';
-            row.className='program-session '+tone+(current?' current':'')+(nextUp?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
-            const assigned=allocations.get(index)||[];
-            const flatTasks=assigned.flatMap(unit=>unit.items.map(task=>({task,group:unit.group})));
-            const hasTasks=flatTasks.length>0;
+            const start=campTimeToMinutes(item.time); const tone=start<12?'morning':start<17?'day':start<20?'evening':'night';
+            row.className='program-session '+tone+(current||nextUp?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
+            const assigned=allocations.get(index)||[]; const flatTasks=assigned.flatMap(unit=>unit.items.map(task=>({task,group:unit.group}))); const hasTasks=flatTasks.length>0;
             row.innerHTML=`<div class="program-session-rail"><div class="program-session-time">${escapeHtml(item.time)}</div></div><div class="program-session-main"><div class="program-session-head"><div class="program-session-name">${escapeHtml(item.name)}</div></div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="${done?'Etüdü yeniden aç':'Etüdü tamamla'}" ${item.id==='exam'?'disabled':''}><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`;
-            const stack=row.querySelector('.program-task-stack');
-            flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current||nextUp));
-            const db=row.querySelector('.program-done-btn');
-            if(item.id!=='exam') db.addEventListener('click',()=>{setProgramSessionDone(key,item.id,!done);renderProgramPage();renderTasks();});
-            row.classList.toggle('no-tasks',!hasTasks);
-            programSessions.appendChild(row);
+            const stack=row.querySelector('.program-task-stack');flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current||nextUp));
+            const db=row.querySelector('.program-done-btn');if(item.id!=='exam')db.addEventListener('click',()=>{setProgramSessionDone(key,item.id,!done);renderProgramPage();renderTasks();});
+            row.classList.toggle('no-tasks',!hasTasks);programSessions.appendChild(row);
         });
-        updateProgramQuick();
-        updateContentSwitchHeight();
+        updateProgramQuick();updateContentSwitchHeight();
+    }
+    function formatProgramClock(totalSeconds){
+        const sec=Math.max(0,Math.round(Number(totalSeconds)||0));
+        const mins=Math.floor(sec/60);
+        const s=sec%60;
+        return `${String(mins).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
     function updateProgramQuick(){
         if(!programQuickTime)return;
-        const today=new Date(); const day=today.getDay(); const schedule=CAMP_SCHEDULE[day]||[];
-        if(!schedule.length){programQuickTime.textContent='-- dk';return;}
-        const idx=campCurrentIndex(schedule,today);
-        if(idx>=0){ programQuickTime.textContent=`${campRemainingMinutes(schedule,idx,today)} dk`; return; }
-        const nowMinute=today.getHours()*60+today.getMinutes()+today.getSeconds()/60;
-        const nextIndex=schedule.findIndex(item=>campTimeToMinutes(item.time)>nowMinute);
-        if(nextIndex>=0){ programQuickTime.textContent=`${campUntilMinutes(schedule,nextIndex,today)} dk`; return; }
-        programQuickTime.textContent='0 dk';
+        const today=new Date();
+        const schedule=CAMP_SCHEDULE[today.getDay()]||[];
+        if(!schedule.length){programQuickTime.textContent='00:00';return;}
+        const current=campCurrentIndex(schedule,today);
+        const nowSec=today.getHours()*3600+today.getMinutes()*60+today.getSeconds();
+        if(current>=0){
+            const endMin=campEndMinutes(schedule[current].time);
+            const left=Math.max(0,Math.round(endMin*60-nowSec));
+            programQuickTime.textContent=formatProgramClock(left);
+            return;
+        }
+        const nowMinute=nowSec/60;
+        const next=schedule.findIndex(item=>campTimeToMinutes(item.time)>nowMinute);
+        if(next>=0){
+            const start=campTimeToMinutes(schedule[next].time);
+            const left=Math.max(0,Math.round(start*60-nowSec));
+            programQuickTime.textContent=formatProgramClock(left);
+            return;
+        }
+        programQuickTime.textContent='00:00';
     }
-    programBindMain?.addEventListener('click',()=>openTasksPage(programSelectedDateKey()));
     renderProgramDays();renderProgramPage();updateProgramQuick();
-    let lastProgramMinute=-1;
-    setInterval(()=>{updateProgramQuick();const d=new Date();const minute=d.getHours()*60+d.getMinutes();if(currentView==='program' && minute!==lastProgramMinute){lastProgramMinute=minute;renderProgramPage();}},1000);
+    setInterval(()=>{updateProgramQuick();if(currentView==='program')renderProgramPage();},1000);
 
     /* =========================================================
        YKS GERİ SAYIM
