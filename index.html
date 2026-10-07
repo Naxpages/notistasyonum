@@ -3147,6 +3147,170 @@ body.ai-page-open .menu-trigger{display:none!important;}
   .side-menu{padding-top:72px!important;}
 }
 </style>
+
+<style id="program-and-tasks-v12-style">
+/* =========================================================
+   V12 — PROGRAM + GÖREVLER
+   Ana çalışma alanı dört bölümlü; program ana araç, görevler ayrı çalışma ekranı.
+========================================================= */
+.content-track{width:400%!important;}
+.content-pane{width:25%!important;min-width:25%!important;}
+.content-track{transition:transform .56s cubic-bezier(.22,1,.36,1)!important;}
+body.focus-local-mode .content-track{transform:translateX(-25%)!important;}
+body.camp-local-mode .content-track{transform:translateX(-50%)!important;}
+body.program-local-mode .content-track{transform:translateX(-75%)!important;}
+body.focus-local-mode #notes-pane,body.focus-local-mode #camp-library-pane,body.focus-local-mode #program-pane,
+body.camp-local-mode #notes-pane,body.camp-local-mode #focus-pane,body.camp-local-mode #program-pane,
+body.program-local-mode #notes-pane,body.program-local-mode #focus-pane,body.program-local-mode #camp-library-pane,
+body:not(.focus-local-mode):not(.camp-local-mode):not(.program-local-mode) #focus-pane,
+body:not(.focus-local-mode):not(.camp-local-mode):not(.program-local-mode) #camp-library-pane,
+body:not(.focus-local-mode):not(.camp-local-mode):not(.program-local-mode) #program-pane{
+    visibility:hidden!important;pointer-events:none!important;user-select:none!important;
+}
+body.focus-local-mode #focus-pane,body.camp-local-mode #camp-library-pane,body.program-local-mode #program-pane,
+body:not(.focus-local-mode):not(.camp-local-mode):not(.program-local-mode) #notes-pane{
+    visibility:visible!important;pointer-events:auto!important;user-select:auto!important;
+}
+body.focus-local-mode #search-bar,body.focus-local-mode #add-card-btn,
+body.camp-local-mode #search-bar,body.camp-local-mode #add-card-btn,
+body.program-local-mode #search-bar,body.program-local-mode #add-card-btn{display:none!important;}
+
+/* Üstteki minicik program hızlı erişimi */
+.program-quick{
+    position:fixed;top:18px;left:76px;z-index:12000;display:flex;align-items:center;gap:8px;
+    height:46px;padding:0 12px;border:1px solid rgba(255,255,255,.08);border-radius:13px;
+    background:rgba(18,21,25,.76);color:#eaf0f5;box-shadow:0 12px 34px rgba(0,0,0,.20);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;transition:.2s ease;
+}
+.program-quick:hover{background:rgba(25,29,34,.94);border-color:rgba(109,170,224,.24);transform:translateY(-1px);}
+.program-quick svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:0 0 20px;}
+.program-quick-main{font-size:.72rem;font-weight:900;line-height:1;white-space:nowrap;}
+.program-quick-time{font-size:.68rem;color:#86b9e5;font-weight:900;white-space:nowrap;}
+
+/* Menü: program + tasks */
+.side-menu-program svg,.side-menu-task svg{color:#fff;}
+.side-menu-task{margin-top:2px;}
+
+/* Program sayfası */
+.program-pane{min-height:560px;padding:6px 0 40px;}
+.program-shell{width:min(1120px,94%);margin:0 auto;}
+.program-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 18px;}
+.program-title-wrap{display:flex;align-items:center;gap:13px;}
+.program-title-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,rgba(81,147,216,.22),rgba(131,92,198,.18));border:1px solid rgba(255,255,255,.10);box-shadow:0 14px 36px rgba(0,0,0,.20);}
+.program-title-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.program-title{font-size:clamp(1.5rem,2.6vw,2.15rem);font-weight:950;letter-spacing:-.045em;color:#f6f8fb;}
+.program-sub{margin-top:4px;color:#6e7e8e;font-size:.68rem;}
+.program-bind-main{height:42px;padding:0 15px;border-radius:13px;border:1px solid rgba(106,173,232,.24);background:rgba(65,130,194,.10);color:#b9dcf8;font:inherit;font-size:.66rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:.2s ease;}
+.program-bind-main:hover{background:rgba(65,130,194,.18);border-color:rgba(106,173,232,.42);color:#fff;}
+.program-bind-main svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.program-days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 1px 12px;}
+.program-days::-webkit-scrollbar{display:none;}
+.program-day{flex:0 0 84px;height:62px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);color:#778695;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:.18s ease;}
+.program-day strong{font-size:.69rem;color:#cbd7e1;}
+.program-day span{font-size:.54rem;color:#657280;}
+.program-day:hover{border-color:rgba(94,158,220,.26);background:rgba(255,255,255,.035);}
+.program-day.active{background:linear-gradient(145deg,rgba(49,121,195,.19),rgba(45,69,95,.16));border-color:rgba(93,169,231,.40);box-shadow:0 0 24px rgba(55,131,215,.08);}
+.program-day.today strong{color:#fff;}
+.program-day.today::after{content:'BUGÜN';font-size:.40rem;letter-spacing:.8px;font-weight:950;color:#66b6ff;margin-top:1px;}
+.program-date-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 12px;padding:0 2px;}
+.program-date-label{color:#8fa0ae;font-size:.66rem;font-weight:800;}
+.program-bound-count{color:#667684;font-size:.58rem;font-weight:800;}
+.program-sessions{display:grid;gap:9px;}
+.program-session{display:grid;grid-template-columns:118px minmax(0,1fr) auto;gap:14px;align-items:stretch;padding:13px 14px;border:1px solid rgba(255,255,255,.075);border-radius:16px;background:linear-gradient(145deg,rgba(21,27,33,.80),rgba(11,15,19,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.02);transition:.18s ease;}
+.program-session:hover{border-color:rgba(101,158,205,.20);transform:translateY(-1px);}
+.program-session.current{border-color:rgba(83,166,232,.38);background:linear-gradient(145deg,rgba(27,74,112,.22),rgba(13,20,27,.82));}
+.program-session.done{opacity:.66;}
+.program-session.exam{border-style:dashed;}
+.program-session-time{font-size:.82rem;font-weight:950;color:#e4edf4;display:flex;align-items:center;}
+.program-session.current .program-session-time{color:#82c9ff;}
+.program-session.done .program-session-time{text-decoration:line-through;color:#77838e;}
+.program-session-body{min-width:0;}
+.program-session-name{font-size:.79rem;font-weight:900;color:#e5edf3;}
+.program-session-status{margin-top:4px;color:#697b89;font-size:.55rem;font-weight:800;}
+.program-task-stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.program-task-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);color:#bcc8d1;font-size:.60rem;font-weight:750;}
+.program-task-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:520px;}
+.program-task-chip small{color:#67798a;font-size:.48rem;font-weight:900;white-space:nowrap;}
+.program-task-chip .program-task-open{width:24px;height:24px;border:0;border-radius:7px;background:rgba(67,143,214,.10);color:#89c7f2;display:grid;place-items:center;cursor:pointer;flex:0 0 24px;}
+.program-task-open svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-session-action{align-self:center;display:flex;}
+.program-done-btn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);color:#788894;display:grid;place-items:center;cursor:pointer;transition:.18s ease;}
+.program-done-btn:hover{border-color:rgba(107,171,225,.32);color:#fff;background:rgba(107,171,225,.08);}
+.program-session.done .program-done-btn{color:#7fd0a4;border-color:rgba(96,198,143,.24);background:rgba(96,198,143,.08);}
+.program-done-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.program-empty{padding:30px;border:1px dashed rgba(255,255,255,.08);border-radius:16px;text-align:center;color:#697885;font-size:.68rem;}
+.program-foot-note{margin-top:10px;color:#52606c;font-size:.53rem;text-align:center;}
+
+/* Görevler tam ekran çalışma alanı */
+.tasks-page{position:fixed;inset:0;z-index:13000;background:linear-gradient(180deg,#0d1115 0%,#090c10 100%);display:none;overflow:auto;}
+.tasks-page.open{display:block;}
+body.tasks-page-open{overflow:hidden;}
+body.tasks-page-open .container{visibility:hidden;pointer-events:none;}
+body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:none!important;}
+.tasks-shell{width:min(1080px,92%);margin:0 auto;padding:28px 0 70px;}
+.tasks-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.tasks-back{width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);color:#dbe4eb;display:grid;place-items:center;cursor:pointer;transition:.18s ease;}
+.tasks-back:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.15);}
+.tasks-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.tasks-title{font-size:1.35rem;font-weight:950;color:#f5f7fa;letter-spacing:-.04em;}
+.tasks-head-spacer{flex:1;}
+.tasks-new-group-btn{height:42px;padding:0 13px;border-radius:12px;border:1px solid rgba(105,169,222,.24);background:rgba(73,139,202,.10);color:#a9d3f4;font:inherit;font-size:.63rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+.tasks-new-group-btn:hover{background:rgba(73,139,202,.18);color:#fff;}
+.tasks-new-group-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.tasks-date-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:5px;margin-bottom:20px;}
+.tasks-date-row::-webkit-scrollbar{display:none;}
+.tasks-date{flex:0 0 77px;height:54px;border-radius:13px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.015);color:#768491;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;transition:.18s ease;}
+.tasks-date strong{font-size:.62rem;color:#c3ced7;}.tasks-date span{font-size:.50rem;color:#61707c;}
+.tasks-date.active{border-color:rgba(93,169,229,.40);background:rgba(66,132,196,.12);color:#b7dcf8;}.tasks-date.active strong{color:#fff;}.tasks-date.today span{color:#73bdf0;}
+.tasks-list{display:grid;gap:12px;}
+.task-group{border:1px solid rgba(255,255,255,.08);border-radius:17px;background:linear-gradient(145deg,rgba(20,25,31,.86),rgba(11,15,19,.85));box-shadow:0 20px 50px rgba(0,0,0,.17);overflow:hidden;}
+.task-group.dragging,.task-row.dragging{opacity:.42;}
+.task-group-head{display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.055);}
+.task-drag,.task-group-drag{width:30px;height:30px;display:grid;place-items:center;color:#5f6e7a;cursor:grab;touch-action:none;flex:0 0 30px;}
+.task-drag:active,.task-group-drag:active{cursor:grabbing;}
+.task-drag svg,.task-group-drag svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.task-group-title{flex:1;min-width:0;border:0;outline:none;background:transparent;color:#edf2f6;font:inherit;font-size:.90rem;font-weight:900;}
+.task-group-title::placeholder{color:#596673;}
+.task-group-actions{display:flex;gap:7px;align-items:center;}
+.task-group-action{height:34px;padding:0 9px;border-radius:9px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.02);color:#8c9ca8;font:inherit;font-size:.55rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+.task-group-action:hover{color:#fff;border-color:rgba(105,169,222,.25);background:rgba(105,169,222,.07);}
+.task-group-action.danger:hover{border-color:rgba(230,110,110,.24);background:rgba(190,65,65,.07);color:#ffadad;}
+.task-group-action svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+.task-group-bound{padding:0 14px 8px 58px;color:#647584;font-size:.52rem;font-weight:800;}
+.task-group-bound strong{color:#8bb8d9;}
+.task-rows{padding:4px 12px 7px;}
+.task-row{display:grid;grid-template-columns:30px 30px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:47px;padding:4px 4px;border-bottom:1px solid rgba(255,255,255,.035);border-radius:10px;transition:.15s ease;}
+.task-row:last-child{border-bottom:0;}.task-row:hover{background:rgba(255,255,255,.018);}
+.task-check{width:27px;height:27px;border-radius:8px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.02);color:transparent;display:grid;place-items:center;cursor:pointer;transition:.18s ease;}
+.task-check:hover{border-color:rgba(99,174,228,.34);}.task-check svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.task-row.done .task-check{border-color:rgba(92,193,139,.28);background:rgba(92,193,139,.08);color:#7ed4a5;}.task-row.done .task-text{color:#667580;text-decoration:line-through;}
+.task-text{min-width:0;color:#cbd5de;font-size:.67rem;font-weight:740;outline:none;white-space:pre-wrap;word-break:break-word;}
+.task-smart-link{width:28px;height:28px;border-radius:8px;border:1px solid rgba(87,158,219,.14);background:rgba(67,143,214,.08);color:#83bfe9;display:grid;place-items:center;cursor:pointer;flex:0 0 28px;transition:.18s ease;}
+.task-smart-link:hover{background:rgba(67,143,214,.16);border-color:rgba(101,180,235,.3);color:#fff;}.task-smart-link.locked{color:#697985;background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.05);cursor:default;}
+.task-smart-link svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.task-add-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:8px;padding:8px 14px 14px;}
+.task-add-input{height:40px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.02);color:#eaf0f5;padding:0 11px;outline:none;font:inherit;font-size:.62rem;}
+.task-add-input:focus{border-color:rgba(97,170,228,.30);background:rgba(255,255,255,.035);}.task-add-input::placeholder{color:#566672;}
+.task-add-btn{height:40px;border-radius:10px;border:1px solid rgba(105,171,225,.20);background:rgba(66,137,201,.10);color:#9ed0ef;display:grid;place-items:center;cursor:pointer;}.task-add-btn:hover{background:rgba(66,137,201,.17);color:#fff;}
+.task-add-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.tasks-empty{padding:50px 20px;text-align:center;color:#586875;border:1px dashed rgba(255,255,255,.08);border-radius:17px;font-size:.68rem;}
+.tasks-bind-popover{position:fixed;z-index:13200;display:none;width:min(270px,calc(100vw - 28px));padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:#141a20;box-shadow:0 22px 70px rgba(0,0,0,.45);}
+.tasks-bind-popover.open{display:block;}
+.tasks-bind-title{padding:3px 4px 8px;color:#dce6ed;font-size:.62rem;font-weight:900;}
+.tasks-bind-select{width:100%;height:39px;padding:0 10px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#0d1217;color:#dfe8ee;font:inherit;font-size:.60rem;outline:none;}
+.tasks-bind-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.tasks-bind-actions button{height:35px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);color:#91a0ac;font:inherit;font-size:.56rem;font-weight:900;cursor:pointer;}.tasks-bind-actions button.primary{background:rgba(67,141,206,.14);border-color:rgba(97,169,227,.24);color:#a8d2ef;}
+
+@media(max-width:700px){
+    .program-quick{top:11px;left:65px;height:46px;padding:0 10px;gap:7px;max-width:160px;}
+    .program-quick-main{font-size:.62rem;}.program-quick-time{font-size:.59rem;}
+    .program-shell{width:94%;}.program-head{align-items:flex-start;}.program-title-icon{width:42px;height:42px;border-radius:13px;}.program-title{font-size:1.45rem;}.program-sub{display:none;}.program-bind-main{height:38px;padding:0 11px;font-size:.56rem;}
+    .program-day{flex-basis:74px;height:56px;}
+    .program-session{grid-template-columns:82px minmax(0,1fr) 38px;gap:9px;padding:11px 10px;}.program-session-time{font-size:.66rem;}.program-session-name{font-size:.66rem;}.program-session-status{font-size:.49rem;}.program-task-chip{font-size:.55rem;padding:6px 7px;}.program-task-chip span{max-width:170px;}.program-done-btn{width:36px;height:36px;border-radius:10px;}
+    .tasks-shell{width:94%;padding:16px 0 50px;}.tasks-title{font-size:1.2rem;}.tasks-head{margin-bottom:12px;}.tasks-new-group-btn{width:42px;padding:0;justify-content:center;font-size:0;}.task-group-head{padding:11px 10px;}.task-group-actions{gap:5px;}.task-group-action{font-size:0;width:34px;padding:0;justify-content:center;}.task-group-bound{padding-left:50px;}.task-rows{padding:3px 8px 6px;}.task-row{grid-template-columns:26px 26px minmax(0,1fr) auto;gap:5px;min-height:44px;}.task-smart-link{width:27px;height:27px;}.task-add-row{padding:7px 10px 11px;}
+}
+</style>
+
 </head>
 
 <body>
@@ -3178,6 +3342,10 @@ body.ai-page-open .menu-trigger{display:none!important;}
                 <button type="button" class="side-menu-item side-menu-view" id="camp-view-btn" role="tab" aria-selected="false">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 3v6M17 3v6M5 10h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9Z"></path><path d="M8 14h3M13 14h3M8 17h3"></path></svg>
                     <span>Kamp</span>
+                </button>
+                <button type="button" class="side-menu-item side-menu-view side-menu-program" id="program-view-btn" role="tab" aria-selected="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 16h3"></path></svg>
+                    <span>Programım</span>
                 </button>
             </div>
 
@@ -3218,6 +3386,14 @@ body.ai-page-open .menu-trigger{display:none!important;}
                 <button type="button" class="side-menu-item" id="open-about-btn" title="Hakkında">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6M12 7.2h.01"></path></svg>
                     <span>Hakkında</span>
+                </button>
+            </div>
+
+            <div class="side-menu-section">
+                <div class="side-menu-section-title">Ek Özellikler</div>
+                <button type="button" class="side-menu-item side-menu-task" id="open-tasks-btn" title="Görevler">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4.5h6M8.5 10.5h7M8.5 14h7M8.5 17.5h5"></path><path d="m6.8 10.5 1.1 1.1 2-2"></path></svg>
+                    <span>Görevler</span>
                 </button>
             </div>
         </nav>
@@ -3377,44 +3553,14 @@ body.ai-page-open .menu-trigger{display:none!important;}
 
 
 
-    <!-- =====================================================
-         KAMP PROGRAMI — KOMPAKT AÇILIR PANEL
-    ===================================================== -->
-    <button class="camp-trigger" id="camp-trigger" type="button" aria-expanded="false" aria-controls="camp-panel">
-        <span class="camp-trigger-icon">📅</span>
-        <span class="camp-trigger-copy">
-            <span class="camp-trigger-title">KAMP PROGRAMI</span>
-            <span class="camp-trigger-live" id="camp-trigger-live">Program yükleniyor...</span>
-        </span>
-        <span class="camp-trigger-chevron">⌃</span>
+    <!-- Program hızlı erişimi -->
+    <button class="program-quick" id="program-quick" type="button" aria-label="Programımı aç" title="Programım">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path></svg>
+        <span class="program-quick-main" id="program-quick-main">Program</span>
+        <span class="program-quick-time" id="program-quick-time">--:--</span>
     </button>
 
-    <div class="camp-backdrop" id="camp-backdrop"></div>
-
-    <aside class="camp-panel" id="camp-panel" aria-label="Kamp programı" aria-hidden="true">
-        <div class="camp-panel-head">
-            <div>
-                <div class="camp-kicker">HAFTA İÇİ + CUMARTESİ</div>
-                <div class="camp-title">📅 Kamp Programım</div>
-            </div>
-            <button class="camp-close" id="camp-close" type="button" aria-label="Kamp panelini kapat">×</button>
-        </div>
-
-        <div class="camp-days" id="camp-days"></div>
-
-        <div class="camp-body">
-            <div class="camp-summary">
-                <div class="camp-selected-date" id="camp-selected-date"></div>
-                <div class="camp-progress-text" id="camp-progress-text">0 / 0 tamamlandı</div>
-            </div>
-            <div class="camp-progress" aria-label="Günlük kamp ilerlemesi">
-                <div class="camp-progress-fill" id="camp-progress-fill"></div>
-            </div>
-            <div class="camp-list" id="camp-list"></div>
-        </div>
-    </aside>
-
-<div class="content-switch" id="content-switch">
+    <div class="content-switch" id="content-switch">
         <div class="content-track" id="content-track">
             <section class="content-pane notes-pane" id="notes-pane" aria-label="Notlar" aria-hidden="false">
                 <div class="grid" id="notes-grid"></div>
@@ -3640,9 +3786,42 @@ body.ai-page-open .menu-trigger{display:none!important;}
                     <div class="camp-no-result" id="camp-no-result">Sonuç bulunamadı.</div>
                 </div>
             </section>
+
+            <section class="content-pane program-pane" id="program-pane" aria-label="Programım" aria-hidden="true">
+                <div class="program-shell">
+                    <div class="program-head">
+                        <div class="program-title-wrap">
+                            <div class="program-title-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 16h3"></path></svg>
+                            </div>
+                            <div><div class="program-title">Programım</div></div>
+                        </div>
+                        <button class="program-bind-main" id="program-bind-main" type="button" title="Görevleri bağla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>Görev bağla</span></button>
+                    </div>
+                    <div class="program-days" id="program-days"></div>
+                    <div class="program-date-bar"><div class="program-date-label" id="program-date-label"></div><div class="program-bound-count" id="program-bound-count"></div></div>
+                    <div class="program-sessions" id="program-sessions"></div>
+                </div>
+            </section>
         </div>
     </div>
 
+</div>
+
+<div class="tasks-page" id="tasks-page" aria-hidden="true">
+    <div class="tasks-shell">
+        <div class="tasks-head">
+            <button class="tasks-back" id="tasks-back" type="button" aria-label="Geri dön" title="Geri dön"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"></path><path d="M8 12h11"></path></svg></button>
+            <div class="tasks-title">Görevler</div><div class="tasks-head-spacer"></div>
+            <button class="tasks-new-group-btn" id="tasks-new-group-btn" type="button" title="Görev grubu ekle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>Grup ekle</span></button>
+        </div>
+        <div class="tasks-date-row" id="tasks-date-row"></div>
+        <div class="tasks-list" id="tasks-list"></div>
+    </div>
+</div>
+<div class="tasks-bind-popover" id="tasks-bind-popover" aria-hidden="true">
+    <div class="tasks-bind-title">Program</div><select class="tasks-bind-select" id="tasks-bind-select"></select>
+    <div class="tasks-bind-actions"><button type="button" id="tasks-bind-cancel">Vazgeç</button><button type="button" class="primary" id="tasks-bind-save">Bağla</button></div>
 </div>
 
 <!-- =========================================================
@@ -5591,140 +5770,29 @@ updateDailyMotivation();
     const notesViewBtn = document.getElementById('notes-view-btn');
     const focusViewBtn = document.getElementById('focus-view-btn');
     const campViewBtn = document.getElementById('camp-view-btn');
-    const contentTrack = document.getElementById('content-track');
+    const programViewBtn = document.getElementById('program-view-btn');
     const campLibraryPane = document.getElementById('camp-library-pane');
+    const programPane = document.getElementById('program-pane');
+    let currentView='notes';
 
-    /* =========================================================
-       SOL MENÜ — TEK MERKEZDEN NAVİGASYON
-    ========================================================= */
-    const menuTrigger = document.getElementById('menu-trigger');
-    const sideMenu = document.getElementById('side-menu');
-    const sideMenuBackdrop = document.getElementById('side-menu-backdrop');
-    const sideMenuAiBtn = document.getElementById('side-menu-ai-btn');
-
-    function setMenuOpen(open) {
-        document.body.classList.toggle('menu-open', !!open);
-        menuTrigger?.setAttribute('aria-expanded', String(!!open));
-        menuTrigger?.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
-        sideMenu?.setAttribute('aria-hidden', String(!open));
-        sideMenuBackdrop?.classList.toggle('open', !!open);
-    }
-
-    menuTrigger?.addEventListener('click', () => {
-        const isOpen = document.body.classList.contains('menu-open');
-        if (!isOpen) closeExclusiveUi();
-        setMenuOpen(!isOpen);
-    });
-    sideMenuBackdrop?.addEventListener('click', () => setMenuOpen(false));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenuOpen(false); });
-
-    sideMenuAiBtn?.addEventListener('click', () => {
-        setMenuOpen(false);
-        openAI();
-    });
-
-    sideMenu?.addEventListener('click', (e) => {
-        const target = e.target.closest && e.target.closest('#open-exams-btn,#open-leader-btn,#notification-btn,#spotify-btn,#open-pro-btn,#open-about-btn,#side-menu-ai-btn,#notes-view-btn,#focus-view-btn,#camp-view-btn');
-        if (target) setMenuOpen(false);
-    }, true);
-
-    /* One surface at a time: overlays, drawer subpanels and AI never stack on each other. */
-    const EXCLUSIVE_OVERLAY_SELECTORS = [
-        '#exam-overlay','#exam-analysis-overlay','#about-overlay','#leader-overlay','#pro-overlay',
-        '#notification-panel','#spotify-panel','#camp-panel',
-        '#ni-admin-login-overlay','#ni-admin-panel-overlay'
-    ];
-
-    function closeExclusiveUi() {
-        EXCLUSIVE_OVERLAY_SELECTORS.forEach(selector => {
-            const el = document.querySelector(selector);
-            if (!el) return;
-            const classDrivenPanel = el.matches('.notification-panel,.spotify-panel,.camp-panel,.ni-admin-overlay');
-            el.classList.remove('open');
-            if (classDrivenPanel) {
-                el.style.removeProperty('display');
-            } else {
-                el.style.display = 'none';
-            }
-            el.setAttribute('aria-hidden','true');
-        });
-        const ai = document.getElementById('ai-panel');
-        if (ai) ai.classList.remove('open','ai-page-mode');
-        document.body.classList.remove('ai-page-open');
-        document.body.classList.remove('ai-page-mode');
-        const notifBtn = document.getElementById('notification-btn');
-        const spotifyBtn = document.getElementById('spotify-btn');
-        const campTrigger = document.getElementById('camp-trigger');
-        notifBtn?.setAttribute('aria-expanded','false');
-        spotifyBtn?.setAttribute('aria-expanded','false');
-        campTrigger?.setAttribute('aria-expanded','false');
-        campTrigger?.classList.remove('open');
-        document.getElementById('camp-backdrop')?.classList.remove('open');
-        document.getElementById('side-menu-backdrop')?.classList.remove('open');
-        document.body.classList.remove('menu-open');
-        menuTrigger?.setAttribute('aria-expanded','false');
-        menuTrigger?.setAttribute('aria-label','Menüyü aç');
-        sideMenu?.setAttribute('aria-hidden','true');
-    }
-    window.closeExclusiveUi = closeExclusiveUi;
-
-    /* Any click on a real opener first clears all other surfaces. */
-    document.addEventListener('click', (e) => {
-        const opener = e.target.closest?.('#open-exams-btn,#open-leader-btn,#notification-btn,#spotify-btn,#open-pro-btn,#open-about-btn,#side-menu-ai-btn,#notes-view-btn,#focus-view-btn,#camp-view-btn,#camp-trigger');
-        if (opener) closeExclusiveUi();
-    }, true);
-
-    function updateContentSwitchHeight() {
-        const contentSwitch = document.getElementById('content-switch');
-        if (!contentSwitch) return;
-        const activePane = document.body.classList.contains('camp-local-mode')
-            ? campLibraryPane
-            : document.body.classList.contains('focus-local-mode')
-                ? document.getElementById('focus-pane')
-                : document.getElementById('notes-pane');
-        if (!activePane) return;
-        requestAnimationFrame(() => {
-            const h = Math.max(activePane.scrollHeight, activePane.getBoundingClientRect().height, 1);
-            contentSwitch.style.height = h + 'px';
-        });
-    }
-
-    function setView(view) {
-        closeExclusiveUi();
-        const isFocus = view === 'focus';
-        const isCamp = view === 'camp';
-
-        document.body.classList.toggle('focus-local-mode', isFocus);
-        document.body.classList.toggle('camp-local-mode', isCamp);
-
-        notesViewBtn.classList.toggle('active', view === 'notes');
-        focusViewBtn.classList.toggle('active', isFocus);
-        campViewBtn.classList.toggle('active', isCamp);
-
-        notesViewBtn.setAttribute('aria-selected', String(view === 'notes'));
-        focusViewBtn.setAttribute('aria-selected', String(isFocus));
-        campViewBtn.setAttribute('aria-selected', String(isCamp));
-
-        document.getElementById('notes-pane').setAttribute('aria-hidden', String(view !== 'notes'));
-        document.getElementById('focus-pane').setAttribute('aria-hidden', String(!isFocus));
-        campLibraryPane.setAttribute('aria-hidden', String(!isCamp));
-
-        if (isFocus) {
-            const focusTimerHost = document.getElementById('focus-local-timer');
-            if (timerModal.parentElement !== focusTimerHost) focusTimerHost.appendChild(timerModal);
-            timerModal.style.display = 'flex';
-        }
-        updateContentSwitchHeight();
-        setMenuOpen(false);
-        if (window.matchMedia && window.matchMedia('(max-width:700px)').matches) {
-            requestAnimationFrame(() => window.scrollTo({top:0, behavior:'smooth'}));
-        }
-    }
-
-    focusViewBtn.addEventListener('click', () => setView('focus'));
-    notesViewBtn.addEventListener('click', () => setView('notes'));
-    campViewBtn.addEventListener('click', () => setView('camp'));
-
+    const menuTrigger=document.getElementById('menu-trigger');
+    const sideMenu=document.getElementById('side-menu');
+    const sideMenuBackdrop=document.getElementById('side-menu-backdrop');
+    const sideMenuAiBtn=document.getElementById('side-menu-ai-btn');
+    const openTasksBtn=document.getElementById('open-tasks-btn');
+    const programQuick=document.getElementById('program-quick');
+    function setMenuOpen(open){ document.body.classList.toggle('menu-open',!!open); menuTrigger?.setAttribute('aria-expanded',String(!!open)); menuTrigger?.setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç'); sideMenu?.setAttribute('aria-hidden',String(!open)); sideMenuBackdrop?.classList.toggle('open',!!open); }
+    menuTrigger?.addEventListener('click',()=>{const open=document.body.classList.contains('menu-open'); if(!open) closeExclusiveUi(); setMenuOpen(!open);});
+    sideMenuBackdrop?.addEventListener('click',()=>setMenuOpen(false));
+    sideMenuAiBtn?.addEventListener('click',()=>{setMenuOpen(false);openAI();});
+    openTasksBtn?.addEventListener('click',()=>{setMenuOpen(false);openTasksPage(currentView==='program'?programSelectedDateKey():taskSelectedDateKey);});
+    programQuick?.addEventListener('click',()=>setView('program'));
+    sideMenu?.addEventListener('click',e=>{const t=e.target.closest?.('#open-exams-btn,#open-leader-btn,#notification-btn,#spotify-btn,#open-pro-btn,#open-about-btn,#side-menu-ai-btn,#notes-view-btn,#focus-view-btn,#camp-view-btn,#program-view-btn,#open-tasks-btn');if(t)setMenuOpen(false);},true);
+    const EXCLUSIVE_OVERLAY_SELECTORS=['#exam-overlay','#exam-analysis-overlay','#about-overlay','#leader-overlay','#pro-overlay','#notification-panel','#spotify-panel','#ni-admin-login-overlay','#ni-admin-panel-overlay','#tasks-page'];
+    function closeExclusiveUi(){EXCLUSIVE_OVERLAY_SELECTORS.forEach(sel=>{const el=document.querySelector(sel);if(!el)return;const cd=el.matches('.notification-panel,.spotify-panel,.tasks-page,.ni-admin-overlay');el.classList.remove('open');if(cd)el.style.removeProperty('display');else el.style.display='none';el.setAttribute('aria-hidden','true');});const ai=document.getElementById('ai-panel');if(ai)ai.classList.remove('open','ai-page-mode');document.body.classList.remove('ai-page-open','ai-page-mode','tasks-page-open');document.getElementById('notification-btn')?.setAttribute('aria-expanded','false');document.getElementById('spotify-btn')?.setAttribute('aria-expanded','false');setMenuOpen(false);}
+    function updateContentSwitchHeight(){const cs=document.getElementById('content-switch');if(!cs)return;const active=currentView==='focus'?document.getElementById('focus-pane'):currentView==='camp'?campLibraryPane:currentView==='program'?programPane:document.getElementById('notes-pane');if(!active)return;requestAnimationFrame(()=>{cs.style.height=Math.max(active.scrollHeight,active.getBoundingClientRect().height,1)+'px';});}
+    function setView(view){closeExclusiveUi();currentView=view;document.body.classList.toggle('focus-local-mode',view==='focus');document.body.classList.toggle('camp-local-mode',view==='camp');document.body.classList.toggle('program-local-mode',view==='program');[notesViewBtn,focusViewBtn,campViewBtn,programViewBtn].forEach((b,i)=>b.classList.toggle('active',['notes','focus','camp','program'][i]===view));notesViewBtn.setAttribute('aria-selected',String(view==='notes'));focusViewBtn.setAttribute('aria-selected',String(view==='focus'));campViewBtn.setAttribute('aria-selected',String(view==='camp'));programViewBtn.setAttribute('aria-selected',String(view==='program'));document.getElementById('notes-pane').setAttribute('aria-hidden',String(view!=='notes'));document.getElementById('focus-pane').setAttribute('aria-hidden',String(view!=='focus'));campLibraryPane.setAttribute('aria-hidden',String(view!=='camp'));programPane.setAttribute('aria-hidden',String(view!=='program'));if(view==='focus'){const host=document.getElementById('focus-local-timer');if(timerModal.parentElement!==host)host.appendChild(timerModal);timerModal.style.display='flex';}if(view==='program')renderProgramPage();updateContentSwitchHeight();setMenuOpen(false);if(window.matchMedia?.('(max-width:700px)'))requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));}
+    notesViewBtn.addEventListener('click',()=>setView('notes'));focusViewBtn.addEventListener('click',()=>setView('focus'));campViewBtn.addEventListener('click',()=>setView('camp'));programViewBtn.addEventListener('click',()=>setView('program'));
     const campLibrarySearch = document.getElementById('camp-library-search');
     const campLibraryGrid = document.getElementById('camp-library-grid');
     const campLibraryCards = [...document.querySelectorAll('.teacher-card')];
@@ -5825,7 +5893,7 @@ updateDailyMotivation();
     /* Notlar uzadıkça yatay panelin yüksekliği de yalnızca aktif pane'e göre güncellenir. */
     if (window.ResizeObserver) {
         const contentResizeObserver = new ResizeObserver(() => updateContentSwitchHeight());
-        ['notes-pane','focus-pane','camp-library-pane'].forEach(id => {
+        ['notes-pane','focus-pane','camp-library-pane','program-pane'].forEach(id => {
             const el = document.getElementById(id);
             if (el) contentResizeObserver.observe(el);
         });
@@ -7119,228 +7187,189 @@ updateDailyMotivation();
 
 
     /* =========================================================
-       KAMP PROGRAMI — SABİT OFİS PROGRAMI
+       PROGRAM + GÖREVLER — YEREL ÇALIŞMA MOTORU
     ========================================================= */
     const CAMP_SCHEDULE = {
-        1: [
-            { id:'1', time:'09:00–10:30', name:'1. Etüt' },
-            { id:'2', time:'10:45–12:15', name:'2. Etüt' },
-            { id:'3', time:'12:30–13:45', name:'3. Etüt' },
-            { id:'4', time:'14:30–16:00', name:'4. Etüt' },
-            { id:'5', time:'16:15–17:45', name:'5. Etüt' },
-            { id:'6', time:'18:15–19:45', name:'6. Etüt' },
-            { id:'7', time:'20:00–21:30', name:'7. Etüt' }
-        ],
-        2: [
-            { id:'1', time:'09:00–10:30', name:'1. Etüt' },
-            { id:'2', time:'10:45–12:15', name:'2. Etüt' },
-            { id:'3', time:'12:30–13:45', name:'3. Etüt' },
-            { id:'4', time:'14:30–16:00', name:'4. Etüt' },
-            { id:'5', time:'16:15–17:45', name:'5. Etüt' },
-            { id:'6', time:'18:15–19:45', name:'6. Etüt' },
-            { id:'7', time:'20:00–21:30', name:'7. Etüt' }
-        ],
-        3: [
-            { id:'1', time:'09:00–10:30', name:'1. Etüt' },
-            { id:'2', time:'10:45–12:15', name:'2. Etüt' },
-            { id:'3', time:'12:30–13:45', name:'3. Etüt' },
-            { id:'4', time:'14:30–16:00', name:'4. Etüt' },
-            { id:'5', time:'16:15–17:45', name:'5. Etüt' },
-            { id:'6', time:'18:15–19:45', name:'6. Etüt' },
-            { id:'7', time:'20:00–21:30', name:'7. Etüt' }
-        ],
-        4: [
-            { id:'1', time:'09:00–10:30', name:'1. Etüt' },
-            { id:'2', time:'10:45–12:15', name:'2. Etüt' },
-            { id:'3', time:'12:30–13:45', name:'3. Etüt' },
-            { id:'4', time:'14:30–16:00', name:'4. Etüt' },
-            { id:'5', time:'16:15–17:45', name:'5. Etüt' },
-            { id:'6', time:'18:15–19:45', name:'6. Etüt' },
-            { id:'7', time:'20:00–21:30', name:'7. Etüt' }
-        ],
-        5: [
-            { id:'1', time:'09:00–10:30', name:'1. Etüt' },
-            { id:'2', time:'10:45–12:15', name:'2. Etüt' },
-            { id:'3', time:'12:30–13:45', name:'3. Etüt' },
-            { id:'4', time:'14:30–16:00', name:'4. Etüt' },
-            { id:'5', time:'16:15–17:45', name:'5. Etüt' },
-            { id:'6', time:'18:15–19:45', name:'6. Etüt' },
-            { id:'7', time:'20:00–21:30', name:'7. Etüt' }
-        ],
-        6: [
-            { id:'exam', time:'10:15–13:15', name:'Deneme Sınavı' },
-            { id:'1', time:'14:15–15:45', name:'1. Etüt' },
-            { id:'2', time:'16:00–17:30', name:'2. Etüt' },
-            { id:'3', time:'17:45–19:30', name:'3. Etüt' }
-        ]
+        1:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
+        2:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
+        3:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
+        4:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
+        5:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
+        6:[{id:'exam',time:'10:15–13:15',name:'Deneme Sınavı'},{id:'1',time:'14:15–15:45',name:'1. Etüt'},{id:'2',time:'16:00–17:30',name:'2. Etüt'},{id:'3',time:'17:45–19:30',name:'3. Etüt'}]
     };
-    const CAMP_DAY_NAMES = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-    const CAMP_DAY_SHORT = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
-    const campDays = document.getElementById('camp-days');
-    const campList = document.getElementById('camp-list');
-    const campSelectedDate = document.getElementById('camp-selected-date');
-    const campProgressText = document.getElementById('camp-progress-text');
-    const campProgressFill = document.getElementById('camp-progress-fill');
-    const campTrigger = document.getElementById('camp-trigger');
-    const campTriggerLive = document.getElementById('camp-trigger-live');
-    const campPanel = document.getElementById('camp-panel');
-    const campBackdrop = document.getElementById('camp-backdrop');
-    const campClose = document.getElementById('camp-close');
-    let campSelectedDay = new Date().getDay();
-    let campRenderedCurrentIndex = -99;
-    let campRenderedDay = -99;
-    let campCompleted = JSON.parse(localStorage.getItem('yks_camp_completed') || '{}');
+    const CAMP_DAY_SHORT=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+    function campDateKey(date=new Date()){ const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0'); return `${y}-${m}-${d}`; }
+    function campTodayKey(){ return campDateKey(new Date()); }
+    function campTimeToMinutes(text){ const first=String(text).split('–')[0].trim(); const [h,m]=first.split(':').map(Number); return h*60+m; }
+    function campEndMinutes(text){ const last=String(text).split('–').pop().trim(); const [h,m]=last.split(':').map(Number); return h*60+m; }
+    function campCurrentIndex(schedule,date=new Date()){ const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; return schedule.findIndex(item=>now>=campTimeToMinutes(item.time)&&now<campEndMinutes(item.time)); }
+    function campRemainingText(schedule,index,date=new Date()){ if(index<0||!schedule[index])return ''; const end=campEndMinutes(schedule[index].time); const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; let sec=Math.max(0,Math.round((end-now)*60)); const h=Math.floor(sec/3600);sec%=3600;const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0'); return h?`${h}s ${m}:${s}`:`${m}:${s}`; }
+    let campCompleted=(()=>{try{const x=JSON.parse(localStorage.getItem('yks_camp_completed')||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
+    const programDays = document.getElementById('program-days');
+    const programDateLabel = document.getElementById('program-date-label');
+    const programBoundCount = document.getElementById('program-bound-count');
+    const programSessions = document.getElementById('program-sessions');
+    const programBindMain = document.getElementById('program-bind-main');
+    const programQuickMain = document.getElementById('program-quick-main');
+    const programQuickTime = document.getElementById('program-quick-time');
+    const tasksPage = document.getElementById('tasks-page');
+    const tasksBack = document.getElementById('tasks-back');
+    const tasksNewGroupBtn = document.getElementById('tasks-new-group-btn');
+    const tasksDateRow = document.getElementById('tasks-date-row');
+    const tasksList = document.getElementById('tasks-list');
+    const tasksBindPopover = document.getElementById('tasks-bind-popover');
+    const tasksBindSelect = document.getElementById('tasks-bind-select');
+    const tasksBindSave = document.getElementById('tasks-bind-save');
+    const tasksBindCancel = document.getElementById('tasks-bind-cancel');
+    const TASK_GROUPS_KEY = 'yks_task_groups_v1';
+    const TASK_SELECTED_DATE_KEY = 'yks_task_selected_date_v1';
+    const TASK_RETURN_VIEW_KEY = 'yks_task_return_view_v1';
+    let taskGroups = loadTaskGroups();
+    let taskSelectedDateKey = localStorage.getItem(TASK_SELECTED_DATE_KEY) || campDateKey(new Date());
+    let taskReturnView = 'notes';
+    let taskBindingGroupId = null;
+    let programSelectedDay = new Date().getDay();
 
-    function campDateKey(date = new Date()) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth()+1).padStart(2,'0');
-        const d = String(date.getDate()).padStart(2,'0');
-        return `${y}-${m}-${d}`;
+    function loadTaskGroups(){
+        try{ const raw=JSON.parse(localStorage.getItem(TASK_GROUPS_KEY)||'[]'); return Array.isArray(raw)?raw.map(normalizeTaskGroup):[]; }catch(_){ return []; }
     }
-    function campDateLabel(dayOffset = 0) {
-        const d = new Date();
-        d.setDate(d.getDate() + dayOffset);
-        return d.toLocaleDateString('tr-TR', { weekday:'long', day:'numeric', month:'long' });
+    function normalizeTaskGroup(g){
+        const group={id:String(g?.id||('g_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(g?.title||'Yeni görev grubu'),programDate:g?.programDate||null,tasks:Array.isArray(g?.tasks)?g.tasks.map(t=>({id:String(t?.id||('t_'+Date.now()+'_'+Math.random().toString(36).slice(2,8))),title:String(t?.title||''),done:!!t?.done,createdAt:Number(t?.createdAt||Date.now())})):[]};
+        return group;
     }
-    function campTodayKey() { return campDateKey(new Date()); }
-    function campTimeToMinutes(text) {
-        const first = text.split('–')[0].trim();
-        const [h,m] = first.split(':').map(Number);
-        return h * 60 + m;
+    function saveTaskGroups(){ localStorage.setItem(TASK_GROUPS_KEY,JSON.stringify(taskGroups)); }
+    function dateFromKey(key){ const [y,m,d]=String(key).split('-').map(Number); const dt=new Date(y,m-1,d); dt.setHours(12,0,0,0); return dt; }
+    function weekDateKey(day){
+        const now=new Date(); const todayDay=now.getDay(); const mondayOffset=todayDay===0?-6:1-todayDay; const monday=new Date(now); monday.setDate(now.getDate()+mondayOffset); monday.setHours(12,0,0,0); const dt=new Date(monday); dt.setDate(monday.getDate()+(day===0?6:day-1)); return campDateKey(dt);
     }
-    function campEndMinutes(text) {
-        const parts = text.split('–');
-        const last = parts[parts.length-1].trim();
-        const [h,m] = last.split(':').map(Number);
-        return h * 60 + m;
+    function taskDateLabel(key){ return dateFromKey(key).toLocaleDateString('tr-TR',{day:'numeric',month:'long',weekday:'long'}); }
+    function renderTaskDateRow(){
+        if(!tasksDateRow) return; tasksDateRow.innerHTML=''; const todayKey=campTodayKey();
+        for(let day=1;day<=6;day++){} // keep lint-friendly; actual row starts Monday and ends Sunday
+        const order=[1,2,3,4,5,6,0];
+        order.forEach(day=>{ const key=weekDateKey(day); const dt=dateFromKey(key); const b=document.createElement('button'); b.type='button'; b.className='tasks-date'+(key===taskSelectedDateKey?' active':'')+(key===todayKey?' today':''); b.innerHTML=`<strong>${['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'][day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`; b.addEventListener('click',()=>{ taskSelectedDateKey=key; localStorage.setItem(TASK_SELECTED_DATE_KEY,key); renderTaskDateRow(); renderTasks(); }); tasksDateRow.appendChild(b); });
     }
-    function campCurrentIndex(schedule, date = new Date()) {
-        const now = date.getHours() * 60 + date.getMinutes() + date.getSeconds()/60;
-        return schedule.findIndex(item => now >= campTimeToMinutes(item.time) && now < campEndMinutes(item.time));
-    }
-    function campRemainingText(schedule, index, date = new Date()) {
-        if (index < 0 || !schedule[index]) return '';
-        const end = campEndMinutes(schedule[index].time);
-        const now = date.getHours() * 60 + date.getMinutes() + date.getSeconds()/60;
-        let seconds = Math.max(0, Math.round((end - now) * 60));
-        const h = Math.floor(seconds / 3600);
-        seconds %= 3600;
-        const m = Math.floor(seconds / 60).toString().padStart(2,'0');
-        const s = (seconds % 60).toString().padStart(2,'0');
-        return h > 0 ? `${h}s ${m}:${s}` : `${m}:${s}`;
-    }
-    function campRenderDays() {
-        campDays.innerHTML = '';
-        for (let day = 0; day <= 6; day++) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'camp-day';
-            if (day === campSelectedDay) btn.classList.add('active');
-            if (day === new Date().getDay()) btn.classList.add('today');
-            btn.innerHTML = `<strong>${CAMP_DAY_SHORT[day]}</strong><span>${CAMP_DAY_NAMES[day]}</span>`;
-            btn.addEventListener('click', () => {
-                campSelectedDay = day;
-                campRenderedDay = -99;
-                campRenderedCurrentIndex = -99;
-                campRenderDays();
-                campRenderSchedule();
-            });
-            campDays.appendChild(btn);
-        }
-    }
-    function campRenderSchedule() {
-        const schedule = CAMP_SCHEDULE[campSelectedDay] || [];
-        const isToday = campSelectedDay === new Date().getDay();
-        campSelectedDate.textContent = isToday ? `Bugün • ${campDateLabel()}` : `${CAMP_DAY_NAMES[campSelectedDay]} programı`;
-        campList.innerHTML = '';
-        if (!schedule.length) {
-            campList.innerHTML = '<div class="camp-empty">Bu gün için tanımlı kamp programı bulunmuyor.</div>';
-            campProgressText.textContent = '0 / 0 tamamlandı';
-            campProgressFill.style.width = '0%';
-            return;
-        }
-        const dateKey = isToday ? campTodayKey() : null;
-        const doneSet = dateKey ? (campCompleted[dateKey] || []) : [];
-        schedule.forEach((item, index) => {
-            const row = document.createElement('div');
-            const current = isToday && index === campCurrentIndex(schedule);
-            const done = doneSet.includes(item.id);
-            row.className = 'camp-session' + (current ? ' current' : '') + (done ? ' done' : '');
-            let state = done ? '✓ Tamamlandı' : (current ? 'ŞU AN' : (isToday && index < campCurrentIndex(schedule) ? 'Bitti' : (isToday ? 'Bekliyor' : 'Program')));
-            const sub = item.sub || (current ? `Bitmesine ${campRemainingText(schedule,index)}` : (index < campCurrentIndex(schedule) && isToday ? 'Süre doldu' : (isToday ? 'Kamp programı' : 'Bugünün değil')));
-            row.innerHTML = `
-                <div class="camp-time">${item.time}</div>
-                <div>
-                    <div class="camp-session-name">${item.name}</div>
-                    <div class="camp-session-sub">${sub}</div>
-                </div>
-                <button type="button" class="camp-state">${state}</button>
-            `;
-            const stateBtn = row.querySelector('.camp-state');
-            if (dateKey) {
-                stateBtn.addEventListener('click', () => campToggleDone(dateKey, item.id));
-            } else {
-                stateBtn.disabled = true;
-                stateBtn.style.cursor = 'default';
-                stateBtn.style.opacity = '.72';
-            }
-            campList.appendChild(row);
+    function normalizeTaskText(text){ return String(text||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c'); }
+    function campPlaylistIndex(){
+        return [...document.querySelectorAll('.teacher-card[data-camp-id] .playlist-link[data-camp-playlist]')].map(link=>{
+            const card=link.closest('.teacher-card'); const teacher=card?.querySelector('.teacher-name')?.textContent?.trim()||''; const name=link.querySelector('.playlist-name')?.textContent?.trim()||''; const meta=link.querySelector('.playlist-meta')?.textContent?.trim()||''; const url=link.getAttribute('href')||link.dataset.campUrl||''; const premium=link.classList.contains('camp-premium-link'); return {teacher,name,meta,url,premium,search:normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher)};
         });
-        const completedCount = doneSet.length;
-        campProgressText.textContent = `${completedCount} / ${schedule.length} tamamlandı`;
-        campProgressFill.style.width = `${Math.min(100, (completedCount / schedule.length) * 100)}%`;
     }
-    function campToggleDone(dateKey, id) {
-        const set = Array.isArray(campCompleted[dateKey]) ? [...campCompleted[dateKey]] : [];
-        const index = set.indexOf(id);
-        if (index >= 0) set.splice(index,1); else set.push(id);
-        campCompleted[dateKey] = set;
-        localStorage.setItem('yks_camp_completed', JSON.stringify(campCompleted));
-        campRenderSchedule();
-        campUpdateLive();
+    function inferTaskMeta(title){
+        const t=normalizeTaskText(title); const level=t.match(/\b(tyt|ayt)\b/)?.[1]||''; const subjects=['matematik','geometri','fizik','kimya','biyoloji'].filter(v=>t.includes(v)); const teachers=['soner akinici','eyup b','eyup boncuk','ozcan aykin','rehber matematik','biosem','altug gunes','gorkem sahin'].filter(v=>t.includes(normalizeTaskText(v))); const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi)\b/.test(t); const lesson=/\b(video|ders|kamp|konu|konu anlatimi|izle)\b/.test(t); return {level,subjects,teachers,question,lesson,text:t};
     }
-    function campUpdateLive() {
-        const today = new Date();
-        const todayDay = today.getDay();
-        if (!CAMP_SCHEDULE[todayDay]) {
-            campTriggerLive.textContent = 'Bugün program yok';
-            return;
-        }
-        const schedule = CAMP_SCHEDULE[todayDay];
-        const currentIndex = campCurrentIndex(schedule, today);
-        if (currentIndex >= 0) {
-            const item = schedule[currentIndex];
-            campTriggerLive.textContent = `${item.name} • ${campRemainingText(schedule,currentIndex,today)}`;
-        } else {
-            const nowMin = today.getHours()*60 + today.getMinutes();
-            const nextIndex = schedule.findIndex(item => campTimeToMinutes(item.time) > nowMin);
-            campTriggerLive.textContent = nextIndex >= 0 ? `Sıradaki: ${schedule[nextIndex].name}` : 'Bugünkü program tamamlandı';
-        }
-        const nextIndex = currentIndex;
-        if (campSelectedDay === todayDay && (campRenderedDay !== todayDay || campRenderedCurrentIndex !== nextIndex)) {
-            campRenderedDay = todayDay;
-            campRenderedCurrentIndex = nextIndex;
-            campRenderSchedule();
-        }
+    function smartMatch(title){
+        const m=inferTaskMeta(title); const entries=campPlaylistIndex(); if(!entries.length)return null; let best=null;
+        for(const e of entries){ const x=e.search; let score=0; if(m.level && x.includes(m.level))score+=3; if(m.subjects.some(v=>x.includes(v)))score+=2; if(m.teachers.some(v=>x.includes(v)))score+=6; if(m.lesson && /kamp/.test(x))score+=1; if(m.question && /soru bankasi|cozum|soru/.test(x))score+=1; if(x.includes(m.text)&&m.text.length>8)score+=2; if(!best||score>best.score)best={...e,score}; }
+        return best && best.score>=5 ? best : null;
     }
-    function campSetOpen(open) {
-        campPanel.classList.toggle('open', open);
-        campBackdrop.classList.toggle('open', open);
-        campTrigger.classList.toggle('open', open);
-        campTrigger.setAttribute('aria-expanded', String(open));
-        campPanel.setAttribute('aria-hidden', String(!open));
+    function renderSmartLink(task){
+        const match=smartMatch(task.title); if(!match) return '';
+        if(match.premium && !(proActive||plusActive)) return `<span class="task-smart-link locked" title="Üyelik gerekli"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg></span>`;
+        return `<button type="button" class="task-smart-link" title="${escapeHtml(match.name)}" data-task-smart-url="${escapeHtml(match.url)}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></button>`;
     }
-    campTrigger.addEventListener('click', () => campSetOpen(!campPanel.classList.contains('open')));
-    campClose.addEventListener('click', () => campSetOpen(false));
-    campBackdrop.addEventListener('click', () => campSetOpen(false));
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && campPanel.classList.contains('open')) campSetOpen(false);
-    });
+    function renderTasks(){
+        if(!tasksList)return; tasksList.innerHTML=''; if(!taskGroups.length){ tasksList.innerHTML='<div class="tasks-empty">Henüz görev yok.</div>'; return; }
+        taskGroups.forEach(group=>{ const card=document.createElement('article'); card.className='task-group'; card.draggable=true; card.dataset.groupId=group.id; const bound=group.programDate?`Programa bağlı · ${taskDateLabel(group.programDate)}`:'Programına bağlı değil';
+            card.innerHTML=`<div class="task-group-head"><div class="task-group-drag" title="Sürükle"><svg viewBox="0 0 24 24"><path d="M8 6h8M8 12h8M8 18h8"></path></svg></div><input class="task-group-title" value="${escapeHtml(group.title)}" aria-label="Görev grubu başlığı"><div class="task-group-actions"><button type="button" class="task-group-action task-bind-btn" title="Programa bağla"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M12 12v5M9.5 14.5h5"></path></svg><span>Programa bağla</span></button><button type="button" class="task-group-action danger task-delete-group" title="Grubu sil"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M8 10v7M12 10v7M16 10v7M6 7l1 14h10l1-14"></path></svg></button></div></div><div class="task-group-bound"><strong>${bound}</strong></div><div class="task-rows"></div><div class="task-add-row"><input class="task-add-input" placeholder="Görev ekle"><button type="button" class="task-add-btn" title="Görev ekle"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></button></div>`;
+            const titleInput=card.querySelector('.task-group-title'); titleInput.addEventListener('input',()=>{group.title=titleInput.value;saveTaskGroups();});
+            card.querySelector('.task-bind-btn').addEventListener('click',e=>openTaskBind(group,e.currentTarget));
+            card.querySelector('.task-delete-group').addEventListener('click',()=>{ if(confirm('Bu görev grubu silinsin mi?')){ taskGroups=taskGroups.filter(g=>g.id!==group.id); saveTaskGroups(); renderTasks(); renderProgramPage(); } });
+            const rows=card.querySelector('.task-rows');
+            group.tasks.forEach(task=>{ const row=document.createElement('div'); row.className='task-row'+(task.done?' done':''); row.draggable=true; row.dataset.taskId=task.id; row.innerHTML=`<div class="task-drag" title="Sürükle"><svg viewBox="0 0 24 24"><path d="M8 6h8M8 12h8M8 18h8"></path></svg></div><button type="button" class="task-check" title="Tamamlandı"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button><div class="task-text" contenteditable="true" spellcheck="false">${escapeHtml(task.title)}</div>${renderSmartLink(task)}`;
+                row.querySelector('.task-check').addEventListener('click',()=>{task.done=!task.done;saveTaskGroups();renderTasks();renderProgramPage();});
+                const txt=row.querySelector('.task-text'); txt.addEventListener('input',()=>{task.title=txt.textContent||'';saveTaskGroups();}); txt.addEventListener('blur',()=>{task.title=(txt.textContent||'').trim();saveTaskGroups();renderTasks();});
+                const smart=row.querySelector('[data-task-smart-url]'); if(smart) smart.addEventListener('click',()=>{ const u=smart.dataset.taskSmartUrl; if(u) window.open(u,'_blank','noopener'); });
+                rows.appendChild(row);
+            });
+            const input=card.querySelector('.task-add-input'); const add=()=>{const title=input.value.trim(); if(!title)return; group.tasks.push({id:'t_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),title,done:false,createdAt:Date.now()}); input.value=''; saveTaskGroups(); renderTasks(); renderProgramPage();}; card.querySelector('.task-add-btn').addEventListener('click',add); input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add();}});
+            attachTaskDnD(card,group); attachGroupDnD(card,group); tasksList.appendChild(card);
+        });
+    }
+    function attachTouchSort(container,itemSelector,handleSelector,getItems,getId,onDrop){
+        const state={dragging:null,started:false,pointerId:null};
+        container.addEventListener('pointerdown',e=>{
+            if(e.pointerType==='mouse')return;
+            const handle=e.target.closest(handleSelector); const item=handle?.closest(itemSelector);
+            if(!handle||!item)return;
+            state.dragging=item; state.started=false; state.pointerId=e.pointerId;
+            handle.setPointerCapture?.(e.pointerId);
+            const move=ev=>{
+                if(state.pointerId!==ev.pointerId||!state.dragging)return;
+                if(!state.started && Math.abs(ev.clientY-e.clientY)<6)return;
+                state.started=true; ev.preventDefault(); state.dragging.classList.add('dragging');
+                const under=document.elementFromPoint(ev.clientX,ev.clientY)?.closest(itemSelector);
+                if(!under||under===state.dragging||!container.contains(under))return;
+                const rect=under.getBoundingClientRect(); const before=ev.clientY<rect.top+rect.height/2;
+                if(before) container.insertBefore(state.dragging,under); else container.insertBefore(state.dragging,under.nextSibling);
+            };
+            const up=ev=>{
+                if(state.pointerId!==ev.pointerId)return;
+                window.removeEventListener('pointermove',move,true); window.removeEventListener('pointerup',up,true);
+                const item=state.dragging; state.dragging=null; state.pointerId=null;
+                if(!item)return; item.classList.remove('dragging'); if(state.started)onDrop();
+            };
+            window.addEventListener('pointermove',move,true); window.addEventListener('pointerup',up,true);
+        });
+        container.__syncTouchModel=()=>{ const items=getItems(); const ids=[...container.querySelectorAll(itemSelector)].map(el=>getId(el)); const ordered=[]; ids.forEach(id=>{const obj=items.find(x=>String(x.id)===String(id));if(obj)ordered.push(obj);}); items.splice(0,items.length,...ordered); onDrop(false); };
+    }
+    function attachTaskDnD(card,group){
+        const rows=card.querySelector('.task-rows'); let dragged=null;
+        rows.querySelectorAll('.task-row').forEach(row=>{row.addEventListener('dragstart',()=>{dragged=group.tasks.find(t=>t.id===row.dataset.taskId);row.classList.add('dragging');});row.addEventListener('dragend',()=>{row.classList.remove('dragging');dragged=null;saveTaskGroups();renderTasks();renderProgramPage();});row.addEventListener('dragover',e=>{e.preventDefault();if(!dragged||dragged.id===row.dataset.taskId)return;const over=group.tasks.find(t=>t.id===row.dataset.taskId);const from=group.tasks.indexOf(dragged),to=group.tasks.indexOf(over);if(from<0||to<0)return;group.tasks.splice(from,1);group.tasks.splice(to,0,dragged);});});
+        attachTouchSort(rows,'.task-row','.task-drag',()=>group.tasks,row=>row.dataset.taskId,()=>{const ids=[...rows.querySelectorAll('.task-row')].map(r=>r.dataset.taskId);group.tasks.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));saveTaskGroups();renderTasks();renderProgramPage();});
+    }
+    function attachGroupDnD(card,group){
+        let dragged=null; card.addEventListener('dragstart',e=>{if(e.target.closest('.task-row,.task-add-input,.task-group-title,.task-group-action')){e.preventDefault();return;}dragged=group;card.classList.add('dragging');});card.addEventListener('dragend',()=>{card.classList.remove('dragging');dragged=null;saveTaskGroups();renderTasks();renderProgramPage();});card.addEventListener('dragover',e=>{e.preventDefault();if(!dragged||dragged.id===card.dataset.groupId)return;const over=taskGroups.find(g=>g.id===card.dataset.groupId);const from=taskGroups.indexOf(dragged),to=taskGroups.indexOf(over);if(from<0||to<0)return;taskGroups.splice(from,1);taskGroups.splice(to,0,dragged);});
+        attachTouchSort(tasksList,'.task-group','.task-group-drag',()=>taskGroups,el=>el.dataset.groupId,()=>{const ids=[...tasksList.querySelectorAll('.task-group')].map(r=>r.dataset.groupId);taskGroups.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));saveTaskGroups();renderTasks();renderProgramPage();});
+    }
+    function addTaskGroup(){ const g=normalizeTaskGroup({title:'Yeni görev grubu',tasks:[]}); g.programDate=null; taskGroups.push(g); saveTaskGroups(); renderTasks(); renderProgramPage(); requestAnimationFrame(()=>{const input=tasksList.querySelector(`.task-group[data-group-id="${CSS.escape(g.id)}"] .task-group-title`); input?.focus(); input?.select();}); }
+    function openTaskBind(group,anchor){
+        taskBindingGroupId=group.id; tasksBindSelect.innerHTML=''; const today=new Date(); for(let i=-1;i<=6;i++){const dt=new Date(today);dt.setDate(today.getDate()+i); const key=campDateKey(dt); const opt=document.createElement('option'); opt.value=key; opt.textContent=(i===0?'Bugün · ':'')+dt.toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'short'}); tasksBindSelect.appendChild(opt);} tasksBindSelect.value=group.programDate||taskSelectedDateKey; tasksBindPopover.classList.add('open'); tasksBindPopover.setAttribute('aria-hidden','false'); const r=anchor.getBoundingClientRect(); const left=Math.min(window.innerWidth-tasksBindPopover.offsetWidth-12,Math.max(12,r.right-tasksBindPopover.offsetWidth)); const top=Math.min(window.innerHeight-tasksBindPopover.offsetHeight-12,r.bottom+8); tasksBindPopover.style.left=left+'px'; tasksBindPopover.style.top=top+'px';
+    }
+    tasksBindSave.addEventListener('click',()=>{const group=taskGroups.find(g=>g.id===taskBindingGroupId); if(group){group.programDate=tasksBindSelect.value;taskSelectedDateKey=group.programDate;localStorage.setItem(TASK_SELECTED_DATE_KEY,taskSelectedDateKey);saveTaskGroups();renderTaskDateRow();renderTasks();renderProgramPage();} closeTaskBind();});
+    tasksBindCancel.addEventListener('click',closeTaskBind);
+    function closeTaskBind(){tasksBindPopover.classList.remove('open');tasksBindPopover.setAttribute('aria-hidden','true');taskBindingGroupId=null;}
+    document.addEventListener('click',e=>{ if(!tasksBindPopover.classList.contains('open'))return; if(!e.target.closest('#tasks-bind-popover,.task-bind-btn')) closeTaskBind(); });
+    function openTasksPage(dateKey){
+        taskReturnView=currentView; if(dateKey){taskSelectedDateKey=dateKey;localStorage.setItem(TASK_SELECTED_DATE_KEY,dateKey);} closeExclusiveUi(); setMenuOpen(false); renderTaskDateRow();renderTasks(); tasksPage.classList.add('open');tasksPage.setAttribute('aria-hidden','false');document.body.classList.add('tasks-page-open');requestAnimationFrame(()=>{const active=tasksDateRow.querySelector('.active');active?.scrollIntoView({inline:'center',block:'nearest'});});
+    }
+    function closeTasksPage(){ closeTaskBind(); tasksPage.classList.remove('open');tasksPage.setAttribute('aria-hidden','true');document.body.classList.remove('tasks-page-open'); setView(taskReturnView||'notes'); }
+    tasksBack.addEventListener('click',closeTasksPage); tasksNewGroupBtn.addEventListener('click',addTaskGroup);
 
-    campRenderDays();
-    campRenderSchedule();
-    campUpdateLive();
-    setInterval(campUpdateLive, 1000);
+    function programSelectedDateKey(){ return weekDateKey(programSelectedDay); }
+    function taskUnitsForGroups(groups){
+        const units=[];
+        groups.forEach(group=>{
+            const pending=group.tasks.filter(t=>!t.done);
+            const used=new Set();
+            pending.forEach(task=>{ if(used.has(task.id))return; const meta=inferTaskMeta(task.title); let partner=null;
+                if(meta.lesson||(!meta.question&&!meta.lesson)){ partner=pending.find(other=>{if(other.id===task.id||used.has(other.id))return false; const om=inferTaskMeta(other.title); if(!om.question)return false; const sameTeacher=meta.teachers.length&&om.teachers.some(v=>meta.teachers.includes(v)); const sameSubject=meta.subjects.length&&om.subjects.some(v=>meta.subjects.includes(v)); const sameLevel=meta.level&&meta.level===om.level; return sameTeacher||sameSubject||(!meta.teachers.length&&!meta.subjects.length&&(!meta.level||sameLevel));}); }
+                if(partner){used.add(task.id);used.add(partner.id);units.push({group,title:task.title,items:[task,partner]});} else {used.add(task.id);units.push({group,title:task.title,items:[task]});}
+            });
+        });
+        return units;
+    }
+    function allocateProgramUnits(dateKey){
+        const dt=dateFromKey(dateKey); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; const study=schedule.map((item,index)=>({item,index})).filter(x=>x.item.id!=='exam'); if(!study.length)return new Map(); const bound=taskGroups.filter(g=>g.programDate===dateKey); const units=taskUnitsForGroups(bound); const doneSet=campCompleted[dateKey]||[]; const today=dateKey===campTodayKey();
+        let start=0; if(today){const now=new Date(); const current=schedule.findIndex(x=>now.getHours()*60+now.getMinutes()+now.getSeconds()/60>=campTimeToMinutes(x.time)&&now.getHours()*60+now.getMinutes()+now.getSeconds()/60<campEndMinutes(x.time)); if(current>=0){start=Math.max(0,study.findIndex(x=>x.index===current));} else {const next=schedule.findIndex(x=>campTimeToMinutes(x.time)>now.getHours()*60+now.getMinutes()); const idx=study.findIndex(x=>x.index===next); if(idx>=0)start=idx; else start=Math.max(0,study.length-1);}}
+        const remaining=study.slice(start).filter(x=>!doneSet.includes(x.item.id)); const map=new Map(remaining.map(x=>[x.index,[]])); if(!units.length)return map; const n=remaining.length||1; const base=Math.floor(units.length/n),extra=units.length%n; let cursor=0; remaining.forEach((slot,i)=>{const count=base+(i<extra?1:0); map.set(slot.index,units.slice(cursor,cursor+count));cursor+=count;}); if(cursor<units.length&&remaining.length){const last=remaining[remaining.length-1].index;map.get(last).push(...units.slice(cursor));} return map;
+    }
+    function renderProgramDays(){
+        programDays.innerHTML=''; const today=new Date().getDay(); const order=[1,2,3,4,5,6,0]; order.forEach(day=>{const key=weekDateKey(day);const dt=dateFromKey(key);const b=document.createElement('button');b.type='button';b.className='program-day'+(day===programSelectedDay?' active':'')+(day===today?' today':'');b.innerHTML=`<strong>${CAMP_DAY_SHORT[day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`;b.addEventListener('click',()=>{programSelectedDay=day;renderProgramDays();renderProgramPage();});programDays.appendChild(b);});
+    }
+    function renderProgramPage(){
+        if(!programSessions)return; renderProgramDays(); const key=programSelectedDateKey(); const dt=dateFromKey(key); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; const doneSet=campCompleted[key]||[]; const allocations=allocateProgramUnits(key); const bound=taskGroups.filter(g=>g.programDate===key); programDateLabel.textContent=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});programBoundCount.textContent=bound.length?`${bound.length} görev grubu`:'Görev bağlı değil'; programSessions.innerHTML=''; if(!schedule.length){programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';return;}
+        const now=new Date(); const currentIndex=now.getDay()===day?campCurrentIndex(schedule,now):-1;
+        schedule.forEach((item,index)=>{ const done=doneSet.includes(item.id); const current=index===currentIndex; const row=document.createElement('div'); row.className='program-session'+(current?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':''); const assigned=allocations.get(index)||[]; row.innerHTML=`<div class="program-session-time">${escapeHtml(item.time)}</div><div class="program-session-body"><div class="program-session-name">${escapeHtml(item.name)}</div><div class="program-session-status">${done?'Tamamlandı':current?`Bitmesine ${campRemainingText(schedule,index,now)}`:item.id==='exam'?'Deneme':'Etüt'}</div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="Etüdü ${done?'yeniden aç':'tamamla'}"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`; const stack=row.querySelector('.program-task-stack'); assigned.forEach(unit=>unit.items.forEach(task=>{const chip=document.createElement('div');chip.className='program-task-chip';const groupName=unit.group.title;chip.innerHTML=`<span title="${escapeHtml(task.title)}">${escapeHtml(task.title)}</span><small>${escapeHtml(groupName)}</small>`;const match=smartMatch(task.title);if(match && (!match.premium || proActive||plusActive)){const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',()=>window.open(match.url,'_blank','noopener'));chip.appendChild(btn);}stack.appendChild(chip);})); const db=row.querySelector('.program-done-btn');db.addEventListener('click',()=>{const set=Array.isArray(campCompleted[key])?[...campCompleted[key]]:[];const p=set.indexOf(item.id);if(p>=0)set.splice(p,1);else set.push(item.id);campCompleted[key]=set;localStorage.setItem('yks_camp_completed',JSON.stringify(campCompleted));renderProgramPage();});programSessions.appendChild(row); });
+        updateProgramQuick(); updateContentSwitchHeight();
+    }
+    function updateProgramQuick(){
+        if(!programQuickMain||!programQuickTime)return; const today=new Date(); const day=today.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; if(!schedule.length){programQuickMain.textContent='Program';programQuickTime.textContent='--:--';return;} const idx=campCurrentIndex(schedule,today); let item=idx>=0?schedule[idx]:null; if(!item){const now=today.getHours()*60+today.getMinutes(); const next=schedule.find(s=>campTimeToMinutes(s.time)>now); item=next||schedule[schedule.length-1];} programQuickMain.textContent=item.name; programQuickTime.textContent=(item.time||'').split('–').pop()||'--:--';
+    }
+    programBindMain?.addEventListener('click',()=>openTasksPage(programSelectedDateKey()));
+    renderProgramDays();renderProgramPage();updateProgramQuick();
+    let lastProgramMinute=-1;
+    setInterval(()=>{updateProgramQuick();const d=new Date();const minute=d.getHours()*60+d.getMinutes();if(currentView==='program' && minute!==lastProgramMinute){lastProgramMinute=minute;renderProgramPage();}},1000);
 
     /* =========================================================
        YKS GERİ SAYIM
