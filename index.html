@@ -3500,6 +3500,106 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
   .program-session{grid-template-columns:62px minmax(0,1fr) 36px;gap:8px;padding:10px 8px 10px 7px;border-radius:16px;}.program-session-time{min-width:58px;padding:9px 5px;font-size:.64rem;}.program-session-name{font-size:.68rem;}.program-task-chip{font-size:.53rem;max-width:100%;}.program-task-chip > span.program-task-text{max-width:180px;}.program-task-thumb{height:28px;}.program-task-chip:hover .program-task-thumb,.program-task-thumb:not(:empty){width:44px;}.program-done-btn{width:34px;height:34px;border-radius:10px;}.program-schedule-head{font-size:.62rem;margin-bottom:8px;}
 }
 @media(prefers-reduced-motion:reduce){.program-hero-bg{animation:none!important;}.program-session,.program-bind-main,.program-task-thumb{transition:none!important;}}
+
+<style id="program-v15-polish">
+/* V15 — Programım: sade, işlev odaklı düzen */
+.program-quick{left:76px;height:44px;min-width:92px;padding:0 12px;gap:8px;border-radius:13px;background:rgba(15,20,25,.82);border-color:rgba(255,255,255,.08);}
+.program-quick svg{width:19px;height:19px;stroke-width:1.7;}
+.program-quick-time{font-size:.72rem;font-weight:950;color:#dcecf7;white-space:nowrap;}
+
+.program-pane{padding:14px 0 68px;min-height:680px;}
+.program-shell{width:min(1080px,92%);}
+.program-topbar{margin:2px 0 14px;}
+.program-topbar-left{gap:11px;}
+.program-mark{width:46px;height:46px;flex-basis:46px;border-radius:14px;}
+.program-kicker{font-size:.43rem;letter-spacing:1.4px;margin-bottom:4px;}
+.program-title{font-size:clamp(1.48rem,3vw,2.1rem);}
+.program-date-label{display:none;}
+.program-bind-main{width:44px;height:44px;padding:0;justify-content:center;font-size:0;border-radius:13px;}
+.program-bind-main svg{width:18px;height:18px;}
+
+.program-hero-card{min-height:315px;margin-bottom:14px;border-radius:26px;}
+.program-hero-bg{background-position:center 56%;}
+.program-hero-overlay{background:linear-gradient(90deg,rgba(6,10,14,.96) 0%,rgba(7,11,15,.86) 46%,rgba(7,11,15,.42) 72%,rgba(5,9,13,.18) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(4,7,10,.58));}
+.program-hero-content{min-height:315px;padding:28px 30px 27px;justify-content:flex-end;max-width:720px;}
+.program-live-pill{padding:7px 10px;font-size:.48rem;background:rgba(7,12,16,.58);}
+.program-focus-time{margin-top:15px;font-size:clamp(2.45rem,6vw,4.55rem);letter-spacing:-.065em;line-height:.92;max-width:70%;}
+.program-focus-name{margin-top:11px;font-size:clamp(.88rem,2vw,1.14rem);font-weight:820;color:#c9d9e4;max-width:none;}
+.program-focus-name{display:none!important;}
+.program-focus-range{margin-top:5px;color:#8297a7;font-size:.58rem;font-weight:900;letter-spacing:.04em;}
+.program-focus-progress{height:4px;margin-top:17px;width:min(520px,88%);}
+
+.program-days{gap:9px;padding:0 1px 14px;}
+.program-day{flex:1 1 0;min-width:84px;height:68px;border-radius:15px;}
+.program-day strong{font-size:.88rem;letter-spacing:-.02em;color:#cfdbe4;}
+.program-day span,.program-day.today::after{display:none;}
+.program-day.active{transform:translateY(-1px);}
+
+.program-schedule-head{display:flex;align-items:center;justify-content:flex-start;margin:0 2px 10px;font-size:.66rem;}
+.program-schedule-head span:last-child{display:none;}
+.program-schedule-line{display:none;}
+.program-sessions{display:flex;flex-direction:column;gap:10px;}
+.program-session{min-height:112px;display:grid;grid-template-columns:96px minmax(0,1fr) 42px;gap:13px;align-items:center;padding:11px;position:relative;border-radius:20px;overflow:hidden;background:#0d1318;border-color:rgba(255,255,255,.08);box-shadow:0 12px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.025);}
+.program-session::after{content:'';position:absolute;inset:0;background-image:url('https://cdn.pixabay.com/video/2025/04/13/271841_tiny.jpg');background-size:cover;background-position:center;opacity:.12;filter:saturate(.75) contrast(.95);pointer-events:none;}
+.program-session.morning::after{opacity:.14;filter:brightness(1.08) saturate(.78) contrast(.94);}
+.program-session.day::after{opacity:.12;filter:brightness(.98) saturate(.72) contrast(.98);}
+.program-session.evening::after{opacity:.13;filter:brightness(.72) saturate(.66) contrast(1.02);}
+.program-session.night::after{opacity:.15;filter:brightness(.48) saturate(.58) contrast(1.06);}
+.program-session>*{position:relative;z-index:1;}
+.program-session:hover{transform:translateY(-1px);border-color:rgba(111,181,232,.20);}
+.program-session.current{min-height:134px;border-color:rgba(105,186,239,.38);background:linear-gradient(145deg,rgba(24,61,88,.50),rgba(8,14,19,.94));box-shadow:0 18px 50px rgba(43,116,170,.12),inset 0 1px 0 rgba(255,255,255,.035);}
+.program-session.current::before{content:'';position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:99px;background:linear-gradient(180deg,#7bcfff,#4e91cf);box-shadow:0 0 18px rgba(84,167,229,.40);z-index:2;}
+.program-session.done{opacity:.76;background:#0b1210;border-color:rgba(103,194,144,.14);}
+.program-session.done::after{opacity:.07;filter:brightness(.54) saturate(.45) grayscale(.25);}
+.program-session.exam{border-style:solid;background:#111316;}
+.program-session.exam::after{opacity:.06;filter:brightness(.42) grayscale(.25);}
+.program-session-rail{height:100%;display:flex;align-items:center;justify-content:center;}
+.program-session-time{min-width:80px;padding:9px 6px;border:0;background:transparent;font-size:.77rem;font-weight:950;line-height:1.25;color:#e7eff4;}
+.program-session.current .program-session-time{color:#a4dbff;background:transparent;border:0;}
+.program-session.done .program-session-time{color:#7f8f98;text-decoration:none;}
+.program-session-main{min-width:0;}
+.program-session-head{display:block;}
+.program-session-name{font-size:.92rem;font-weight:950;color:#eef4f7;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.program-session-state{display:none;}
+.program-task-stack{gap:7px;margin-top:10px;}
+.program-task-chip{padding:5px 7px 5px 5px;border-radius:12px;background:rgba(8,13,18,.50);border-color:rgba(255,255,255,.07);font-size:.57rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.program-task-chip.matched{animation:programTaskMatched .55s cubic-bezier(.2,.8,.2,1);}
+.program-task-thumb{width:0!important;height:32px;opacity:0;transform:translateX(-9px) scale(.92);overflow:hidden;flex:0 0 auto;border-radius:8px;transition:width .36s cubic-bezier(.2,.76,.3,1),opacity .28s ease,transform .36s cubic-bezier(.2,.76,.3,1);}
+.program-task-chip.matched .program-task-thumb{width:54px!important;opacity:1;transform:none;}
+.program-task-thumb.locked{filter:grayscale(.65) brightness(.80);}
+@keyframes programTaskMatched{0%{transform:translateX(-5px);opacity:.55;}100%{transform:translateX(0);opacity:1;}}
+.program-task-open{width:25px;height:25px;border-radius:8px;background:rgba(67,143,214,.10);}
+.program-session-action{display:flex;align-items:center;justify-content:center;}
+.program-done-btn{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.025);}
+.program-done-btn svg{width:18px;height:18px;}
+.program-session.done .program-done-btn{color:#80d1a4;border-color:rgba(99,198,148,.24);background:rgba(96,198,143,.09);}
+.program-session.no-tasks:not(.current){min-height:88px;}
+.program-session.no-tasks .program-task-stack{display:none;}
+
+@media(max-width:700px){
+  .program-quick{left:62px;top:10px;height:42px;min-width:78px;padding:0 9px;gap:6px;}
+  .program-quick svg{width:18px;height:18px;}
+  .program-quick-time{font-size:.64rem;}
+  .program-shell{width:93%;}
+  .program-hero-card{min-height:250px;border-radius:21px;}
+  .program-hero-content{min-height:250px;padding:22px 20px;}
+  .program-focus-time{font-size:clamp(2rem,10vw,3.2rem);max-width:86%;}
+  .program-focus-name{font-size:.82rem;margin-top:9px;}
+  .program-focus-range{font-size:.53rem;}
+  .program-days{gap:7px;padding-bottom:11px;}
+  .program-day{height:62px;min-width:70px;}
+  .program-day strong{font-size:.77rem;}
+  .program-session{grid-template-columns:72px minmax(0,1fr) 38px;gap:8px;min-height:104px;padding:9px;}
+  .program-session.current{min-height:122px;}
+  .program-session-time{min-width:64px;font-size:.66rem;}
+  .program-session-name{font-size:.76rem;}
+  .program-task-chip{font-size:.52rem;max-width:100%;}
+  .program-task-text{max-width:49vw!important;}
+  .program-task-chip.matched .program-task-thumb{width:46px!important;height:28px;}
+  .program-done-btn{width:34px;height:34px;border-radius:10px;}
+}
+@media(prefers-reduced-motion:reduce){.program-session,.program-task-thumb,.program-task-chip.matched{transition:none!important;animation:none!important;}}
+</style>
 </style>
 
 </head>
@@ -3746,9 +3846,8 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 
     <!-- Program hızlı erişimi -->
     <button class="program-quick" id="program-quick" type="button" aria-label="Programımı aç" title="Programım">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path></svg>
-        <span class="program-quick-main" id="program-quick-main">Program</span>
-        <span class="program-quick-time" id="program-quick-time">--:--</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2"></path><circle cx="12" cy="12" r="8"></circle></svg>
+        <span class="program-quick-time" id="program-quick-time">-- dk</span>
     </button>
 
     <div class="content-switch" id="content-switch">
@@ -4002,8 +4101,9 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                         <div class="program-hero-overlay"></div>
                         <div class="program-hero-content">
                             <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">Sıradaki etüt</span></div>
-                            <div class="program-focus-time" id="program-focus-time">--:--</div>
-                            <div class="program-focus-name" id="program-focus-name">Program hazır</div>
+                            <div class="program-focus-time" id="program-focus-time">Program hazır</div>
+                            <div class="program-focus-name" id="program-focus-name">--:--</div>
+                            <div class="program-focus-range" id="program-focus-range">--:-- — --:--</div>
                             <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
                         </div>
                     </div>
@@ -7418,6 +7518,8 @@ updateDailyMotivation();
     function campEndMinutes(text){ const last=String(text).split('–').pop().trim(); const [h,m]=last.split(':').map(Number); return h*60+m; }
     function campCurrentIndex(schedule,date=new Date()){ const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; return schedule.findIndex(item=>now>=campTimeToMinutes(item.time)&&now<campEndMinutes(item.time)); }
     function campRemainingText(schedule,index,date=new Date()){ if(index<0||!schedule[index])return ''; const end=campEndMinutes(schedule[index].time); const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; let sec=Math.max(0,Math.round((end-now)*60)); const h=Math.floor(sec/3600);sec%=3600;const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0'); return h?`${h}s ${m}:${s}`:`${m}:${s}`; }
+    function campRemainingMinutes(schedule,index,date=new Date()){ if(index<0||!schedule[index])return 0; const end=campEndMinutes(schedule[index].time); const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; return Math.max(0,Math.ceil(end-now)); }
+    function campUntilMinutes(schedule,index,date=new Date()){ if(index<0||!schedule[index])return 0; const start=campTimeToMinutes(schedule[index].time); const now=date.getHours()*60+date.getMinutes()+date.getSeconds()/60; return Math.max(0,Math.ceil(start-now)); }
     let campCompleted=(()=>{try{const x=JSON.parse(localStorage.getItem('yks_camp_completed')||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
     const CAMP_AUTO_DONE_KEY='yks_camp_auto_done_v1';
     let campAutoDone=(()=>{try{const x=JSON.parse(localStorage.getItem(CAMP_AUTO_DONE_KEY)||'{}');return x&&typeof x==='object'?x:{}}catch(_){return {}}})();
@@ -7426,7 +7528,6 @@ updateDailyMotivation();
     const programDateLabel = document.getElementById('program-date-label');
     const programSessions = document.getElementById('program-sessions');
     const programBindMain = document.getElementById('program-bind-main');
-    const programQuickMain = document.getElementById('program-quick-main');
     const programQuickTime = document.getElementById('program-quick-time');
     const tasksPage = document.getElementById('tasks-page');
     const tasksBack = document.getElementById('tasks-back');
@@ -7492,7 +7593,10 @@ updateDailyMotivation();
             const premium=link.classList.contains('camp-premium-link');
             const thumb=link.querySelector('.playlist-thumb')?.getAttribute('src') || card?.querySelector('.teacher-visual img')?.getAttribute('src') || '';
             const subject=card?.dataset?.subject||'';
-            return {teacher,name,meta,url,premium,thumb,subject,teacherId,search:normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher)};
+            const search=normalizeTaskText((card?.dataset.campSearch||'')+' '+name+' '+teacher+' '+meta);
+            const questionContent=/soru|cozum|test|problem|soru bankasi|soru cozumu/.test(search);
+            const lessonContent=!questionContent;
+            return {teacher,name,meta,url,premium,thumb,subject,teacherId,questionContent,lessonContent,search};
         });
     }
     function registerCampPlaylistClick(link){
@@ -7533,11 +7637,16 @@ updateDailyMotivation();
         let best=null;
         for(const e of entries){
             const x=e.search; let score=0;
+            // Soru/test görevleri yalnızca soru çözüm / soru bankası içeriklerine bağlanır.
+            if(m.question && !e.questionContent) continue;
+            if(m.lesson && e.questionContent) continue;
             if(m.teachers.length){ if(!m.teachers.includes(e.teacherId)) continue; score+=10; }
             if(m.level){ if(!x.includes(m.level)) continue; score+=4; }
             if(m.subjects.length){ const subjectHit=m.subjects.some(v=>x.includes(v)||normalizeTaskText(e.subject).includes(v)); if(!subjectHit)continue; score+=5; }
-            if(m.lesson && /kamp|ders|video/.test(x))score+=1.5;
-            if(m.question && /soru bankasi|cozum|soru/.test(x))score+=2.5;
+            if(m.lessonContent && e.lessonContent)score+=1.5;
+            if(m.question && e.questionContent)score+=5;
+            // Explicit question intent always beats ordinary lesson playlists.
+            if(!m.question && e.questionContent)score-=4;
             if(!m.teachers.length)score+=teacherWatchScore(e)*0.8;
             if(/\borijinal\b/.test(m.text) && e.teacherId==='orijinal')score+=5;
             if(!best || score>best.score || (Math.abs(score-best.score)<0.01 && teacherWatchScore(e)>teacherWatchScore(best))) best={...e,score};
@@ -7651,7 +7760,8 @@ updateDailyMotivation();
         const p=set.indexOf(sessionId);
         const autoKey=dateKey+'|'+sessionId;
         if(nextDone){
-            if(p<0)set.push(sessionId);
+            // Assignment must be captured BEFORE the etüt is marked complete;
+            // completed etütler are intentionally removed from redistribution.
             const assigned=programTaskIdsForSession(dateKey,sessionId);
             const ids=[];
             assigned.forEach(({task})=>{
@@ -7659,6 +7769,7 @@ updateDailyMotivation();
                 if(!live || live.done) return;
                 live.done=true; live.autoDone=true; ids.push(live.id);
             });
+            if(p<0)set.push(sessionId);
             campAutoDone[autoKey]=ids;
         }else{
             if(p>=0)set.splice(p,1);
@@ -7675,8 +7786,8 @@ updateDailyMotivation();
     }
     function appendProgramTaskChip(stack, task, groupName, currentSession){
         const chip=document.createElement('div');
-        chip.className='program-task-chip';
         const match=smartMatch(task.title);
+        chip.className='program-task-chip'+(match?' matched':'');
         const thumbWrap=document.createElement('span');
         thumbWrap.className='program-task-thumb'+(match?.premium && !(proActive||plusActive)?' locked':'');
         if(match?.thumb){
@@ -7715,6 +7826,7 @@ updateDailyMotivation();
         const focusName=document.getElementById('program-focus-name');
         const focusTime=document.getElementById('program-focus-time');
         const focusRemaining=document.getElementById('program-focus-remaining');
+        const focusRange=document.getElementById('program-focus-range');
         const focusFill=document.getElementById('program-focus-progress-fill');
         const todayFloor=new Date(); todayFloor.setHours(0,0,0,0);
         const futureDate=dt.getTime()>todayFloor.getTime();
@@ -7728,14 +7840,23 @@ updateDailyMotivation();
             focusItem=schedule[schedule.length-1]||null;
         }
         if(focusItem){
-            focusTime.textContent=focusItem.time||'--:--';
-            focusName.textContent=focusItem.name||'Program';
             const idx=schedule.indexOf(focusItem);
             const live=isToday&&currentIndex>=0&&idx===currentIndex;
-            if(live) focusRemaining.textContent=`Bitmesine ${campRemainingText(schedule,idx,now)}`;
-            else if(futureDate) focusRemaining.textContent='Sıradaki etüt';
-            else if(pastDate) focusRemaining.textContent='Günün son etüdü';
-            else focusRemaining.textContent='Program';
+            const nextUp=isToday&&!live&&campTimeToMinutes(focusItem.time||'00:00')>now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+            focusTime.textContent=focusItem.name||'Etüt';
+            focusName.textContent='';
+            if(focusRange) focusRange.textContent=focusItem.time||'--:--';
+            if(live){
+                focusRemaining.textContent=`${campRemainingMinutes(schedule,idx,now)} dk kaldı`;
+            }else if(nextUp){
+                focusRemaining.textContent=`${campUntilMinutes(schedule,idx,now)} dk sonra`;
+            }else if(futureDate){
+                focusRemaining.textContent='İlk etüt';
+            }else if(pastDate){
+                focusRemaining.textContent='Gün tamamlandı';
+            }else{
+                focusRemaining.textContent='Program';
+            }
             const start=campTimeToMinutes(focusItem.time||'00:00');
             const end=campEndMinutes(focusItem.time||'00:00');
             const minute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
@@ -7743,14 +7864,16 @@ updateDailyMotivation();
             focusFill.style.width=(live?pct:(pastDate?100:0))+'%';
         }else if(schedule.length){
             const last=schedule[schedule.length-1];
-            focusTime.textContent=last.time||'--:--';
-            focusName.textContent='Program tamamlandı';
-            focusRemaining.textContent='Bugünün etütleri bitti.';
+            focusTime.textContent=last.name||'Program';
+            focusName.textContent='';
+            if(focusRange) focusRange.textContent=last.time||'--:--';
+            focusRemaining.textContent='Gün tamamlandı';
             focusFill.style.width='100%';
         }else{
-            focusTime.textContent='--:--';
-            focusName.textContent='Program hazır';
-            focusRemaining.textContent='Bu gün için etüt yok.';
+            focusTime.textContent='Program hazır';
+            focusName.textContent='';
+            if(focusRange) focusRange.textContent='--:--';
+            focusRemaining.textContent='Bu gün için etüt yok';
             focusFill.style.width='0%';
         }
 
@@ -7762,17 +7885,32 @@ updateDailyMotivation();
             return;
         }
 
-        schedule.forEach((item,index)=>{
+        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+        const ordered=[...schedule.keys()].sort((a,b)=>{
+            const score=(i)=>{
+                if(i===currentIndex)return 0;
+                if(isToday && currentIndex<0 && campTimeToMinutes(schedule[i].time)<nowMinute)return 3;
+                if(doneSet.includes(schedule[i].id))return 3;
+                if(isToday && campTimeToMinutes(schedule[i].time)>=nowMinute)return 1;
+                return 2;
+            };
+            return score(a)-score(b) || a-b;
+        });
+        ordered.forEach(index=>{
+            const item=schedule[index];
             const done=doneSet.includes(item.id);
             const current=index===currentIndex;
+            const nextUp=isToday&&currentIndex<0&&!done&&campTimeToMinutes(item.time)>nowMinute;
             const row=document.createElement('div');
-            row.className='program-session'+(current?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
+            const start=campTimeToMinutes(item.time);
+            const tone=start<12?'morning':start<17?'day':start<20?'evening':'night';
+            row.className='program-session '+tone+(current?' current':'')+(nextUp?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
             const assigned=allocations.get(index)||[];
             const flatTasks=assigned.flatMap(unit=>unit.items.map(task=>({task,group:unit.group})));
             const hasTasks=flatTasks.length>0;
-            row.innerHTML=`<div class="program-session-rail"><div class="program-session-time">${escapeHtml(item.time)}</div><div class="program-session-marker"></div></div><div class="program-session-main"><div class="program-session-head"><div class="program-session-name">${escapeHtml(item.name)}</div><div class="program-session-state">${done?'✓':current?'ŞİMDİ':''}</div></div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="Etüdü ${done?'yeniden aç':'tamamla'}" ${item.id==='exam'?'disabled':''}><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`;
+            row.innerHTML=`<div class="program-session-rail"><div class="program-session-time">${escapeHtml(item.time)}</div></div><div class="program-session-main"><div class="program-session-head"><div class="program-session-name">${escapeHtml(item.name)}</div></div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="${done?'Etüdü yeniden aç':'Etüdü tamamla'}" ${item.id==='exam'?'disabled':''}><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`;
             const stack=row.querySelector('.program-task-stack');
-            flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current));
+            flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current||nextUp));
             const db=row.querySelector('.program-done-btn');
             if(item.id!=='exam') db.addEventListener('click',()=>{setProgramSessionDone(key,item.id,!done);renderProgramPage();renderTasks();});
             row.classList.toggle('no-tasks',!hasTasks);
@@ -7782,7 +7920,15 @@ updateDailyMotivation();
         updateContentSwitchHeight();
     }
     function updateProgramQuick(){
-        if(!programQuickMain||!programQuickTime)return; const today=new Date(); const day=today.getDay(); const schedule=CAMP_SCHEDULE[day]||[]; if(!schedule.length){programQuickMain.textContent='Program';programQuickTime.textContent='--:--';return;} const idx=campCurrentIndex(schedule,today); let item=idx>=0?schedule[idx]:null; if(!item){const now=today.getHours()*60+today.getMinutes(); const next=schedule.find(s=>campTimeToMinutes(s.time)>now); item=next||schedule[schedule.length-1];} programQuickMain.textContent=item.name; programQuickTime.textContent=(item.time||'').split('–').pop()||'--:--';
+        if(!programQuickTime)return;
+        const today=new Date(); const day=today.getDay(); const schedule=CAMP_SCHEDULE[day]||[];
+        if(!schedule.length){programQuickTime.textContent='-- dk';return;}
+        const idx=campCurrentIndex(schedule,today);
+        if(idx>=0){ programQuickTime.textContent=`${campRemainingMinutes(schedule,idx,today)} dk`; return; }
+        const nowMinute=today.getHours()*60+today.getMinutes()+today.getSeconds()/60;
+        const nextIndex=schedule.findIndex(item=>campTimeToMinutes(item.time)>nowMinute);
+        if(nextIndex>=0){ programQuickTime.textContent=`${campUntilMinutes(schedule,nextIndex,today)} dk`; return; }
+        programQuickTime.textContent='0 dk';
     }
     programBindMain?.addEventListener('click',()=>openTasksPage(programSelectedDateKey()));
     renderProgramDays();renderProgramPage();updateProgramQuick();
