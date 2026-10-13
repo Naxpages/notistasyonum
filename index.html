@@ -3006,6 +3006,9 @@ body.ai-page-open .container{opacity:0!important;visibility:hidden!important;poi
 .side-menu-discover .menu-dot{margin-left:auto;}
 @keyframes discoverIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes discoverFloat{0%,100%{transform:translate(-8px,-5px) scale(1)}50%{transform:translate(10px,8px) scale(1.08)}}
+        .discover-video-embed{display:block;min-height:0;aspect-ratio:16/9;background:#080b0f;}
+        .discover-video-embed iframe{display:block;width:100%;height:100%;min-height:360px;border:0;position:absolute;inset:0;border-radius:inherit;}
+        @media(max-width:760px){.discover-video-embed{min-height:0;}.discover-video-embed iframe{min-height:250px;}}
 @media(max-width:760px){.discover-shell{width:calc(100% - 22px);padding-top:12px}.discover-content{padding-top:14px}.discover-hero{grid-template-columns:1fr;gap:14px}.discover-hero-copy{min-height:0;padding:28px 6px 18px}.discover-hero h1{font-size:clamp(2.2rem,13vw,3.6rem)}.discover-video{min-height:250px;border-radius:24px}.discover-release{margin-top:14px;padding:19px}.discover-head{height:52px}.discover-back{width:42px;height:42px;border-radius:13px}}
 
 /* Exclusive surfaces: keep only one overlay/panel alive at a time. */
@@ -4255,13 +4258,8 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                         <h1>Burada yeni olan şeyler.</h1>
                         <p>Yeni özellikler, küçük keşifler ve Not İstasyonu'nun önemli yenilikleri.</p>
                     </div>
-                    <div class="discover-video" aria-label="Tanıtım videosu alanı">
-                        <div class="discover-video-glow"></div>
-                        <div class="discover-video-card">
-                            <div class="discover-play">▶</div>
-                            <div class="discover-video-label">Tanıtım videosu</div>
-                            <div class="discover-video-note">Yakında</div>
-                        </div>
+                    <div class="discover-video discover-video-embed" aria-label="Not İstasyonu tanıtım videosu">
+                        <iframe src="https://www.youtube-nocookie.com/embed/5h_iRiRwJZU?rel=0&autoplay=0&hl=tr" title="Not İstasyonu tanıtım videosu" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                 </section>
 
@@ -8469,7 +8467,22 @@ updateDailyMotivation();
         programQuickTime.textContent='00:00';
     }
     renderProgramDays();renderProgramPage();updateProgramQuick();
-    setInterval(()=>{updateProgramQuick();if(currentView==='program')renderProgramPage();},1000);
+    // Live clock updates must not rebuild the entire Programım DOM every second.
+    // Rebuilding it repeatedly moved task/video chips and interrupted focus/scroll.
+    let lastProgramLiveState = '';
+    setInterval(()=>{
+        updateProgramQuick();
+        if(currentView!=='program') return;
+        const key=programSelectedDateKey();
+        const schedule=CAMP_SCHEDULE[dateFromKey(key).getDay()]||[];
+        const now=new Date();
+        const liveIndex=key===campTodayKey()?campCurrentIndex(schedule,now):-1;
+        const liveState=key+'|'+liveIndex;
+        if(liveState!==lastProgramLiveState){
+            lastProgramLiveState=liveState;
+            renderProgramPage();
+        }
+    },1000);
 
     /* =========================================================
        YKS GERİ SAYIM
@@ -8846,6 +8859,10 @@ updateDailyMotivation();
     function setDiscoverOpen(open){
         if(!discoverPage || !discoverBtn) return;
         if(open) closeExclusiveUi();
+        // closeExclusiveUi applies inline display:none to exclusive overlays;
+        // clear that inline override here so the .open class can actually show Discover.
+        if(open) discoverPage.style.removeProperty('display');
+        else discoverPage.style.display='none';
         discoverPage.classList.toggle('open',!!open);
         discoverPage.setAttribute('aria-hidden',String(!open));
         discoverBtn.setAttribute('aria-expanded',String(!!open));
@@ -9725,7 +9742,23 @@ updateDailyMotivation();
   function scheduleReload() {
     if (reloadScheduled || isLoggingOut) return;
     reloadScheduled = true;
-    setTimeout(()=>{ if (document.visibilityState !== 'prerender') window.location.reload(); },500);
+    // A cloud merge must never reload the page while someone is writing a note or editing a task.
+    // Defer until the page is in the background; if the user stays here, do not interrupt them.
+    const safeToReload = () => {
+      const active = document.activeElement;
+      const editing = !!active && (active.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
+      if (document.visibilityState === 'hidden' && !editing) {
+        window.removeEventListener('visibilitychange', safeToReload);
+        window.location.reload();
+      }
+    };
+    window.addEventListener('visibilitychange', safeToReload);
+    setTimeout(() => {
+      const active = document.activeElement;
+      const editing = !!active && (active.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
+      if (!editing && document.visibilityState === 'hidden') safeToReload();
+      // If the user is active, preserve the current editing session instead of forcing a reload.
+    }, 1500);
   }
   async function flushPending() {
     if (suppressPush) return;
