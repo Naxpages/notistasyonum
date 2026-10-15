@@ -502,7 +502,7 @@ body.focus-local-mode .content-track {
         @media (max-width:620px){.camp-library-pane{padding-bottom:32px;}.camp-filter{height:42px;padding:0 13px;}.teacher-visual{height:202px;}.playlist-link{grid-template-columns:94px minmax(0,1fr) 44px;min-height:84px;}.playlist-thumb-wrap{width:94px;height:62px;}.playlist-cta{width:44px;height:44px;}.camp-premium-card .teacher-visual{height:180px;}.camp-contact{margin-top:22px;}}
 
         /* Not editörü — biçimlendirme davranışı sade ve kalıcı. */
-        .editable-area{white-space:normal;}
+        .editable-area{white-space:normal;flex-grow:0;min-height:48px;font-weight:400;}
         .editable-area>div,.editable-area>p{margin:0 0 8px;min-height:1.55em;}
         .editable-area ul,.editable-area ol{margin:0 0 8px;padding-left:24px;}
         .editable-area li{margin:0 0 4px;}
@@ -551,15 +551,52 @@ body.focus-local-mode .content-track {
            NOT KARTLARI
         ===================================================== */
 
+        /* Not panosu: her kart kendi içeriği kadar uzar; kısa kartlar
+           uzun komşularının yüksekliğine zorlanmaz. CSS columns masonry düzeni sağlar. */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            display: block;
+            column-count: 2;
+            column-gap: 20px;
+            margin-top: 24px;
         }
 
+        .grid > .card {
+            display: flex;
+            width: 100%;
+            min-height: 0;
+            margin: 0 0 20px;
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            vertical-align: top;
+        }
+
+        .note-nav-bar {
+            column-span: all;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 18px;
+            padding: 11px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        .note-nav-back {
+            flex: 0 0 auto;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 8px 11px;
+            cursor: pointer;
+            font: inherit;
+            font-size: .82rem;
+        }
+        .note-nav-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.85rem; font-weight:750; }
+
         @media (max-width: 860px) {
-            .grid { grid-template-columns: 1fr; }
+            .grid { column-count: 1; }
         }
 
         .card {
@@ -572,7 +609,9 @@ body.focus-local-mode .content-track {
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: 320px;
+            min-height: 0;
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
             animation: cardAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             transition:
                 transform 0.3s ease,
@@ -741,14 +780,18 @@ body.focus-local-mode .content-track {
         .highlight-mark{position:relative;z-index:1;}
         .highlight-mark::after{content:"";position:absolute;left:-3px;right:-3px;bottom:0;height:7px;border-radius:3px;background:#fff176;z-index:-1;opacity:.95;}
         .note-action-btn.note-lock-btn{min-width:34px;}
+        .note-color-bold-btn{color:var(--note-accent,#9da4aa)!important;}
+        .note-child-btn{font-size:1rem!important;font-weight:900;}
         .card-footer{display:flex;justify-content:flex-start;align-items:center;gap:8px;margin-top:15px;padding-top:10px;border-top:1px dashed var(--border-color);}
         .editable-title{font-size:1.28rem;font-weight:850;margin-top:0;margin-bottom:12px;padding-bottom:8px;padding-right:40px;border-bottom:2px solid var(--border-color);outline:none;line-height:1.22;}
-        .editable-area{flex-grow:1;outline:none;font-size:.98rem;line-height:1.55;color:var(--text-color);padding:4px 2px;min-height:150px;min-width:0;overflow-wrap:anywhere;word-break:break-word;white-space:normal;}
+        .editable-area{flex-grow:0;outline:none;font-size:.98rem;line-height:1.55;color:var(--text-color);padding:4px 2px;min-height:48px;min-width:0;overflow-wrap:anywhere;word-break:break-word;white-space:normal;font-weight:400;}
         .editable-area > div,.editable-area > p{margin:0 0 7px;}
         .editable-area ul,.editable-area ol{margin:0 0 7px;padding-left:22px;}
         .editable-area li{margin-bottom:4px;}
         .editable-area s,.editable-area strike{text-decoration-thickness:1.5px;}
         .editable-area span[style*="background-color"]{box-decoration-break:clone;-webkit-box-decoration-break:clone;border-radius:3px;padding:0 1px;}
+        .editable-area strong[data-note-color-bold="true"]{color:var(--note-accent,var(--text-color));font-weight:900;}
+        @media(prefers-reduced-motion:reduce){.card{animation:none!important;transition:none!important;}}
 
         .card.is-locked .editable-title,
         .card.is-locked .editable-area {
@@ -5626,6 +5669,8 @@ updateDailyMotivation();
                     } else {
                         el.removeAttribute('style');
                     }
+                } else if (el.tagName === 'STRONG' && name === 'data-note-color-bold') {
+                    if (value === 'true') el.setAttribute(name, 'true'); else el.removeAttribute(name);
                 } else if (name !== 'src' && name !== 'alt' && name !== 'title') {
                     el.removeAttribute(attr.name);
                 }
@@ -5647,6 +5692,11 @@ updateDailyMotivation();
             const s = document.createElement('s');
             while (el.firstChild) s.appendChild(el.firstChild);
             el.replaceWith(s);
+        });
+        template.content.querySelectorAll('STRONG').forEach(el => {
+            if (el.hasAttribute('data-note-color-bold')) {
+                el.setAttribute('data-note-color-bold', 'true');
+            }
         });
 
         template.content.querySelectorAll('SPAN').forEach(el => {
@@ -5691,6 +5741,26 @@ updateDailyMotivation();
             btn.textContent = '✓';
             setTimeout(() => { btn.textContent = old; }, 850);
         }
+    }
+
+    let activeNoteId = null;
+    const noteNavigationStack = [];
+
+    function sameNoteId(a, b) { return String(a) === String(b); }
+
+    function childNotesOf(noteId) {
+        return notesData.filter(candidate => candidate.parentNoteId != null && sameNoteId(candidate.parentNoteId, noteId));
+    }
+
+    function leaveLinkedNote() {
+        if (noteNavigationStack.length) {
+            activeNoteId = noteNavigationStack.pop();
+            renderNotes('');
+        } else {
+            activeNoteId = null;
+            renderNotes(searchBar ? searchBar.value : '');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderNotes(searchTerm = '') {
@@ -5738,15 +5808,53 @@ updateDailyMotivation();
 
         filteredNotes = filteredNotes.map(item => item.note);
 
+        if (activeNoteId != null && !term) {
+            const activeNote = notesData.find(note => sameNoteId(note.id, activeNoteId));
+            if (activeNote) {
+                filteredNotes = childNotesOf(activeNote.id);
+                const nav = document.createElement('div');
+                nav.className = 'note-nav-bar';
+                const back = document.createElement('button');
+                back.type = 'button';
+                back.className = 'note-nav-back';
+                back.textContent = noteNavigationStack.length ? '← Önceki nota dön' : '← Tüm notlar';
+                back.addEventListener('click', leaveLinkedNote);
+                const label = document.createElement('div');
+                label.className = 'note-nav-label';
+                label.textContent = 'Alt notlar · ' + String(activeNote.title || 'Başlık');
+                const addChild = document.createElement('button');
+                addChild.type = 'button';
+                addChild.className = 'note-nav-back';
+                addChild.textContent = '＋ Alt not';
+                addChild.addEventListener('click', () => createChildNote(activeNote));
+                nav.append(back, label, addChild);
+                notesGrid.appendChild(nav);
+                if (!filteredNotes.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'note-nav-label';
+                    empty.style.padding = '18px 4px';
+                    empty.textContent = 'Henüz alt not yok. ＋ Alt not düğmesiyle oluşturabilirsin.';
+                    notesGrid.appendChild(empty);
+                }
+            } else {
+                activeNoteId = null;
+                noteNavigationStack.length = 0;
+            }
+        } else if (!term && activeNoteId == null) {
+            filteredNotes = filteredNotes.filter(note => note.parentNoteId == null);
+        }
+
         filteredNotes.forEach(note => {
             const card = document.createElement('div');
             card.className = 'card';
+            card.dataset.noteId = String(note.id);
 
             const isLocked = note.locked === true;
             if (isLocked) card.classList.add('is-locked');
 
             const activeColor = note.color || '#dee2e6';
             card.style.borderTopColor = activeColor;
+            card.style.setProperty('--note-accent', activeColor);
 
             if (note.tag === 'unlem') card.classList.add('glow-unlem');
             else if (note.tag === 'ates') card.classList.add('glow-ates');
@@ -5771,6 +5879,7 @@ updateDailyMotivation();
                     data-placeholder="Notlarını buraya yaz..."
                 >${safeContent}</div>
 
+
                 <div class="card-footer">
                     <select class="tag-select"
                         style="color:${activeColor};border-color:${activeColor};"
@@ -5791,7 +5900,8 @@ updateDailyMotivation();
                         <button class="note-action-btn note-format-btn" type="button" data-note-format="bold" title="Kalın" aria-label="Kalın"><strong>B</strong></button>
                         <button class="note-action-btn note-format-btn" type="button" data-note-format="italic" title="İtalik" aria-label="İtalik"><em>I</em></button>
                         <button class="note-action-btn note-format-btn" type="button" data-note-format="underline" title="Altı çizili" aria-label="Altı çizili"><u>U</u></button>
-                        <button class="note-action-btn note-format-btn" type="button" data-note-format="strike" title="Üstü çizili" aria-label="Üstü çizili"><s>S</s></button>
+                        <button class="note-action-btn note-format-btn note-color-bold-btn" type="button" data-note-format="colorBold" title="Not rengiyle kalın" aria-label="Not rengiyle kalın"><strong>A</strong></button>
+                        <button class="note-action-btn note-child-btn" type="button" title="Alt not oluştur" aria-label="Alt not oluştur">＋</button>
                         <button class="note-action-btn note-format-btn note-highlight-btn" type="button" data-note-format="highlight" title="Fosfor" aria-label="Fosfor"><span class="highlight-mark">A</span></button>
                         <button class="note-action-btn note-format-btn note-list-btn" type="button" data-note-format="list" title="Madde işareti" aria-label="Madde işareti">•</button>
                         <button class="note-action-btn note-lock-btn" type="button" title="Notu kilitle" aria-label="Notu kilitle">
@@ -5810,6 +5920,8 @@ updateDailyMotivation();
             const formatBtns = [...card.querySelectorAll('[data-note-format]')];
             const lockBtn = card.querySelector('.note-lock-btn');
             const lockIcon = card.querySelector('.note-lock-icon');
+            const childBtn = card.querySelector('.note-child-btn');
+
             const setLockUi = locked => {
                 card.classList.toggle('is-locked', locked);
                 titleEl?.setAttribute('contenteditable', locked ? 'false' : 'true');
@@ -5818,6 +5930,7 @@ updateDailyMotivation();
                 deleteBtn.disabled = locked;
                 copyBtn.disabled = false;
                 formatBtns.forEach(btn => btn.disabled = locked);
+                childBtn.disabled = !locked;
                 lockBtn.title = locked ? 'Notun kilidini aç' : 'Notu kilitle';
                 lockBtn.setAttribute('aria-label', locked ? 'Notun kilidini aç' : 'Notu kilitle');
                 if (locked) {
@@ -5842,6 +5955,13 @@ updateDailyMotivation();
                 const plainTitle = titleEl.textContent.replace(/\s+/g, ' ').trim().slice(0, 120);
                 saveNoteField('title', plainTitle);
             });
+            titleEl.addEventListener('click', () => {
+                if (note.locked !== true) return;
+                if (activeNoteId != null && !sameNoteId(activeNoteId, note.id)) noteNavigationStack.push(activeNoteId);
+                activeNoteId = note.id;
+                renderNotes('');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
             titleEl.addEventListener('keydown', e => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -5858,32 +5978,55 @@ updateDailyMotivation();
 
             let savedRange = null;
 
+            function rangeIsInsideArea(range) {
+                return !!range && area.contains(range.commonAncestorContainer);
+            }
+
             function rememberSelection() {
                 const selection = window.getSelection();
                 if (!selection || !selection.rangeCount) return;
                 const range = selection.getRangeAt(0);
-                if (!area.contains(range.commonAncestorContainer)) return;
+                if (!rangeIsInsideArea(range)) return;
                 savedRange = range.cloneRange();
                 updateFormatState();
             }
 
             function updateFormatState() {
-                const commands = { bold:'bold', italic:'italic', underline:'underline', strike:'strikeThrough', list:'insertUnorderedList' };
+                const commands = { bold:'bold', italic:'italic', underline:'underline', list:'insertUnorderedList' };
                 Object.entries(commands).forEach(([key, command]) => {
-                    const target = card.querySelector('[data-note-format=\"' + key + '\"]');
+                    const target = card.querySelector('[data-note-format="' + key + '"]');
                     if (target) target.classList.toggle('active', !!document.queryCommandState(command));
                 });
+                const selection = window.getSelection();
+                let colorBold = false;
+                if (selection && selection.rangeCount && rangeIsInsideArea(selection.getRangeAt(0))) {
+                    let node = selection.anchorNode;
+                    if (node && node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+                    colorBold = !!(node && node.closest && node.closest('strong[data-note-color-bold="true"]'));
+                }
+                const colorBtn = card.querySelector('[data-note-format="colorBold"]');
+                if (colorBtn) colorBtn.classList.toggle('active', colorBold);
             }
 
             function restoreSelection() {
-                if (!savedRange) { area.focus(); return; }
+                area.focus({ preventScroll: true });
                 const selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(savedRange);
-                area.focus();
+                if (!selection) return null;
+                if (savedRange && rangeIsInsideArea(savedRange)) {
+                    selection.removeAllRanges();
+                    selection.addRange(savedRange);
+                } else if (!selection.rangeCount || !rangeIsInsideArea(selection.getRangeAt(0))) {
+                    const range = document.createRange();
+                    range.selectNodeContents(area);
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    savedRange = range.cloneRange();
+                }
+                return selection.rangeCount ? selection.getRangeAt(0) : null;
             }
 
-            ['mouseup','keyup','focus'].forEach(type => area.addEventListener(type, rememberSelection));
+            ['mouseup','keyup','focus','input'].forEach(type => area.addEventListener(type, rememberSelection));
 
             area.addEventListener('keydown', e => {
                 if (e.key !== 'Enter' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return;
@@ -5892,15 +6035,16 @@ updateDailyMotivation();
                 const element = node && (node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement);
                 const listItem = element && element.closest ? element.closest('li') : null;
                 if (listItem && area.contains(listItem)) return;
+                // Native contenteditable paragraph behavior avoids creating accidental heading-sized blocks.
                 e.preventDefault();
-                restoreSelection();
-                document.execCommand('insertParagraph', false);
+                const range = restoreSelection();
+                if (range) document.execCommand('insertParagraph', false, null);
                 saveAreaSoon();
             });
 
             function saveAreaSoon() {
                 clearTimeout(area._saveTimer);
-                area._saveTimer = setTimeout(saveArea, 80);
+                area._saveTimer = setTimeout(saveArea, 120);
             }
 
             const saveArea = () => {
@@ -5908,19 +6052,47 @@ updateDailyMotivation();
                 if (!normalized) {
                     saveNoteField('content', '');
                     area.innerHTML = '';
+                    savedRange = null;
                     return;
                 }
 
-                if (area.innerHTML !== normalized) area.innerHTML = normalized;
+                if (area.innerHTML !== normalized) {
+                    const hadFocus = document.activeElement === area;
+                    const selection = window.getSelection();
+                    let oldRange = null;
+                    if (hadFocus && selection && selection.rangeCount && rangeIsInsideArea(selection.getRangeAt(0))) oldRange = selection.getRangeAt(0).cloneRange();
+                    area.innerHTML = normalized;
+                    // Normalizing during typing can invalidate the old range; do not steal focus or move the caret.
+                    if (hadFocus && oldRange) {
+                        try {
+                            const textLength = notePlainText(normalized).length;
+                            const range = document.createRange();
+                            range.selectNodeContents(area);
+                            range.collapse(false);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                            savedRange = range.cloneRange();
+                        } catch (_) {}
+                    }
+                }
                 saveNoteField('content', normalized);
             };
 
             area.addEventListener('input', saveAreaSoon);
-
             area.addEventListener('blur', saveArea);
 
-            /* Görsel yapıştırıldığında boyutları hemen güvenli hale getir. */
             area.addEventListener('paste', e => {
+                // Paste as plain text unless the clipboard contains an image; this prevents pasted heading/font-size styles.
+                const items = e.clipboardData && e.clipboardData.items ? Array.from(e.clipboardData.items) : [];
+                const hasImage = items.some(item => item.type && item.type.startsWith('image/'));
+                if (!hasImage) {
+                    e.preventDefault();
+                    const text = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
+                    restoreSelection();
+                    document.execCommand('insertText', false, text);
+                    saveAreaSoon();
+                    return;
+                }
                 setTimeout(() => {
                     area.querySelectorAll('img').forEach(img => {
                         img.removeAttribute('width');
@@ -5942,22 +6114,59 @@ updateDailyMotivation();
                     e.preventDefault();
                     if (note.locked === true) return;
                     rememberSelection();
-                    restoreSelection();
-                    const mode = btn.dataset.noteFormat;
-                    document.execCommand('styleWithCSS', false, true);
-                    if (mode === 'bold') document.execCommand('bold', false);
-                    else if (mode === 'italic') document.execCommand('italic', false);
-                    else if (mode === 'underline') document.execCommand('underline', false);
-                    else if (mode === 'strike') document.execCommand('strikeThrough', false);
-                    else if (mode === 'list') document.execCommand('insertUnorderedList', false);
-                    else if (mode === 'highlight') {
-                        const existing = (document.queryCommandValue('hiliteColor') || document.queryCommandValue('backColor') || '').toLowerCase();
-                        const isHighlighted = existing.includes('255, 241, 118') || existing.includes('255,241,118') || existing.includes('#fff176');
-                        document.execCommand('hiliteColor', false, isHighlighted ? 'transparent' : '#fff176');
-                    }
-                    updateFormatState();
-                    saveArea();
                 });
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    if (note.locked === true) return;
+                    const range = restoreSelection();
+                    if (!range) return;
+                    const mode = btn.dataset.noteFormat;
+                    if (mode === 'colorBold') {
+                        if (range.collapsed) return;
+                        const selected = range.extractContents();
+                        const wrapper = document.createElement('strong');
+                        wrapper.setAttribute('data-note-color-bold', 'true');
+                        wrapper.appendChild(selected);
+                        range.insertNode(wrapper);
+                        const after = document.createRange();
+                        after.selectNodeContents(wrapper);
+                        after.collapse(false);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(after);
+                        savedRange = after.cloneRange();
+                    } else {
+                        document.execCommand('styleWithCSS', false, false);
+                        if (mode === 'bold') document.execCommand('bold', false, null);
+                        else if (mode === 'italic') document.execCommand('italic', false, null);
+                        else if (mode === 'underline') document.execCommand('underline', false, null);
+                        else if (mode === 'list') document.execCommand('insertUnorderedList', false, null);
+                        else if (mode === 'highlight') {
+                            const selectedNode = window.getSelection()?.anchorNode;
+                            const parent = selectedNode && (selectedNode.nodeType === Node.TEXT_NODE ? selectedNode.parentElement : selectedNode);
+                            const mark = parent && parent.closest ? parent.closest('span[style*="background-color"]') : null;
+                            if (mark && area.contains(mark)) {
+                                const text = document.createTextNode(mark.textContent || '');
+                                mark.replaceWith(text);
+                            } else if (!range.collapsed) {
+                                const selected = range.extractContents();
+                                const span = document.createElement('span');
+                                span.style.backgroundColor = '#fff176';
+                                span.appendChild(selected);
+                                range.insertNode(span);
+                            }
+                        }
+                    }
+                    rememberSelection();
+                    saveArea();
+                    updateFormatState();
+                });
+            });
+
+            childBtn.addEventListener('click', () => {
+                if (note.locked !== true) return;
+                saveArea();
+                createChildNote(note);
             });
 
             lockBtn.addEventListener('click', () => {
@@ -5980,9 +6189,37 @@ updateDailyMotivation();
     }
 
 
-    /* =========================================================
-       NOT GÜNCELLEME
-    ========================================================= */
+    function createUniqueNoteId() {
+        let id = Date.now();
+        while (notesData.some(note => sameNoteId(note.id, id))) id += 1;
+        return id;
+    }
+
+    function persistNotes() {
+        localStorage.setItem('yks_box_data_v11', JSON.stringify(notesData));
+    }
+
+    function createChildNote(parentNote) {
+        const nextColor = parentNote.color || systemColors[notesData.length % systemColors.length];
+        const child = {
+            id: createUniqueNoteId(),
+            title: 'Yeni alt not',
+            content: '',
+            color: nextColor,
+            tag: 'yildiz',
+            locked: false,
+            parentNoteId: parentNote.id
+        };
+        notesData.push(child);
+        persistNotes();
+        activeNoteId = parentNote.id;
+        renderNotes('');
+        setTimeout(() => {
+            const card = notesGrid.querySelector('[data-note-id="' + String(child.id) + '"]');
+            const title = card && card.querySelector('.editable-title');
+            if (title) { title.focus(); document.execCommand('selectAll', false, null); }
+        }, 30);
+    }
 
     function updateData(
         id,
@@ -6029,7 +6266,7 @@ updateDailyMotivation();
 
             notesData.push({
 
-                id: Date.now(),
+                id: createUniqueNoteId(),
 
                 title: 'Başlık',
 
@@ -6094,10 +6331,13 @@ updateDailyMotivation();
 
     searchBar.addEventListener(
         'input',
-        e =>
-            renderNotes(
-                e.target.value
-            )
+        e => {
+            if (activeNoteId != null) {
+                activeNoteId = null;
+                noteNavigationStack.length = 0;
+            }
+            renderNotes(e.target.value);
+        }
     );
 
 
