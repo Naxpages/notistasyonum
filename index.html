@@ -4180,6 +4180,106 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 }
 </style>
 
+
+<style id="program-live-workspace-v2-style">
+/* Programım v2 — saat akışı ve tek tek görev yönetimi */
+.program-pane{padding:18px 0 58px!important;}
+.program-shell{width:min(1160px,94%)!important;}
+.program-topbar{margin:2px 0 18px!important;}
+.program-date-label{display:block!important;color:#8494a1!important;font-size:.68rem!important;margin-top:6px!important;}
+.program-hero-card{min-height:390px!important;border-radius:27px!important;margin-bottom:20px!important;}
+.program-hero-overlay{background:linear-gradient(90deg,rgba(5,9,13,.97) 0%,rgba(5,9,13,.88) 36%,rgba(5,9,13,.62) 70%,rgba(5,9,13,.50) 100%),linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.38))!important;}
+.program-hero-content{display:grid!important;grid-template-columns:minmax(0,.88fr) minmax(360px,1.12fr)!important;align-items:stretch!important;gap:clamp(24px,4vw,56px)!important;max-width:none!important;min-height:390px!important;padding:30px clamp(24px,3.2vw,42px)!important;}
+.program-focus-info{min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+.program-live-pill{font-size:.53rem!important;letter-spacing:.8px!important;padding:8px 11px!important;}
+.program-live-dot{width:7px!important;height:7px!important;}
+.program-focus-time{font-size:clamp(2.6rem,5vw,4.8rem)!important;letter-spacing:-.075em!important;line-height:.96!important;margin-top:22px!important;max-width:100%;}
+.program-focus-name{font-size:clamp(1rem,1.65vw,1.25rem)!important;margin-top:12px!important;color:#d1dce3!important;}
+.program-focus-range{font-size:clamp(.88rem,1.4vw,1.05rem)!important;margin-top:8px!important;color:#a9d5ec!important;font-variant-numeric:tabular-nums;}
+.program-focus-progress{width:min(100%,510px)!important;height:5px!important;margin-top:22px!important;}
+.program-focus-footnote{margin-top:15px;color:rgba(219,232,240,.58);font-size:.66rem;line-height:1.5;}
+.program-current-tasks{min-width:0;display:flex;flex-direction:column;justify-content:center;padding:8px 0 8px clamp(22px,3vw,38px);border-left:1px solid rgba(255,255,255,.14);background:linear-gradient(90deg,rgba(255,255,255,.018),rgba(255,255,255,.045));border-radius:0 15px 15px 0;}
+.program-current-tasks-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;padding-right:6px;}
+.program-current-tasks-kicker{color:#8bb9d0;font-size:.53rem;font-weight:900;letter-spacing:1.8px;}
+.program-current-tasks-title{margin-top:7px;color:#f1f6f8;font-size:clamp(1.05rem,1.8vw,1.35rem);font-weight:760;letter-spacing:-.035em;}
+.program-current-tasks-count{flex:0 0 auto;color:#b7c9d4;font-size:.73rem;font-weight:800;font-variant-numeric:tabular-nums;padding-bottom:3px;}
+.program-current-task-list{display:grid;gap:7px;max-height:276px;overflow:auto;padding-right:8px;scrollbar-width:thin;scrollbar-color:rgba(176,202,218,.24) transparent;}
+.program-current-task-list::-webkit-scrollbar{width:5px;}
+.program-current-task-list::-webkit-scrollbar-thumb{background:rgba(176,202,218,.22);border-radius:99px;}
+.program-focus-task-row{display:grid;grid-template-columns:28px minmax(0,1fr) 32px;align-items:center;gap:11px;min-height:54px;padding:7px 8px 7px 0;border-bottom:1px solid rgba(255,255,255,.075);transition:background .16s ease,opacity .16s ease;cursor:pointer;}
+.program-focus-task-row:last-child{border-bottom-color:transparent;}
+.program-focus-task-toggle{width:25px;height:25px;border-radius:8px;border:1px solid rgba(199,220,232,.32);background:rgba(5,11,16,.38);color:transparent;display:grid;place-items:center;cursor:pointer;transition:.16s ease;}
+.program-focus-task-toggle svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.program-focus-task-toggle:hover{border-color:#9bcbea;color:#9bcbea;background:rgba(109,174,212,.12);}
+.program-focus-task-copy{min-width:0;}
+.program-focus-task-name{color:#e3edf2;font-size:.76rem;font-weight:690;line-height:1.35;overflow-wrap:anywhere;}
+.program-focus-task-meta{margin-top:4px;color:#8295a2;font-size:.57rem;font-weight:600;letter-spacing:.01em;}
+.program-focus-task-row.carried .program-focus-task-meta{color:#e6b97b;}
+.program-focus-task-link{width:29px;height:29px;border-radius:9px;border:1px solid rgba(135,194,231,.15);background:rgba(85,151,196,.09);color:#a5d7f2;display:grid;place-items:center;cursor:pointer;}
+.program-focus-task-link svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-focus-task-link.locked{color:#82919b;background:rgba(255,255,255,.025);cursor:not-allowed;}
+.program-focus-task-row.done .program-focus-task-toggle{background:rgba(100,190,145,.17);border-color:rgba(125,214,167,.48);color:#9ce0b8;}
+.program-focus-task-row.done .program-focus-task-name{color:#81928d;text-decoration:line-through;text-decoration-thickness:1px;}
+.program-focus-task-row.done .program-focus-task-meta{color:#687a75;}
+.program-current-tasks-empty{padding:22px 14px 22px 0;color:#9aabb5;font-size:.72rem;line-height:1.7;}
+.program-days{margin-bottom:2px!important;}
+.program-sessions{display:grid!important;gap:22px!important;}
+.program-timeline-section{min-width:0;}
+.program-timeline-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 2px 10px;}
+.program-timeline-section-title{color:#d4e0e7;font-size:.64rem;font-weight:900;letter-spacing:1.45px;}
+.program-timeline-section-sub{color:#637583;font-size:.59rem;font-weight:600;}
+.program-history-deck{display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:5px 8px 14px 10px;scrollbar-width:thin;scrollbar-color:rgba(157,183,199,.18) transparent;}
+.program-history-deck::-webkit-scrollbar{height:5px;}
+.program-history-deck::-webkit-scrollbar-thumb{background:rgba(157,183,199,.18);border-radius:99px;}
+.program-timeline-card{position:relative;min-width:0;border:1px solid rgba(255,255,255,.075);background:linear-gradient(145deg,#151d23,#0d1318);border-radius:17px;padding:14px 15px;box-shadow:0 12px 28px rgba(0,0,0,.16);}
+.program-history-deck .program-timeline-card{flex:0 0 188px;min-height:94px;margin-left:-28px;z-index:1;opacity:.82;transform:none;}
+.program-history-deck .program-timeline-card:first-child{margin-left:0;}
+.program-timeline-card.past{background:linear-gradient(145deg,#11181e,#0c1116);border-color:rgba(255,255,255,.055);}
+.program-timeline-card-time{color:#aabac4;font-size:.72rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.program-timeline-card-name{margin-top:8px;color:#e1e9ee;font-size:.84rem;font-weight:750;letter-spacing:-.02em;}
+.program-timeline-card-meta{margin-top:7px;color:#748591;font-size:.52rem;font-weight:900;letter-spacing:.8px;}
+.program-upcoming-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.program-upcoming-grid .program-timeline-card{min-height:112px;transition:border-color .18s ease,transform .18s ease,background .18s ease;}
+.program-upcoming-grid .program-timeline-card:hover{transform:translateY(-2px);border-color:rgba(124,190,229,.24);}
+.program-timeline-card.upcoming{background:linear-gradient(145deg,rgba(24,34,42,.92),rgba(12,17,22,.98));}
+.program-timeline-card.upcoming .program-timeline-card-meta{color:#7fa5bc;}
+.program-timeline-card.exam{border-style:dashed;border-color:rgba(235,194,131,.20);}
+.program-timeline-card.exam .program-timeline-card-meta{color:#c8a875;}
+.program-empty{padding:30px 22px!important;border-radius:18px!important;}
+@media(max-width:850px){
+ .program-hero-card,.program-hero-content{min-height:0!important;}
+ .program-hero-content{grid-template-columns:1fr!important;gap:22px!important;padding:26px 24px!important;}
+ .program-current-tasks{border-left:0;border-top:1px solid rgba(255,255,255,.14);padding:20px 0 0;background:transparent;border-radius:0;}
+ .program-current-task-list{max-height:300px;}
+ .program-upcoming-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:600px){
+ .program-pane{padding:12px 0 38px!important;}
+ .program-shell{width:94%!important;}
+ .program-hero-card{border-radius:21px!important;}
+ .program-hero-content{padding:22px 18px!important;gap:20px!important;}
+ .program-focus-time{font-size:clamp(2.5rem,12vw,3.5rem)!important;margin-top:18px!important;}
+ .program-focus-name{font-size:.94rem!important;}
+ .program-focus-range{font-size:.86rem!important;}
+ .program-current-tasks-title{font-size:1.08rem;}
+ .program-focus-task-row{min-height:52px;}
+ .program-focus-task-name{font-size:.73rem;}
+ .program-days{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:5px!important;padding-bottom:15px!important;}
+ .program-day{height:59px!important;border-radius:12px!important;}
+ .program-day strong{font-size:.68rem!important;}
+ .program-day span{font-size:.49rem!important;}
+ .program-timeline-section-head{align-items:flex-start;flex-direction:column;gap:4px;}
+ .program-history-deck .program-timeline-card{flex-basis:154px;padding:12px 12px;}
+ .program-history-deck .program-timeline-card{margin-left:-34px;}
+ .program-history-deck .program-timeline-card:first-child{margin-left:0;}
+ .program-upcoming-grid{grid-template-columns:1fr 1fr;gap:8px;}
+ .program-upcoming-grid .program-timeline-card{min-height:98px;padding:12px;}
+ .program-timeline-card-time{font-size:.66rem;}
+ .program-timeline-card-name{font-size:.76rem;}
+}
+@media(prefers-reduced-motion:reduce){.program-focus-task-row,.program-timeline-card{transition:none!important;}}
+</style>
+
 </head>
 
 <body>
@@ -4762,11 +4862,24 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                         <div class="program-hero-bg" aria-hidden="true"></div>
                         <div class="program-hero-overlay"></div>
                         <div class="program-hero-content">
-                            <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">ŞU AN</span></div>
-                            <div class="program-focus-time" id="program-focus-time">Program hazır</div>
-                            <div class="program-focus-name" id="program-focus-name">--:-- — --:--</div>
-                            <div class="program-focus-range" id="program-focus-range">-- dk</div>
-                            <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
+                            <div class="program-focus-info">
+                                <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">ŞU AN DEVAM EDİYOR</span></div>
+                                <div class="program-focus-time" id="program-focus-time">Program hazır</div>
+                                <div class="program-focus-name" id="program-focus-name">--:-- — --:--</div>
+                                <div class="program-focus-range" id="program-focus-range">--:--</div>
+                                <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
+                                <div class="program-focus-footnote" id="program-focus-footnote">Program saatine göre otomatik ilerler</div>
+                            </div>
+                            <section class="program-current-tasks" aria-label="Şu anki etüt görevleri">
+                                <div class="program-current-tasks-head">
+                                    <div>
+                                        <div class="program-current-tasks-kicker">ÇALIŞMA ALANI</div>
+                                        <div class="program-current-tasks-title" id="program-current-tasks-title">Bu etütteki görevler</div>
+                                    </div>
+                                    <div class="program-current-tasks-count" id="program-current-tasks-count">0 / 0</div>
+                                </div>
+                                <div class="program-current-task-list" id="program-current-task-list"></div>
+                            </section>
                         </div>
                     </div>
 
@@ -6414,7 +6527,10 @@ updateDailyMotivation();
                 selectedAvatarEffect,
 
             campCompleted:
-                campCompleted
+                campCompleted,
+
+            programAssignments:
+                programAssignments
 
         };
 
@@ -6589,6 +6705,10 @@ updateDailyMotivation();
                         selectedAvatarEffect = plusActive && AVATAR_EFFECTS.includes(backup.avatarEffect) ? backup.avatarEffect : 'none';
                         campCompleted = backup.campCompleted && typeof backup.campCompleted === 'object' ? backup.campCompleted : {};
                         localStorage.setItem('yks_camp_completed', JSON.stringify(campCompleted));
+                        if (backup.programAssignments && typeof backup.programAssignments === 'object' && !Array.isArray(backup.programAssignments)) {
+                            programAssignments = backup.programAssignments;
+                            localStorage.setItem(PROGRAM_ASSIGNMENTS_KEY, JSON.stringify(programAssignments));
+                        }
                         localStorage.setItem('yks_plus_active', plusActive ? 'true' : 'false');
                         localStorage.setItem('yks_pro_active', proActive ? 'true' : 'false');
                         localStorage.setItem('yks_avatar_style', selectedAvatarStyle);
@@ -8289,6 +8409,13 @@ updateDailyMotivation();
         return group;
     }
     function saveTaskGroups(){ localStorage.setItem(TASK_GROUPS_KEY,JSON.stringify(taskGroups)); }
+    // The former etut checkbox used autoDone=true for tasks it marked complete in bulk.
+    // Those are not individually completed by the user, so reopen only that legacy state.
+    let legacyAutoDoneReopened=false;
+    taskGroups.forEach(group=>group.tasks.forEach(task=>{
+        if(task.autoDone===true){task.done=false;task.autoDone=false;legacyAutoDoneReopened=true;}
+    }));
+    if(legacyAutoDoneReopened)saveTaskGroups();
     function dateFromKey(key){ const [y,m,d]=String(key).split('-').map(Number); const dt=new Date(y,m-1,d); dt.setHours(12,0,0,0); return dt; }
     function weekDateKey(day){
         const now=new Date(); const todayDay=now.getDay(); const mondayOffset=todayDay===0?-6:1-todayDay; const monday=new Date(now); monday.setDate(now.getDate()+mondayOffset); monday.setHours(12,0,0,0); const dt=new Date(monday); dt.setDate(monday.getDate()+(day===0?6:day-1)); return campDateKey(dt);
@@ -8521,169 +8648,232 @@ updateDailyMotivation();
         });
         return units;
     }
+    const PROGRAM_ASSIGNMENTS_KEY='yks_program_task_assignments_v1';
+    let programAssignments=(()=>{
+        try{
+            const value=JSON.parse(localStorage.getItem(PROGRAM_ASSIGNMENTS_KEY)||'{}');
+            return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
+        }catch(_){return {};}
+    })();
+    function saveProgramAssignments(){
+        try{localStorage.setItem(PROGRAM_ASSIGNMENTS_KEY,JSON.stringify(programAssignments));}
+        catch(error){console.warn('[Not İstasyonu] Program görev dağılımı kaydedilemedi:',error);}
+    }
     function programStudySlots(dateKey){
-        const dt=dateFromKey(dateKey); const day=dt.getDay(); const schedule=CAMP_SCHEDULE[day]||[];
-        return schedule.map((item,index)=>({item,index})).filter(x=>x.item.id!=='exam');
+        const dt=dateFromKey(dateKey);
+        const schedule=CAMP_SCHEDULE[dt.getDay()]||[];
+        return schedule.map((item,index)=>({item,index})).filter(slot=>slot.item.id!=='exam');
     }
-    function programStartIndex(dateKey,slots){
-        if(dateKey!==campTodayKey())return 0;
-        const now=new Date();
-        const schedule=CAMP_SCHEDULE[now.getDay()]||[];
-        const current=campCurrentIndex(schedule,now);
-        if(current>=0){const ix=slots.findIndex(x=>x.index===current);return ix>=0?ix:0;}
-        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-        const next=slots.findIndex(x=>campTimeToMinutes(x.item.time)>nowMinute);
-        return next>=0?next:Math.max(0,slots.length-1);
+    function programFocusState(dateKey,now=new Date()){
+        const dt=dateFromKey(dateKey);
+        const schedule=CAMP_SCHEDULE[dt.getDay()]||[];
+        if(!schedule.length)return {schedule,focusIndex:-1,currentIndex:-1,mode:'empty',targetStudyIndex:-1};
+        const today=dateKey===campTodayKey();
+        const future=dt.getTime()>new Date(new Date().setHours(0,0,0,0)).getTime();
+        let focusIndex=-1,currentIndex=-1,mode='';
+        if(today){
+            currentIndex=campCurrentIndex(schedule,now);
+            if(currentIndex>=0){focusIndex=currentIndex;mode='current';}
+            else{
+                const minute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+                focusIndex=schedule.findIndex(item=>campTimeToMinutes(item.time)>minute);
+                if(focusIndex>=0)mode='next';
+                else{focusIndex=schedule.length-1;mode='done';}
+            }
+        }else if(future){focusIndex=0;mode='future';}
+        else{focusIndex=schedule.length-1;mode='past';}
+        const studySlots=programStudySlots(dateKey);
+        let targetStudyIndex=-1;
+        if(focusIndex>=0){
+            const focusItem=schedule[focusIndex];
+            if(focusItem.id==='exam'){
+                targetStudyIndex=studySlots.find(slot=>slot.index>focusIndex)?.index ?? -1;
+            }else{
+                targetStudyIndex=focusIndex;
+            }
+        }
+        if((mode==='done'||mode==='past')&&studySlots.length){
+            targetStudyIndex=studySlots[studySlots.length-1].index;
+        }
+        return {schedule,focusIndex,currentIndex,mode,targetStudyIndex,today,future};
     }
-    function allocateProgramUnits(dateKey){
-        const slots=programStudySlots(dateKey); const map=new Map(slots.map(x=>[x.index,[]]));
-        if(!slots.length)return map;
-        const bound=taskGroups.filter(g=>g.programDate===dateKey);
-        const units=taskUnitsForGroups(bound);
-        if(!units.length)return map;
-        const doneSet=new Set(campCompleted[dateKey]||[]);
-        const start=programStartIndex(dateKey,slots);
-        const remaining=slots.filter((x,i)=>i>=start&&!doneSet.has(x.item.id));
-        if(!remaining.length)return map;
-        // Each lesson (+ its linked question task) is one work unit.
-        // Spread units as evenly as possible; never split a linked pair.
-        const base=Math.floor(units.length/remaining.length);
-        const extra=units.length%remaining.length;
+    function getBoundProgramGroups(dateKey){
+        return taskGroups.filter(group=>group.programDate===dateKey);
+    }
+    function programEntriesForGroups(groups){
+        const entries=[];
+        groups.forEach(group=>group.tasks.forEach(task=>entries.push({task,group})));
+        return entries;
+    }
+    function distributeProgramUnits(units,slots,assignment){
+        if(!units.length||!slots.length)return;
+        const base=Math.floor(units.length/slots.length);
+        const extra=units.length%slots.length;
         let cursor=0;
-        remaining.forEach((slot,i)=>{
-            const count=base+(i<extra?1:0);
-            if(count>0)map.set(slot.index,units.slice(cursor,cursor+count));
-            cursor+=count;
+        slots.forEach((slot,index)=>{
+            const amount=base+(index<extra?1:0);
+            for(let i=0;i<amount&&cursor<units.length;i++,cursor++){
+                const unit=units[cursor];
+                const ids=assignment[slot.item.id]||(assignment[slot.item.id]=[]);
+                unit.items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
+            }
         });
-        return map;
+        // Defensive fallback if slots/units change unexpectedly.
+        while(cursor<units.length){
+            const slot=slots[slots.length-1];
+            const ids=assignment[slot.item.id]||(assignment[slot.item.id]=[]);
+            units[cursor++].items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
+        }
+    }
+    function programAssignmentStartSlots(dateKey,slots){
+        if(!slots.length)return [];
+        const state=programFocusState(dateKey);
+        if(dateKey!==campTodayKey())return slots;
+        if(state.targetStudyIndex>=0){
+            const at=slots.findIndex(slot=>slot.index>=state.targetStudyIndex);
+            if(at>=0)return slots.slice(at);
+        }
+        return [slots[slots.length-1]];
+    }
+    function ensureProgramAssignments(dateKey){
+        const slots=programStudySlots(dateKey);
+        if(!slots.length)return {};
+        const groups=getBoundProgramGroups(dateKey);
+        const allEntries=programEntriesForGroups(groups);
+        const validIds=new Set(allEntries.map(entry=>String(entry.task.id)));
+        let assignment=programAssignments[dateKey];
+        let changed=false;
+        if(!assignment||typeof assignment!=='object'||Array.isArray(assignment)){
+            assignment={};
+            slots.forEach(slot=>assignment[slot.item.id]=[]);
+            const pendingGroups=groups.map(group=>({...group,tasks:group.tasks.filter(task=>!task.done)}));
+            const units=taskUnitsForGroups(pendingGroups);
+            distributeProgramUnits(units,programAssignmentStartSlots(dateKey,slots),assignment);
+            programAssignments[dateKey]=assignment;
+            changed=true;
+        }else{
+            slots.forEach(slot=>{
+                if(!Array.isArray(assignment[slot.item.id])){assignment[slot.item.id]=[];changed=true;}
+            });
+            Object.keys(assignment).forEach(sessionId=>{
+                if(!slots.some(slot=>String(slot.item.id)===String(sessionId))){delete assignment[sessionId];changed=true;return;}
+                const next=assignment[sessionId].map(String).filter(id=>validIds.has(id));
+                if(next.length!==assignment[sessionId].length||next.some((id,i)=>id!==String(assignment[sessionId][i]))){assignment[sessionId]=next;changed=true;}
+            });
+            const assignedIds=new Set(Object.values(assignment).flat().map(String));
+            const unassignedGroups=groups.map(group=>({...group,tasks:group.tasks.filter(task=>!task.done&&!assignedIds.has(String(task.id)))})).filter(group=>group.tasks.length);
+            const newUnits=taskUnitsForGroups(unassignedGroups);
+            if(newUnits.length){
+                const remaining=programAssignmentStartSlots(dateKey,slots);
+                // Spread new tasks toward the least-loaded remaining session without moving existing work.
+                const counts=new Map(remaining.map(slot=>[slot.item.id,(assignment[slot.item.id]||[]).filter(id=>{
+                    const entry=allEntries.find(item=>String(item.task.id)===String(id));
+                    return entry&&!entry.task.done;
+                }).length]));
+                newUnits.forEach(unit=>{
+                    let target=remaining[0];
+                    remaining.forEach(slot=>{if((counts.get(slot.item.id)||0)<(counts.get(target.item.id)||0))target=slot;});
+                    const ids=assignment[target.item.id]||(assignment[target.item.id]=[]);
+                    unit.items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
+                    counts.set(target.item.id,(counts.get(target.item.id)||0)+unit.items.length);
+                });
+                changed=true;
+            }
+        }
+        if(changed){programAssignments[dateKey]=assignment;saveProgramAssignments();}
+        return assignment;
+    }
+    function getProgramSessionEntries(dateKey,sessionIndex,{includeCarry=false}={}){
+        const schedule=CAMP_SCHEDULE[dateFromKey(dateKey).getDay()]||[];
+        const slots=programStudySlots(dateKey);
+        const assignment=ensureProgramAssignments(dateKey);
+        const groups=getBoundProgramGroups(dateKey);
+        const entryById=new Map(programEntriesForGroups(groups).map(entry=>[String(entry.task.id),entry]));
+        const session=schedule[sessionIndex];
+        if(!session||session.id==='exam')return [];
+        const out=[];
+        const seen=new Set();
+        const add=(id,carried=false)=>{
+            const key=String(id); if(seen.has(key))return;
+            const entry=entryById.get(key); if(!entry)return;
+            seen.add(key); out.push({...entry,carried});
+        };
+        (assignment[session.id]||[]).forEach(id=>add(id,false));
+        if(includeCarry&&dateKey===campTodayKey()){
+            const state=programFocusState(dateKey);
+            if(state.targetStudyIndex===sessionIndex){
+                slots.filter(slot=>slot.index<sessionIndex).forEach(slot=>{
+                    (assignment[slot.item.id]||[]).forEach(id=>{
+                        const entry=entryById.get(String(id));
+                        if(entry&&!entry.task.done)add(id,true);
+                    });
+                });
+            }
+        }
+        return out;
+    }
+    function programTaskToggle(taskId){
+        const wanted=String(taskId);
+        for(const group of taskGroups){
+            const task=group.tasks.find(item=>String(item.id)===wanted);
+            if(!task)continue;
+            task.done=!task.done;
+            task.autoDone=false;
+            saveTaskGroups();
+            renderProgramPage();
+            if(tasksPage?.classList.contains('open'))renderTasks();
+            return;
+        }
     }
     function renderProgramDays(){
         programDays.innerHTML=''; const today=new Date().getDay(); const order=[1,2,3,4,5,6,0]; order.forEach(day=>{const key=weekDateKey(day);const dt=dateFromKey(key);const b=document.createElement('button');b.type='button';b.className='program-day'+(day===programSelectedDay?' active':'')+(day===today?' today':'');b.innerHTML=`<strong>${CAMP_DAY_SHORT[day]}</strong><span>${dt.getDate()}.${String(dt.getMonth()+1).padStart(2,'0')}</span>`;b.addEventListener('click',()=>{programSelectedDay=day;renderProgramDays();renderProgramPage();});programDays.appendChild(b);});
     }
-    function programTaskIdsForSession(dateKey, sessionId){
-        const allocations=allocateProgramUnits(dateKey);
-        const schedule=CAMP_SCHEDULE[dateFromKey(dateKey).getDay()]||[];
-        const idx=schedule.findIndex(x=>x.id===sessionId);
-        if(idx<0)return [];
-        const units=allocations.get(idx)||[];
-        return units.flatMap(unit=>unit.items.map(task=>({task,group:unit.group})));
-    }
-    function setProgramSessionDone(dateKey, sessionId, nextDone){
-        const set=Array.isArray(campCompleted[dateKey])?[...campCompleted[dateKey]]:[];
-        const p=set.indexOf(sessionId);
-        const autoKey=dateKey+'|'+sessionId;
-        if(nextDone){
-            // Assignment must be captured BEFORE the etüt is marked complete;
-            // completed etütler are intentionally removed from redistribution.
-            const assigned=programTaskIdsForSession(dateKey,sessionId);
-            const ids=[];
-            assigned.forEach(({task})=>{
-                const live=taskGroups.flatMap(g=>g.tasks).find(t=>t.id===task.id);
-                if(!live || live.done) return;
-                live.done=true; live.autoDone=true; ids.push(live.id);
-            });
-            if(p<0)set.push(sessionId);
-            campAutoDone[autoKey]=ids;
-        }else{
-            if(p>=0)set.splice(p,1);
-            const ids=Array.isArray(campAutoDone[autoKey])?campAutoDone[autoKey]:[];
-            taskGroups.forEach(g=>g.tasks.forEach(t=>{
-                if(ids.includes(t.id) && t.autoDone){t.done=false;t.autoDone=false;}
-            }));
-            delete campAutoDone[autoKey];
-        }
-        campCompleted[dateKey]=set;
-        localStorage.setItem('yks_camp_completed',JSON.stringify(campCompleted));
-        saveCampAutoDone();
-        saveTaskGroups();
-    }
-    function appendProgramTaskChip(stack, task, groupName, currentSession){
-        const chip=document.createElement('div');
+    function appendProgramFocusTask(container,entry){
+        const {task,group,carried}=entry;
+        const row=document.createElement('div');
+        row.className='program-focus-task-row'+(task.done?' done':'')+(carried?' carried':'');
+        row.dataset.taskId=String(task.id);
+        row.title='Görevi tamamlamak veya yeniden açmak için tıkla';
+        row.addEventListener('click',event=>{
+            if(event.target.closest('.program-focus-task-link,.program-focus-task-toggle'))return;
+            programTaskToggle(task.id);
+        });
+        const check=document.createElement('button');
+        check.type='button';
+        check.className='program-focus-task-toggle';
+        check.setAttribute('aria-label',task.done?'Görevi yeniden aç':'Görevi tamamla');
+        check.setAttribute('aria-pressed',String(!!task.done));
+        check.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.2 4.2L19 6.8"></path></svg>';
+        check.addEventListener('click',event=>{event.stopPropagation();programTaskToggle(task.id);});
+        const copy=document.createElement('div');
+        copy.className='program-focus-task-copy';
+        const title=document.createElement('div');
+        title.className='program-focus-task-name';
+        title.textContent=task.title||'Başlıksız görev';
+        const meta=document.createElement('div');
+        meta.className='program-focus-task-meta';
+        meta.textContent=carried?'Önceki etütten devretti':String(group.title||'Görev grubu');
+        copy.append(title,meta);
+        row.append(check,copy);
         const match=smartMatch(task.title);
-        chip.className='program-task-chip'+(match?' matched':'');
-        if(match?.thumb){
-            const thumbWrap=document.createElement('span');thumbWrap.className='program-task-thumb has-thumb'+(match.premium&&!(proActive||plusActive)?' locked':'');
-            const img=document.createElement('img');img.src=match.thumb;img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';
-            img.addEventListener('error',()=>{thumbWrap.remove();});
-            thumbWrap.appendChild(img);chip.appendChild(thumbWrap);
-        }
-        const text=document.createElement('span');text.className='program-task-text';text.textContent=task.title;text.title=task.title;chip.appendChild(text);
         if(match){
-            if(match.premium&&!(proActive||plusActive)){
-                const lock=document.createElement('span');lock.className='program-task-open';lock.setAttribute('aria-hidden','true');lock.innerHTML='<svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>';chip.appendChild(lock);
-            }else{
-                const btn=document.createElement('button');btn.type='button';btn.className='program-task-open';btn.title=match.name;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';btn.addEventListener('click',e=>{e.stopPropagation();window.open(match.url,'_blank','noopener');});chip.appendChild(btn);
-            }
+            const link=document.createElement('button');
+            link.type='button';
+            link.className='program-focus-task-link'+(match.premium&&!(proActive||plusActive)?' locked':'');
+            link.title=match.premium&&!(proActive||plusActive)?'Bu içerik Pro veya Plus üyelik gerektirir':match.name;
+            link.setAttribute('aria-label',link.title);
+            link.innerHTML=match.premium&&!(proActive||plusActive)
+                ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>'
+                :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>';
+            if(!(match.premium&&!(proActive||plusActive)))link.addEventListener('click',()=>window.open(match.url,'_blank','noopener'));
+            row.appendChild(link);
         }
-        stack.appendChild(chip);
+        container.appendChild(row);
     }
     function formatRemainingText(totalSeconds){
         const sec=Math.max(0,Math.round(Number(totalSeconds)||0));
         const mins=Math.floor(sec/60), s=sec%60;
         return `${mins} dk ${s} sn kaldı`;
-    }
-    function renderProgramPage(){
-        if(!programSessions)return;
-        renderProgramDays();
-        const key=programSelectedDateKey(); const dt=dateFromKey(key); const day=dt.getDay();
-        const schedule=CAMP_SCHEDULE[day]||[]; const doneSet=new Set(campCompleted[key]||[]); const allocations=allocateProgramUnits(key);
-        const now=new Date(); const isToday=key===campTodayKey(); const currentIndex=isToday?campCurrentIndex(schedule,now):-1;
-        const dateText=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
-        programDateLabel.textContent=dateText;
-        const kicker=document.getElementById('program-hero-kicker');if(kicker)kicker.textContent=isToday?'BUGÜN':dt.toLocaleDateString('tr-TR',{weekday:'long'}).toLocaleUpperCase('tr-TR');
-        const focusTime=document.getElementById('program-focus-time');
-        const focusName=document.getElementById('program-focus-name');
-        const focusRemaining=document.getElementById('program-focus-remaining');
-        const focusRange=document.getElementById('program-focus-range');
-        const focusFill=document.getElementById('program-focus-progress-fill');
-        const nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-        let focusItem=null,focusIndex=-1,focusMode='';
-        if(isToday && currentIndex>=0){focusIndex=currentIndex;focusItem=schedule[currentIndex];focusMode='current';}
-        else if(isToday){focusIndex=schedule.findIndex(x=>campTimeToMinutes(x.time)>nowMinute);if(focusIndex>=0){focusItem=schedule[focusIndex];focusMode='next';}else if(schedule.length){focusIndex=schedule.length-1;focusItem=schedule[focusIndex];focusMode='done';}}
-        else if(dt.getTime()>new Date(new Date().setHours(0,0,0,0)).getTime()){focusIndex=schedule.findIndex(x=>x.id!=='exam');if(focusIndex<0)focusIndex=0;focusItem=schedule[focusIndex];focusMode='future';}
-        else if(schedule.length){focusIndex=schedule.length-1;focusItem=schedule[focusIndex];focusMode='past';}
-        if(focusItem){
-            focusTime.textContent=focusItem.name||'Etüt';
-            focusName.textContent=focusItem.time||'--:-- — --:--';
-            const start=campTimeToMinutes(focusItem.time||'00:00'); const end=campEndMinutes(focusItem.time||'00:00');
-            if(focusMode==='current'){
-                const secondsLeft=Math.max(0,Math.round(end*60-(now.getHours()*3600+now.getMinutes()*60+now.getSeconds())));
-                focusRemaining.textContent='ŞU AN'; focusRange.textContent=`${Math.max(1,Math.floor(secondsLeft/60))} dk kaldı`;
-                const pct=Math.max(0,Math.min(100,((nowMinute-start)/(end-start))*100));focusFill.style.width=pct+'%';
-            }else if(focusMode==='next'){
-                const secondsUntil=Math.max(0,Math.round(start*60-(now.getHours()*3600+now.getMinutes()*60+now.getSeconds())));
-                focusRemaining.textContent='SIRADAKİ';focusRange.textContent=`${Math.max(1,Math.ceil(secondsUntil/60))} dk sonra`;focusFill.style.width='0%';
-            }else if(focusMode==='future'){focusRemaining.textContent='İLK ETÜT';focusRange.textContent='Günlük plan';focusFill.style.width='0%';}
-            else {focusRemaining.textContent='TAMAMLANDI';focusRange.textContent='Gün tamamlandı';focusFill.style.width='100%';}
-        }else{
-            focusTime.textContent='Program hazır';focusName.textContent='--:-- — --:--';focusRemaining.textContent='BUGÜN';focusRange.textContent='Bu gün için etüt yok';focusFill.style.width='0%';
-        }
-
-        programSessions.innerHTML='';
-        if(!schedule.length){programSessions.innerHTML='<div class="program-empty">Bu gün için program bulunmuyor.</div>';updateProgramQuick();updateContentSwitchHeight();return;}
-        const currentOrNext=currentIndex>=0?currentIndex:schedule.findIndex(x=>isToday&&campTimeToMinutes(x.time)>nowMinute);
-        const ordered=[...schedule.keys()].sort((a,b)=>{
-            const rank=i=>{
-                if(i===currentOrNext&&currentOrNext>=0)return 0;
-                if(doneSet.has(schedule[i].id))return 3;
-                if(isToday && campTimeToMinutes(schedule[i].time)>nowMinute)return 1;
-                if(isToday)return 2;
-                return i;
-            };
-            return rank(a)-rank(b)||a-b;
-        });
-        ordered.forEach(index=>{
-            const item=schedule[index]; const done=doneSet.has(item.id); const current=index===currentIndex; const nextUp=isToday&&currentIndex<0&&index===currentOrNext;
-            const row=document.createElement('div');
-            const start=campTimeToMinutes(item.time); const tone=start<12?'morning':start<17?'day':start<20?'evening':'night';
-            row.className='program-session '+tone+(current||nextUp?' current':'')+(done?' done':'')+(item.id==='exam'?' exam':'');
-            const assigned=allocations.get(index)||[]; const flatTasks=assigned.flatMap(unit=>unit.items.map(task=>({task,group:unit.group}))); const hasTasks=flatTasks.length>0;
-            row.innerHTML=`<div class="program-session-rail"><div class="program-session-time">${escapeHtml(item.time)}</div></div><div class="program-session-main"><div class="program-session-head"><div class="program-session-name">${escapeHtml(item.name)}</div></div><div class="program-task-stack"></div></div><div class="program-session-action"><button type="button" class="program-done-btn" title="${done?'Etüdü yeniden aç':'Etüdü tamamla'}" ${item.id==='exam'?'disabled':''}><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"></path></svg></button></div>`;
-            const stack=row.querySelector('.program-task-stack');flatTasks.forEach(({task,group})=>appendProgramTaskChip(stack,task,group.title,current||nextUp));
-            const db=row.querySelector('.program-done-btn');if(item.id!=='exam')db.addEventListener('click',()=>{setProgramSessionDone(key,item.id,!done);renderProgramPage();renderTasks();});
-            row.classList.toggle('no-tasks',!hasTasks);programSessions.appendChild(row);
-        });
-        updateProgramQuick();updateContentSwitchHeight();
     }
     function formatProgramClock(totalSeconds){
         const sec=Math.max(0,Math.round(Number(totalSeconds)||0));
@@ -8691,44 +8881,190 @@ updateDailyMotivation();
         const s=sec%60;
         return `${String(mins).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
+    function programTimeParts(date){return date.getHours()*3600+date.getMinutes()*60+date.getSeconds();}
+    function formatProgramDuration(totalSeconds){
+        const sec=Math.max(0,Math.round(Number(totalSeconds)||0));
+        const hours=Math.floor(sec/3600),minutes=Math.floor((sec%3600)/60),seconds=sec%60;
+        return hours?`${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`:formatProgramClock(sec);
+    }
+    function programCountdownForItem(item,mode,now){
+        const start=campTimeToMinutes(item.time),end=campEndMinutes(item.time);
+        const secondsNow=programTimeParts(now);
+        if(mode==='current')return {label:`Etüt bitimine ${formatProgramDuration(end*60-secondsNow)}`,progress:Math.max(0,Math.min(100,((secondsNow/60-start)/(end-start))*100))};
+        if(mode==='next')return {label:`Başlamasına ${formatProgramDuration(start*60-secondsNow)}`,progress:0};
+        if(mode==='future')return {label:`Başlangıç saati ${item.time.split('–')[0].trim()}`,progress:0};
+        return {label:'Bugünün programı tamamlandı',progress:100};
+    }
+    function createProgramTimelineCard(item,index,status,taskCount=0){
+        const card=document.createElement('article');
+        card.className='program-timeline-card '+status+(item.id==='exam'?' exam':'');
+        const time=document.createElement('div');time.className='program-timeline-card-time';time.textContent=item.time;
+        const name=document.createElement('div');name.className='program-timeline-card-name';name.textContent=item.name;
+        const meta=document.createElement('div');meta.className='program-timeline-card-meta';
+        meta.textContent=item.id==='exam'?'DENEME SINAVI':status==='past'?'SÜRESİ DOLDU':`${taskCount} ${taskCount===1?'görev':'görev'}`;
+        card.append(time,name,meta);
+        return card;
+    }
+    function renderProgramTimeline(dateKey,state){
+        programSessions.innerHTML='';
+        const {schedule,focusIndex,mode}=state;
+        if(!schedule.length){
+            const empty=document.createElement('div');empty.className='program-empty';empty.textContent='Pazar günü için etüt planlanmadı. Dinlenme günü.';programSessions.appendChild(empty);return;
+        }
+        const history=[];const upcoming=[];
+        if(mode==='future'){
+            schedule.forEach((item,index)=>{if(index>focusIndex)upcoming.push({item,index});});
+        }else if(mode==='past'||mode==='done'){
+            schedule.forEach((item,index)=>history.push({item,index}));
+        }else{
+            schedule.forEach((item,index)=>{
+                if(index<focusIndex)history.push({item,index});
+                else if(index>focusIndex)upcoming.push({item,index});
+            });
+        }
+        if(history.length){
+            const section=document.createElement('section');section.className='program-timeline-section program-history-section';
+            const head=document.createElement('div');head.className='program-timeline-section-head';
+            const title=document.createElement('div');title.className='program-timeline-section-title';title.textContent='ÖNCEKİ OTURUMLAR';
+            const sub=document.createElement('div');sub.className='program-timeline-section-sub';sub.textContent='Zamanı dolan oturumlar';head.append(title,sub);
+            const deck=document.createElement('div');deck.className='program-history-deck';
+            history.forEach(({item,index},order)=>{
+                const card=createProgramTimelineCard(item,index,'past');
+                card.style.zIndex=String(order+1);
+                card.style.opacity=String(Math.min(.96,.60+order*.055));
+                card.style.transform=`translateY(${Math.min(6,(history.length-1-order))*1}px)`;
+                deck.appendChild(card);
+            });
+            section.append(head,deck);programSessions.appendChild(section);
+        }
+        if(upcoming.length){
+            const section=document.createElement('section');section.className='program-timeline-section program-upcoming-section';
+            const head=document.createElement('div');head.className='program-timeline-section-head';
+            const title=document.createElement('div');title.className='program-timeline-section-title';title.textContent=mode==='future'?'GÜNÜN AKIŞI':'SONRAKİ ETÜTLER';
+            const sub=document.createElement('div');sub.className='program-timeline-section-sub';sub.textContent=mode==='future'?'Planlanan oturumlar':'Sıradaki çalışma zamanları';head.append(title,sub);
+            const grid=document.createElement('div');grid.className='program-upcoming-grid';
+            upcoming.forEach(({item,index})=>{
+                const entries=item.id==='exam'?[]:getProgramSessionEntries(dateKey,index);
+                const pending=entries.filter(entry=>!entry.task.done).length;
+                grid.appendChild(createProgramTimelineCard(item,index,'upcoming',pending));
+            });
+            section.append(head,grid);programSessions.appendChild(section);
+        }
+        if(!history.length&&!upcoming.length){
+            const empty=document.createElement('div');empty.className='program-empty';empty.textContent='Gösterilecek başka etüt bulunmuyor.';programSessions.appendChild(empty);
+        }
+    }
+    function renderProgramPage(){
+        if(!programSessions)return;
+        renderProgramDays();
+        const key=programSelectedDateKey();
+        const dt=dateFromKey(key);
+        const state=programFocusState(key);
+        const {schedule,focusIndex,mode,targetStudyIndex}=state;
+        const dateText=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
+        programDateLabel.textContent=dateText;
+        const kicker=document.getElementById('program-hero-kicker');
+        if(kicker)kicker.textContent=key===campTodayKey()?'BUGÜN':dateText.toLocaleUpperCase('tr-TR');
+        const focusTime=document.getElementById('program-focus-time');
+        const focusName=document.getElementById('program-focus-name');
+        const focusRemaining=document.getElementById('program-focus-remaining');
+        const focusRange=document.getElementById('program-focus-range');
+        const focusFill=document.getElementById('program-focus-progress-fill');
+        const footnote=document.getElementById('program-focus-footnote');
+        const tasksTitle=document.getElementById('program-current-tasks-title');
+        const tasksCount=document.getElementById('program-current-tasks-count');
+        const tasksList=document.getElementById('program-current-task-list');
+        const now=new Date();
+        if(focusIndex>=0&&schedule[focusIndex]){
+            const item=schedule[focusIndex];
+            focusTime.textContent=item.name||'Etüt';
+            focusName.textContent=item.time||'--:-- — --:--';
+            const countdown=programCountdownForItem(item,mode,now);
+            if(focusRange)focusRange.textContent=countdown.label;
+            if(focusFill)focusFill.style.width=countdown.progress+'%';
+            if(mode==='current')focusRemaining.textContent=item.id==='exam'?'DENEME SINAVI DEVAM EDİYOR':'ŞU AN DEVAM EDİYOR';
+            else if(mode==='next')focusRemaining.textContent=item.id==='exam'?'SIRADAKİ ETKİNLİK':'SIRADAKİ ETÜT';
+            else if(mode==='future')focusRemaining.textContent='PLANLANAN GÜN';
+            else focusRemaining.textContent='GÜN TAMAMLANDI';
+            if(footnote)footnote.textContent=mode==='current'?'Etüt süresi dolduğunda program otomatik ilerler':mode==='next'?'Başlangıçta sıradaki oturum otomatik aktif olur':mode==='future'?'Günün akışı saatlere göre otomatik başlar':'Geçmiş oturumlar yalnızca zaman çizelgesinde gösterilir';
+        }else{
+            focusTime.textContent='Program bulunmuyor';focusName.textContent='';focusRemaining.textContent='DİNLENME GÜNÜ';
+            focusRange.textContent='Pazar günü için etüt planlanmadı';focusFill.style.width='0%';
+            if(footnote)footnote.textContent='Yeni hafta programı Pazartesi günü başlar';
+        }
+        if(tasksList){
+            tasksList.innerHTML='';
+            const focusItem=schedule[focusIndex];
+            let entries=[];
+            if(focusItem&&focusItem.id!=='exam'&&targetStudyIndex>=0){
+                entries=getProgramSessionEntries(key,targetStudyIndex,{includeCarry:true});
+                tasksTitle.textContent=mode==='done'||mode==='past'?'Günün kalan görevleri':mode==='next'?'Sıradaki etüdün görevleri':'Bu etütteki görevler';
+            }else if(focusItem?.id==='exam'){
+                tasksTitle.textContent='Deneme sınavı';
+            }else{
+                tasksTitle.textContent='Etüt görevleri';
+            }
+            const total=entries.length;
+            const done=entries.filter(entry=>entry.task.done).length;
+            tasksCount.textContent=`${done} / ${total}`;
+            if(total){
+                entries.forEach(entry=>appendProgramFocusTask(tasksList,entry));
+            }else{
+                const empty=document.createElement('div');empty.className='program-current-tasks-empty';
+                empty.textContent=focusItem?.id==='exam'?'Deneme sınavı sırasında etüt görevi bulunmuyor.':schedule.length?'Bu oturum için henüz görev yok. Görevler bölümünden bugüne bağlayabilirsin.':'Bugün için planlanmış görev bulunmuyor.';
+                tasksList.appendChild(empty);
+            }
+        }
+        renderProgramTimeline(key,state);
+        updateProgramQuick();updateProgramLiveClock();updateContentSwitchHeight();
+    }
+    function updateProgramLiveClock(){
+        if(!programSessions)return;
+        const key=programSelectedDateKey();
+        const state=programFocusState(key);
+        const item=state.schedule[state.focusIndex];
+        const range=document.getElementById('program-focus-range');
+        const fill=document.getElementById('program-focus-progress-fill');
+        if(item){
+            const countdown=programCountdownForItem(item,state.mode,new Date());
+            if(range)range.textContent=countdown.label;
+            if(fill)fill.style.width=countdown.progress+'%';
+        }
+    }
     function updateProgramQuick(){
         if(!programQuickTime)return;
         const today=new Date();
         const schedule=CAMP_SCHEDULE[today.getDay()]||[];
         if(!schedule.length){programQuickTime.textContent='00:00';return;}
         const current=campCurrentIndex(schedule,today);
-        const nowSec=today.getHours()*3600+today.getMinutes()*60+today.getSeconds();
+        const nowSec=programTimeParts(today);
         if(current>=0){
-            const endMin=campEndMinutes(schedule[current].time);
-            const left=Math.max(0,Math.round(endMin*60-nowSec));
-            programQuickTime.textContent=formatProgramClock(left);
+            const end=campEndMinutes(schedule[current].time);
+            programQuickTime.textContent=formatProgramClock(end*60-nowSec);
             return;
         }
         const nowMinute=nowSec/60;
         const next=schedule.findIndex(item=>campTimeToMinutes(item.time)>nowMinute);
         if(next>=0){
             const start=campTimeToMinutes(schedule[next].time);
-            const left=Math.max(0,Math.round(start*60-nowSec));
-            programQuickTime.textContent=formatProgramClock(left);
+            programQuickTime.textContent=formatProgramClock(start*60-nowSec);
             return;
         }
         programQuickTime.textContent='00:00';
     }
     renderProgramDays();renderProgramPage();updateProgramQuick();
-    // Live clock updates must not rebuild the entire Programım DOM every second.
-    // Rebuilding it repeatedly moved task/video chips and interrupted focus/scroll.
-    let lastProgramLiveState = '';
+    let lastProgramLiveState='';
     setInterval(()=>{
         updateProgramQuick();
-        if(currentView!=='program') return;
+        if(currentView!=='program')return;
         const key=programSelectedDateKey();
-        const schedule=CAMP_SCHEDULE[dateFromKey(key).getDay()]||[];
-        const now=new Date();
-        const liveIndex=key===campTodayKey()?campCurrentIndex(schedule,now):-1;
-        const liveState=key+'|'+liveIndex;
+        const state=programFocusState(key);
+        const liveState=key+'|'+state.focusIndex+'|'+state.mode;
         if(liveState!==lastProgramLiveState){
             lastProgramLiveState=liveState;
             renderProgramPage();
+        }else{
+            updateProgramLiveClock();
         }
     },1000);
 
@@ -9682,6 +10018,7 @@ updateDailyMotivation();
     'yks_avatar_style', 'yks_avatar_effect', 'yks_main_title_v11',
     'yks_camp_auto_done_v1', 'yks_camp_playlist_clicks_v1',
     'yks_camp_recent_teachers_v1', 'yks_task_groups_v1',
+    'yks_program_task_assignments_v1',
     'yks_task_selected_date_v1', 'yks_timer_active_seconds',
     'yks_leader_player_id'
   ]);
