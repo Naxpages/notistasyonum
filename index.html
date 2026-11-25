@@ -4197,11 +4197,8 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 .program-focus-name{font-size:clamp(1rem,1.65vw,1.25rem)!important;margin-top:12px!important;color:#d1dce3!important;}
 .program-focus-range{font-size:clamp(.88rem,1.4vw,1.05rem)!important;margin-top:8px!important;color:#a9d5ec!important;font-variant-numeric:tabular-nums;}
 .program-focus-progress{width:min(100%,510px)!important;height:5px!important;margin-top:22px!important;}
-.program-focus-footnote{margin-top:15px;color:rgba(219,232,240,.58);font-size:.66rem;line-height:1.5;}
 .program-current-tasks{min-width:0;display:flex;flex-direction:column;justify-content:center;padding:8px 0 8px clamp(22px,3vw,38px);border-left:1px solid rgba(255,255,255,.14);background:linear-gradient(90deg,rgba(255,255,255,.018),rgba(255,255,255,.045));border-radius:0 15px 15px 0;}
 .program-current-tasks-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;padding-right:6px;}
-.program-current-tasks-kicker{color:#8bb9d0;font-size:.53rem;font-weight:900;letter-spacing:1.8px;}
-.program-current-tasks-title{margin-top:7px;color:#f1f6f8;font-size:clamp(1.05rem,1.8vw,1.35rem);font-weight:760;letter-spacing:-.035em;}
 .program-current-tasks-count{flex:0 0 auto;color:#b7c9d4;font-size:.73rem;font-weight:800;font-variant-numeric:tabular-nums;padding-bottom:3px;}
 .program-current-task-list{display:grid;gap:7px;max-height:276px;overflow:auto;padding-right:8px;scrollbar-width:thin;scrollbar-color:rgba(176,202,218,.24) transparent;}
 .program-current-task-list::-webkit-scrollbar{width:5px;}
@@ -4225,9 +4222,6 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 .program-days{margin-bottom:2px!important;}
 .program-sessions{display:grid!important;gap:22px!important;}
 .program-timeline-section{min-width:0;}
-.program-timeline-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 2px 10px;}
-.program-timeline-section-title{color:#d4e0e7;font-size:.64rem;font-weight:900;letter-spacing:1.45px;}
-.program-timeline-section-sub{color:#637583;font-size:.59rem;font-weight:600;}
 .program-history-deck{display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:5px 8px 14px 10px;scrollbar-width:thin;scrollbar-color:rgba(157,183,199,.18) transparent;}
 .program-history-deck::-webkit-scrollbar{height:5px;}
 .program-history-deck::-webkit-scrollbar-thumb{background:rgba(157,183,199,.18);border-radius:99px;}
@@ -4261,14 +4255,12 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
  .program-focus-time{font-size:clamp(2.5rem,12vw,3.5rem)!important;margin-top:18px!important;}
  .program-focus-name{font-size:.94rem!important;}
  .program-focus-range{font-size:.86rem!important;}
- .program-current-tasks-title{font-size:1.08rem;}
  .program-focus-task-row{min-height:52px;}
  .program-focus-task-name{font-size:.73rem;}
  .program-days{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:5px!important;padding-bottom:15px!important;}
  .program-day{height:59px!important;border-radius:12px!important;}
  .program-day strong{font-size:.68rem!important;}
  .program-day span{font-size:.49rem!important;}
- .program-timeline-section-head{align-items:flex-start;flex-direction:column;gap:4px;}
  .program-history-deck .program-timeline-card{flex-basis:154px;padding:12px 12px;}
  .program-history-deck .program-timeline-card{margin-left:-34px;}
  .program-history-deck .program-timeline-card:first-child{margin-left:0;}
@@ -4851,7 +4843,6 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                                 <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16M8 13h3M13 13h3M8 16h3"></path></svg>
                             </div>
                             <div class="program-topbar-copy">
-                                <div class="program-kicker" id="program-hero-kicker">BUGÜN</div>
                                 <div class="program-title">Programım</div>
                                 <div class="program-date-label" id="program-date-label"></div>
                             </div>
@@ -4863,19 +4854,13 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
                         <div class="program-hero-overlay"></div>
                         <div class="program-hero-content">
                             <div class="program-focus-info">
-                                <div class="program-live-pill"><span class="program-live-dot"></span><span id="program-focus-remaining">ŞU AN DEVAM EDİYOR</span></div>
                                 <div class="program-focus-time" id="program-focus-time">Program hazır</div>
                                 <div class="program-focus-name" id="program-focus-name">--:-- — --:--</div>
                                 <div class="program-focus-range" id="program-focus-range">--:--</div>
                                 <div class="program-focus-progress"><span id="program-focus-progress-fill"></span></div>
-                                <div class="program-focus-footnote" id="program-focus-footnote">Program saatine göre otomatik ilerler</div>
                             </div>
                             <section class="program-current-tasks" aria-label="Şu anki etüt görevleri">
                                 <div class="program-current-tasks-head">
-                                    <div>
-                                        <div class="program-current-tasks-kicker">ÇALIŞMA ALANI</div>
-                                        <div class="program-current-tasks-title" id="program-current-tasks-title">Bu etütteki görevler</div>
-                                    </div>
                                     <div class="program-current-tasks-count" id="program-current-tasks-count">0 / 0</div>
                                 </div>
                                 <div class="program-current-task-list" id="program-current-task-list"></div>
@@ -8890,19 +8875,16 @@ updateDailyMotivation();
     function programCountdownForItem(item,mode,now){
         const start=campTimeToMinutes(item.time),end=campEndMinutes(item.time);
         const secondsNow=programTimeParts(now);
-        if(mode==='current')return {label:`Etüt bitimine ${formatProgramDuration(end*60-secondsNow)}`,progress:Math.max(0,Math.min(100,((secondsNow/60-start)/(end-start))*100))};
-        if(mode==='next')return {label:`Başlamasına ${formatProgramDuration(start*60-secondsNow)}`,progress:0};
-        if(mode==='future')return {label:`Başlangıç saati ${item.time.split('–')[0].trim()}`,progress:0};
-        return {label:'Bugünün programı tamamlandı',progress:100};
+        if(mode==='current')return {label:formatProgramDuration(end*60-secondsNow),progress:Math.max(0,Math.min(100,((secondsNow/60-start)/(end-start))*100))};
+        if(mode==='next')return {label:formatProgramDuration(start*60-secondsNow),progress:0};
+        return {label:'',progress:mode==='past'||mode==='done'?100:0};
     }
-    function createProgramTimelineCard(item,index,status,taskCount=0){
+    function createProgramTimelineCard(item,index,status){
         const card=document.createElement('article');
         card.className='program-timeline-card '+status+(item.id==='exam'?' exam':'');
         const time=document.createElement('div');time.className='program-timeline-card-time';time.textContent=item.time;
         const name=document.createElement('div');name.className='program-timeline-card-name';name.textContent=item.name;
-        const meta=document.createElement('div');meta.className='program-timeline-card-meta';
-        meta.textContent=item.id==='exam'?'DENEME SINAVI':status==='past'?'SÜRESİ DOLDU':`${taskCount} ${taskCount===1?'görev':'görev'}`;
-        card.append(time,name,meta);
+        card.append(time,name);
         return card;
     }
     function renderProgramTimeline(dateKey,state){
@@ -8924,9 +8906,6 @@ updateDailyMotivation();
         }
         if(history.length){
             const section=document.createElement('section');section.className='program-timeline-section program-history-section';
-            const head=document.createElement('div');head.className='program-timeline-section-head';
-            const title=document.createElement('div');title.className='program-timeline-section-title';title.textContent='ÖNCEKİ OTURUMLAR';
-            const sub=document.createElement('div');sub.className='program-timeline-section-sub';sub.textContent='Zamanı dolan oturumlar';head.append(title,sub);
             const deck=document.createElement('div');deck.className='program-history-deck';
             history.forEach(({item,index},order)=>{
                 const card=createProgramTimelineCard(item,index,'past');
@@ -8935,20 +8914,15 @@ updateDailyMotivation();
                 card.style.transform=`translateY(${Math.min(6,(history.length-1-order))*1}px)`;
                 deck.appendChild(card);
             });
-            section.append(head,deck);programSessions.appendChild(section);
+            section.appendChild(deck);programSessions.appendChild(section);
         }
         if(upcoming.length){
             const section=document.createElement('section');section.className='program-timeline-section program-upcoming-section';
-            const head=document.createElement('div');head.className='program-timeline-section-head';
-            const title=document.createElement('div');title.className='program-timeline-section-title';title.textContent=mode==='future'?'GÜNÜN AKIŞI':'SONRAKİ ETÜTLER';
-            const sub=document.createElement('div');sub.className='program-timeline-section-sub';sub.textContent=mode==='future'?'Planlanan oturumlar':'Sıradaki çalışma zamanları';head.append(title,sub);
             const grid=document.createElement('div');grid.className='program-upcoming-grid';
             upcoming.forEach(({item,index})=>{
-                const entries=item.id==='exam'?[]:getProgramSessionEntries(dateKey,index);
-                const pending=entries.filter(entry=>!entry.task.done).length;
-                grid.appendChild(createProgramTimelineCard(item,index,'upcoming',pending));
+                grid.appendChild(createProgramTimelineCard(item,index,'upcoming'));
             });
-            section.append(head,grid);programSessions.appendChild(section);
+            section.appendChild(grid);programSessions.appendChild(section);
         }
         if(!history.length&&!upcoming.length){
             const empty=document.createElement('div');empty.className='program-empty';empty.textContent='Gösterilecek başka etüt bulunmuyor.';programSessions.appendChild(empty);
@@ -8963,15 +8937,10 @@ updateDailyMotivation();
         const {schedule,focusIndex,mode,targetStudyIndex}=state;
         const dateText=dt.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
         programDateLabel.textContent=dateText;
-        const kicker=document.getElementById('program-hero-kicker');
-        if(kicker)kicker.textContent=key===campTodayKey()?'BUGÜN':dateText.toLocaleUpperCase('tr-TR');
         const focusTime=document.getElementById('program-focus-time');
         const focusName=document.getElementById('program-focus-name');
-        const focusRemaining=document.getElementById('program-focus-remaining');
         const focusRange=document.getElementById('program-focus-range');
         const focusFill=document.getElementById('program-focus-progress-fill');
-        const footnote=document.getElementById('program-focus-footnote');
-        const tasksTitle=document.getElementById('program-current-tasks-title');
         const tasksCount=document.getElementById('program-current-tasks-count');
         const tasksList=document.getElementById('program-current-task-list');
         const now=new Date();
@@ -8982,15 +8951,9 @@ updateDailyMotivation();
             const countdown=programCountdownForItem(item,mode,now);
             if(focusRange)focusRange.textContent=countdown.label;
             if(focusFill)focusFill.style.width=countdown.progress+'%';
-            if(mode==='current')focusRemaining.textContent=item.id==='exam'?'DENEME SINAVI DEVAM EDİYOR':'ŞU AN DEVAM EDİYOR';
-            else if(mode==='next')focusRemaining.textContent=item.id==='exam'?'SIRADAKİ ETKİNLİK':'SIRADAKİ ETÜT';
-            else if(mode==='future')focusRemaining.textContent='PLANLANAN GÜN';
-            else focusRemaining.textContent='GÜN TAMAMLANDI';
-            if(footnote)footnote.textContent=mode==='current'?'Etüt süresi dolduğunda program otomatik ilerler':mode==='next'?'Başlangıçta sıradaki oturum otomatik aktif olur':mode==='future'?'Günün akışı saatlere göre otomatik başlar':'Geçmiş oturumlar yalnızca zaman çizelgesinde gösterilir';
         }else{
-            focusTime.textContent='Program bulunmuyor';focusName.textContent='';focusRemaining.textContent='DİNLENME GÜNÜ';
-            focusRange.textContent='Pazar günü için etüt planlanmadı';focusFill.style.width='0%';
-            if(footnote)footnote.textContent='Yeni hafta programı Pazartesi günü başlar';
+            focusTime.textContent='Dinlenme';focusName.textContent='';
+            focusRange.textContent='';focusFill.style.width='0%';
         }
         if(tasksList){
             tasksList.innerHTML='';
@@ -8998,11 +8961,8 @@ updateDailyMotivation();
             let entries=[];
             if(focusItem&&focusItem.id!=='exam'&&targetStudyIndex>=0){
                 entries=getProgramSessionEntries(key,targetStudyIndex,{includeCarry:true});
-                tasksTitle.textContent=mode==='done'||mode==='past'?'Günün kalan görevleri':mode==='next'?'Sıradaki etüdün görevleri':'Bu etütteki görevler';
             }else if(focusItem?.id==='exam'){
-                tasksTitle.textContent='Deneme sınavı';
             }else{
-                tasksTitle.textContent='Etüt görevleri';
             }
             const total=entries.length;
             const done=entries.filter(entry=>entry.task.done).length;
