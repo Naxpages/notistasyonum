@@ -4272,6 +4272,28 @@ body.tasks-page-open .menu-trigger,body.tasks-page-open .program-quick{display:n
 @media(prefers-reduced-motion:reduce){.program-focus-task-row,.program-timeline-card{transition:none!important;}}
 </style>
 
+
+<style id="program-smart-distribution-v3-style">
+.program-timeline-card{padding:0!important;overflow:hidden;transition:border-color .18s ease,background .18s ease,opacity .18s ease;}
+.program-timeline-card-trigger{appearance:none;width:100%;min-height:112px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;gap:7px 12px;padding:14px 15px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit;}
+.program-history-deck .program-timeline-card-trigger{min-height:94px;}
+.program-timeline-card-time{grid-column:1;grid-row:1;}
+.program-timeline-card-name{grid-column:1;grid-row:2;margin-top:0;}
+.program-timeline-card-chevron{grid-column:2;grid-row:1/3;width:26px;height:26px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.085);border-radius:9px;color:#8498a5;background:rgba(255,255,255,.025);transition:transform .18s ease,color .18s ease,border-color .18s ease;}
+.program-timeline-card-chevron svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.program-timeline-card.expanded{border-color:rgba(119,185,225,.38)!important;background:linear-gradient(145deg,rgba(30,51,66,.97),rgba(11,17,22,.99))!important;opacity:1!important;}
+.program-timeline-card.expanded .program-timeline-card-chevron{transform:rotate(180deg);color:#a8d9f5;border-color:rgba(119,185,225,.25);}
+.program-timeline-card-trigger:focus-visible{outline:2px solid rgba(127,194,232,.75);outline-offset:-3px;border-radius:16px;}
+.program-timeline-detail{margin-top:12px;padding:15px 16px;border:1px solid rgba(255,255,255,.075);border-radius:17px;background:linear-gradient(145deg,rgba(18,27,34,.88),rgba(10,15,20,.96));box-shadow:0 14px 34px rgba(0,0,0,.13);animation:programDetailIn .18s ease-out;}
+.program-timeline-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;color:#b8c8d1;font-size:.68rem;font-weight:800;}
+.program-timeline-detail-head span:last-child{color:#8ebbd4;font-variant-numeric:tabular-nums;}
+.program-timeline-detail-list{display:grid;gap:4px;max-height:260px;overflow:auto;padding-right:5px;}
+.program-timeline-detail .program-focus-task-row{min-height:48px;}
+.program-timeline-detail .program-current-tasks-empty{padding:12px 2px;}
+@keyframes programDetailIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.program-timeline-card-trigger{min-height:98px;padding:12px 12px;gap:6px 8px;}.program-history-deck .program-timeline-card-trigger{min-height:94px;}.program-timeline-detail{padding:12px;border-radius:14px;}.program-timeline-detail-head{font-size:.62rem;}}
+@media(prefers-reduced-motion:reduce){.program-timeline-detail{animation:none!important;}}
+</style>
 </head>
 
 <body>
@@ -6515,7 +6537,10 @@ updateDailyMotivation();
                 campCompleted,
 
             programAssignments:
-                programAssignments
+                programAssignments,
+
+            programAssignmentState:
+                programAssignmentState
 
         };
 
@@ -6693,6 +6718,10 @@ updateDailyMotivation();
                         if (backup.programAssignments && typeof backup.programAssignments === 'object' && !Array.isArray(backup.programAssignments)) {
                             programAssignments = backup.programAssignments;
                             localStorage.setItem(PROGRAM_ASSIGNMENTS_KEY, JSON.stringify(programAssignments));
+                        }
+                        if (backup.programAssignmentState && typeof backup.programAssignmentState === 'object' && !Array.isArray(backup.programAssignmentState)) {
+                            programAssignmentState = backup.programAssignmentState;
+                            localStorage.setItem(PROGRAM_ASSIGNMENT_STATE_KEY, JSON.stringify(programAssignmentState));
                         }
                         localStorage.setItem('yks_plus_active', plusActive ? 'true' : 'false');
                         localStorage.setItem('yks_pro_active', proActive ? 'true' : 'false');
@@ -8461,15 +8490,133 @@ updateDailyMotivation();
         const map=[['matematik','matematik'],['geometri','geometri'],['fizik','fizik'],['kimya','kimya'],['biyoloji','biyoloji'],['turkce','turkce'],['edebiyat','edebiyat']];
         return map.filter(([k])=>t.includes(k)).map(([,v])=>v);
     }
-    function inferTaskMeta(title){
-        const t=normalizeTaskText(title);
-        const level=t.match(/\b(tyt|ayt)\b/)?.[1]||'';
-        const subjects=subjectFromText(t);
-        const teachers=teacherMentionIds(t);
-        const question=/\b(soru|sorular|test|problem|problemler|deneme|ornek soru|soru bankasi|cozum|cozumle|coz)\b/.test(t);
-        const lesson=/\b(video|ders|kamp|konu|konu anlatimi|anlatim|izle|izlenecek)\b/.test(t);
-        const original=/\borijinal\b/.test(t);
-        return {level,subjects,teachers,question,lesson,original,text:t};
+    function extractProgramSequence(text){
+        const t=normalizeTaskText(text);
+        let match=t.match(/^\s*(\d{1,3})(?=\s|[.)\-:])/);
+        if(match)return {number:Number(match[1]),confidence:4,source:'prefix'};
+        const afterNumber=t.match(/\b(\d{1,3})\s*[.)]?\s*(video|konu|test|bolum|unite|fasikul|ders|soru|hafta|gun)\b/);
+        if(afterNumber)return {number:Number(afterNumber[1]),confidence:3,source:'number-before-unit'};
+        const beforeNumber=t.match(/\b(video|konu|test|bolum|unite|fasikul|ders|soru|hafta|gun)\s*(?:no|numara)?\s*(\d{1,3})\b/);
+        if(beforeNumber)return {number:Number(beforeNumber[2]),confidence:3,source:'unit-before-number'};
+        return null;
+    }
+    const PROGRAM_TOPIC_STOP_WORDS=new Set([
+        've','ile','icin','olan','olarak','bir','bu','su','the','de','da','mi','mu','mı','mü',
+        'ayt','tyt','video','videolari','video izle','izle','izlenecek','izleyecegim','izlemek',
+        'ders','konu','konulari','konu anlatimi','anlatim','kamp','test','soru','sorular','coz','cozum',
+        'cozumu','cozulecek','yap','yapilacak','bitir','tekrar','calis','calisma','odev','gorev',
+        'izleyecegim','izleyeceksin','izlenecek','dinle','dinlenecek','tamamla','tamamlanacak'
+    ]);
+    function programTopicTokens(text){
+        return new Set(normalizeTaskText(text).split(/[^a-z0-9]+/).filter(word=>word.length>2&&!/^\d+$/.test(word)&&!PROGRAM_TOPIC_STOP_WORDS.has(word)));
+    }
+    function inferTaskMeta(title,groupTitle=''){
+        const taskText=normalizeTaskText(title);
+        const groupText=normalizeTaskText(groupTitle);
+        const combined=(groupText+' '+taskText).trim();
+        const taskLevel=taskText.match(/\b(tyt|ayt)\b/)?.[1]||'';
+        const groupLevel=groupText.match(/\b(tyt|ayt)\b/)?.[1]||'';
+        const level=taskLevel||groupLevel;
+        const taskSubjects=subjectFromText(taskText);
+        const groupSubjects=subjectFromText(groupText);
+        const subjects=taskSubjects.length?taskSubjects:groupSubjects;
+        const taskTeachers=teacherMentionIds(taskText);
+        const groupTeachers=teacherMentionIds(groupText);
+        const teachers=taskTeachers.length?taskTeachers:groupTeachers;
+        const question=/\b(soru\w*|test\w*|problem\w*|deneme\w*|ornek|coz\w*|cozum\w*|tarama\w*|fasikul\w*|yayin denemesi)\b/.test(taskText);
+        const lesson=/\b(video\w*|ders\w*|kamp\w*|konu\w*|anlatim\w*|izle\w*|dinle\w*|playlist\w*|bolum\w*|tekrar videosu)\b/.test(taskText);
+        const original=/\borijinal\b/.test(combined);
+        const sequence=extractProgramSequence(title);
+        const topics=programTopicTokens(title);
+        const seriesKey=[level,subjects.slice().sort().join(','),teachers.slice().sort().join(',')].join('|')||('group:'+normalizeTaskText(groupTitle));
+        return {level,subjects,teachers,question,lesson,original,text:combined,taskText,groupText,sequence,topics,seriesKey};
+    }
+    function sortProgramGroups(groups){
+        const output=groups.slice();
+        const buckets=new Map();
+        output.forEach((group,index)=>{
+            const meta=inferTaskMeta(group.title,group.title);
+            if(!meta.sequence)return;
+            const key=meta.seriesKey;
+            if(!buckets.has(key))buckets.set(key,[]);
+            buckets.get(key).push({index,group,number:meta.sequence.number});
+        });
+        buckets.forEach(items=>{
+            if(items.length<2)return;
+            const ordered=items.slice().sort((a,b)=>a.number-b.number||a.index-b.index);
+            items.forEach((item,i)=>{output[item.index]=ordered[i].group;});
+        });
+        return output;
+    }
+    function sortProgramItemsBySequence(items,getMeta){
+        const output=items.slice();
+        const buckets=new Map();
+        output.forEach((item,index)=>{
+            const meta=getMeta(item);
+            if(!meta.sequence)return;
+            if(!buckets.has(meta.seriesKey))buckets.set(meta.seriesKey,[]);
+            buckets.get(meta.seriesKey).push({index,item,number:meta.sequence.number});
+        });
+        buckets.forEach(entries=>{
+            if(entries.length<2)return;
+            const ordered=entries.slice().sort((a,b)=>a.number-b.number||a.index-b.index);
+            entries.forEach((entry,i)=>{output[entry.index]=ordered[i].item;});
+        });
+        return output;
+    }
+    function sortProgramUnits(units){
+        const output=units.slice();
+        const buckets=new Map();
+        output.forEach((unit,index)=>{
+            const key=unit.seriesKey||'default';
+            if(!buckets.has(key))buckets.set(key,[]);
+            buckets.get(key).push({index,unit});
+        });
+        buckets.forEach(entries=>{
+            const numbered=entries.filter(entry=>entry.unit.sequence!=null);
+            let ordered=null;
+            if(numbered.length>=2){
+                const sorted=numbered.slice().sort((a,b)=>a.unit.sequence-b.unit.sequence||a.index-b.index);
+                ordered=entries.slice();
+                numbered.forEach((entry,i)=>{ordered[entries.indexOf(entry)]={...entry,unit:sorted[i].unit};});
+            }else{
+                const hasLesson=entries.some(entry=>entry.unit.kind==='lesson'||entry.unit.kind==='lesson-question');
+                const hasQuestion=entries.some(entry=>entry.unit.kind==='question'||entry.unit.kind==='lesson-question');
+                if(hasLesson&&hasQuestion){
+                    const rank=unit=>unit.kind==='lesson'?0:unit.kind==='lesson-question'?1:unit.kind==='question'?2:1;
+                    ordered=entries.slice().sort((a,b)=>rank(a.unit)-rank(b.unit)||a.index-b.index);
+                }
+            }
+            if(ordered)entries.forEach((entry,i)=>{output[entry.index]=ordered[i].unit;});
+        });
+        return output;
+    }
+    function sortProgramTaskEntries(entries){
+        const wrappers=entries.map((entry,index)=>{
+            const meta=inferTaskMeta(entry.task.title,entry.group?.title||'');
+            return {...entry,seriesKey:meta.seriesKey,sequence:meta.sequence?.number??null,kind:meta.question?'question':meta.lesson?'lesson':'other',_order:index};
+        });
+        return sortProgramUnits(wrappers).map(({_order,...entry})=>entry);
+    }
+    function programPairScore(lesson,question,lessonCount,questionCount){
+        const a=lesson.meta,b=question.meta;
+        if(a.level&&b.level&&a.level!==b.level)return -1000;
+        if(a.subjects.length&&b.subjects.length&&!a.subjects.some(subject=>b.subjects.includes(subject)))return -1000;
+        if(a.teachers.length&&b.teachers.length&&!a.teachers.some(teacher=>b.teachers.includes(teacher)))return -1000;
+        if(a.sequence&&b.sequence&&a.sequence.number!==b.sequence.number)return -1000;
+        let score=0;
+        if(a.level&&b.level&&a.level===b.level)score+=2;
+        if(a.subjects.length&&b.subjects.length)score+=5;
+        if(a.teachers.length&&b.teachers.length)score+=3;
+        if(a.sequence&&b.sequence&&a.sequence.number===b.sequence.number)score+=12;
+        const overlap=[...a.topics].filter(token=>b.topics.has(token)).length;
+        score+=overlap*5;
+        if(!a.sequence&&!b.sequence&&!overlap){
+            // Shared course/subject alone must not create arbitrary lesson-question pairs.
+            if(lessonCount===1&&questionCount===1)score+=6;
+            else return -1000;
+        }
+        return score;
     }
     function teacherWatchScore(entry){
         const urlCount=Number(campPlaylistClicks[entry.url])||0;
@@ -8601,48 +8748,73 @@ updateDailyMotivation();
     function programSelectedDateKey(){ return weekDateKey(programSelectedDay); }
     function taskUnitsForGroups(groups){
         const units=[];
-        groups.forEach(group=>{
-            const pending=group.tasks.filter(t=>!t.done);
+        const orderedGroups=sortProgramGroups(groups);
+        orderedGroups.forEach((group,groupOrder)=>{
+            const wrappers=group.tasks
+                .map((task,originalIndex)=>({task,originalIndex,meta:inferTaskMeta(task.title,group.title)}))
+                .filter(entry=>!entry.task.done);
+            const ordered=sortProgramItemsBySequence(wrappers,entry=>entry.meta);
+            const lessons=ordered.filter(entry=>entry.meta.lesson&&!entry.meta.question);
+            const questions=ordered.filter(entry=>entry.meta.question&&!entry.meta.lesson);
             const used=new Set();
-            for(const task of pending){
-                if(used.has(task.id))continue;
-                const meta=inferTaskMeta(task.title);
-                let bestPartner=null,bestPartnerScore=-1;
-                if(!meta.question){
-                    for(const other of pending){
-                        if(other.id===task.id||used.has(other.id))continue;
-                        const om=inferTaskMeta(other.title);
-                        if(!om.question)continue;
-                        let relation=0;
-                        if(meta.subjects.length&&om.subjects.some(v=>meta.subjects.includes(v)))relation+=5;
-                        if(meta.level&&om.level===meta.level)relation+=4;
-                        if(meta.teachers.length&&om.teachers.some(v=>meta.teachers.includes(v)))relation+=7;
-                        if(meta.original&&om.original)relation+=4;
-                        if(!meta.subjects.length&&!meta.teachers.length&&!meta.level&&!meta.original&&!om.subjects.length&&!om.teachers.length&&!om.level)relation+=1;
-                        if(relation>bestPartnerScore){bestPartnerScore=relation;bestPartner=other;}
-                    }
+            const pairs=[];
+            lessons.forEach(lesson=>{
+                let best=null,bestScore=-1000,bestDistance=Infinity;
+                questions.forEach(question=>{
+                    if(used.has(question.task.id))return;
+                    const score=programPairScore(lesson,question,lessons.length,questions.length);
+                    const distance=Math.abs(lesson.originalIndex-question.originalIndex);
+                    if(score>bestScore||(score===bestScore&&distance<bestDistance)){bestScore=score;bestDistance=distance;best=question;}
+                });
+                if(best&&bestScore>=5){
+                    used.add(lesson.task.id);used.add(best.task.id);
+                    pairs.push({group,items:[lesson.task,best.task],kind:'lesson-question',seriesKey:lesson.meta.seriesKey,sequence:lesson.meta.sequence?.number??best.meta.sequence?.number??null,order:Math.min(lesson.originalIndex,best.originalIndex),groupOrder});
                 }
-                if(bestPartner && bestPartnerScore>=5){
-                    used.add(task.id);used.add(bestPartner.id);
-                    units.push({group,items:[task,bestPartner],kind:'lesson-question'});
-                }else{
-                    used.add(task.id);
-                    units.push({group,items:[task],kind:meta.question?'question':'lesson'});
-                }
-            }
+            });
+            ordered.forEach(entry=>{
+                if(used.has(entry.task.id))return;
+                const kind=entry.meta.lesson&&entry.meta.question?'lesson-question':entry.meta.question?'question':entry.meta.lesson?'lesson':'other';
+                units.push({group,items:[entry.task],kind,seriesKey:entry.meta.seriesKey,sequence:entry.meta.sequence?.number??null,order:entry.originalIndex,groupOrder});
+            });
+            units.push(...pairs);
+            const groupUnits=units.filter(unit=>unit.group===group);
+            const sortedGroupUnits=sortProgramUnits(groupUnits);
+            let cursor=0;
+            units.forEach((unit,index)=>{if(unit.group===group)units[index]=sortedGroupUnits[cursor++];});
         });
         return units;
     }
     const PROGRAM_ASSIGNMENTS_KEY='yks_program_task_assignments_v1';
+    const PROGRAM_ASSIGNMENT_STATE_KEY='yks_program_assignment_state_v2';
+    const PROGRAM_ASSIGNMENT_ALGORITHM_VERSION=2;
     let programAssignments=(()=>{
         try{
             const value=JSON.parse(localStorage.getItem(PROGRAM_ASSIGNMENTS_KEY)||'{}');
             return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
         }catch(_){return {};}
     })();
+    let programAssignmentState=(()=>{
+        try{
+            const value=JSON.parse(localStorage.getItem(PROGRAM_ASSIGNMENT_STATE_KEY)||'{}');
+            return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
+        }catch(_){return {};}
+    })();
     function saveProgramAssignments(){
         try{localStorage.setItem(PROGRAM_ASSIGNMENTS_KEY,JSON.stringify(programAssignments));}
         catch(error){console.warn('[Not İstasyonu] Program görev dağılımı kaydedilemedi:',error);}
+    }
+    function saveProgramAssignmentState(){
+        try{localStorage.setItem(PROGRAM_ASSIGNMENT_STATE_KEY,JSON.stringify(programAssignmentState));}
+        catch(error){console.warn('[Not İstasyonu] Program dağıtım sürümü kaydedilemedi:',error);}
+    }
+    function programAssignmentSignature(groups){
+        const source=groups.map(group=>[
+            String(group.id),normalizeTaskText(group.title),
+            group.tasks.map(task=>[String(task.id),normalizeTaskText(task.title),String(task.createdAt||'')].join(':')).join(',')
+        ].join('|')).join('||');
+        let hash=2166136261;
+        for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}
+        return (hash>>>0).toString(36);
     }
     function programStudySlots(dateKey){
         const dt=dateFromKey(dateKey);
@@ -8671,44 +8843,62 @@ updateDailyMotivation();
         let targetStudyIndex=-1;
         if(focusIndex>=0){
             const focusItem=schedule[focusIndex];
-            if(focusItem.id==='exam'){
-                targetStudyIndex=studySlots.find(slot=>slot.index>focusIndex)?.index ?? -1;
-            }else{
-                targetStudyIndex=focusIndex;
-            }
+            if(focusItem.id==='exam')targetStudyIndex=studySlots.find(slot=>slot.index>focusIndex)?.index??-1;
+            else targetStudyIndex=focusIndex;
         }
-        if((mode==='done'||mode==='past')&&studySlots.length){
-            targetStudyIndex=studySlots[studySlots.length-1].index;
-        }
+        if((mode==='done'||mode==='past')&&studySlots.length)targetStudyIndex=studySlots[studySlots.length-1].index;
         return {schedule,focusIndex,currentIndex,mode,targetStudyIndex,today,future};
     }
-    function getBoundProgramGroups(dateKey){
-        return taskGroups.filter(group=>group.programDate===dateKey);
-    }
+    function getBoundProgramGroups(dateKey){return taskGroups.filter(group=>group.programDate===dateKey);}
     function programEntriesForGroups(groups){
         const entries=[];
         groups.forEach(group=>group.tasks.forEach(task=>entries.push({task,group})));
         return entries;
     }
+    function programUnitWeight(unit){
+        return unit.items.reduce((sum,task)=>{
+            const text=normalizeTaskText(task.title);
+            let weight=1;
+            if(/\b(video|izle\w*|anlatim|ders|konu)\b/.test(text))weight+=.25;
+            if(/\b(deneme|tarama|fasikul|test)\b/.test(text))weight+=.15;
+            if(/\b(50|100|150|200)\s*(soru|problem)/.test(text))weight+=.45;
+            return sum+weight;
+        },0);
+    }
+    function partitionProgramUnits(units,slotCount){
+        const n=units.length,k=Math.min(n,slotCount);
+        if(!n||!k)return [];
+        if(k===1)return [{start:0,end:n}];
+        const prefix=[0];units.forEach(unit=>prefix.push(prefix[prefix.length-1]+programUnitWeight(unit)));
+        const target=prefix[n]/k;
+        const dp=Array.from({length:k+1},()=>Array(n+1).fill(Infinity));
+        const prev=Array.from({length:k+1},()=>Array(n+1).fill(-1));
+        dp[0][0]=0;
+        for(let parts=1;parts<=k;parts++){
+            for(let end=parts;end<=n-(k-parts);end++){
+                for(let begin=parts-1;begin<end;begin++){
+                    if(!Number.isFinite(dp[parts-1][begin]))continue;
+                    const weight=prefix[end]-prefix[begin];
+                    const cost=dp[parts-1][begin]+Math.pow(weight-target,2);
+                    if(cost<dp[parts][end]){dp[parts][end]=cost;prev[parts][end]=begin;}
+                }
+            }
+        }
+        const ranges=[];let end=n;
+        for(let parts=k;parts>=1;parts--){const begin=prev[parts][end];if(begin<0)break;ranges.unshift({start:begin,end});end=begin;}
+        return ranges;
+    }
     function distributeProgramUnits(units,slots,assignment){
         if(!units.length||!slots.length)return;
-        const base=Math.floor(units.length/slots.length);
-        const extra=units.length%slots.length;
-        let cursor=0;
-        slots.forEach((slot,index)=>{
-            const amount=base+(index<extra?1:0);
-            for(let i=0;i<amount&&cursor<units.length;i++,cursor++){
-                const unit=units[cursor];
-                const ids=assignment[slot.item.id]||(assignment[slot.item.id]=[]);
-                unit.items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
-            }
-        });
-        // Defensive fallback if slots/units change unexpectedly.
-        while(cursor<units.length){
-            const slot=slots[slots.length-1];
+        slots.forEach(slot=>{if(!Array.isArray(assignment[slot.item.id]))assignment[slot.item.id]=[];});
+        const ranges=partitionProgramUnits(units,slots.length);
+        ranges.forEach((range,index)=>{
+            const slot=slots[index];if(!slot)return;
             const ids=assignment[slot.item.id]||(assignment[slot.item.id]=[]);
-            units[cursor++].items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
-        }
+            units.slice(range.start,range.end).forEach(unit=>unit.items.forEach(task=>{
+                const id=String(task.id);if(!ids.includes(id))ids.push(id);
+            }));
+        });
     }
     function programAssignmentStartSlots(dateKey,slots){
         if(!slots.length)return [];
@@ -8728,42 +8918,35 @@ updateDailyMotivation();
         const validIds=new Set(allEntries.map(entry=>String(entry.task.id)));
         let assignment=programAssignments[dateKey];
         let changed=false;
-        if(!assignment||typeof assignment!=='object'||Array.isArray(assignment)){
-            assignment={};
-            slots.forEach(slot=>assignment[slot.item.id]=[]);
-            const pendingGroups=groups.map(group=>({...group,tasks:group.tasks.filter(task=>!task.done)}));
-            const units=taskUnitsForGroups(pendingGroups);
-            distributeProgramUnits(units,programAssignmentStartSlots(dateKey,slots),assignment);
-            programAssignments[dateKey]=assignment;
-            changed=true;
-        }else{
+        if(!assignment||typeof assignment!=='object'||Array.isArray(assignment))assignment={};
+        slots.forEach(slot=>{if(!Array.isArray(assignment[slot.item.id])){assignment[slot.item.id]=[];changed=true;}});
+        Object.keys(assignment).forEach(sessionId=>{
+            if(!slots.some(slot=>String(slot.item.id)===String(sessionId))){delete assignment[sessionId];changed=true;return;}
+            const currentIds=Array.isArray(assignment[sessionId])?assignment[sessionId]:[];
+            const next=currentIds.map(String).filter(id=>validIds.has(id));
+            if(!Array.isArray(assignment[sessionId])||next.length!==currentIds.length||next.some((id,i)=>id!==String(currentIds[i]))){assignment[sessionId]=next;changed=true;}
+        });
+        const assignedIds=new Set(Object.values(assignment).flat().map(String));
+        const hasUnassigned=allEntries.some(entry=>!entry.task.done&&!assignedIds.has(String(entry.task.id)));
+        const signature=programAssignmentSignature(groups);
+        const savedState=programAssignmentState[dateKey];
+        const needsSmartRebuild=!savedState||savedState.version!==PROGRAM_ASSIGNMENT_ALGORITHM_VERSION||savedState.signature!==signature;
+        if(needsSmartRebuild||hasUnassigned){
+            const rebuilt={};slots.forEach(slot=>rebuilt[slot.item.id]=[]);
+            const entryById=new Map(allEntries.map(entry=>[String(entry.task.id),entry]));
+            // Completed work remains attached to its original session; only pending work is re-planned.
             slots.forEach(slot=>{
-                if(!Array.isArray(assignment[slot.item.id])){assignment[slot.item.id]=[];changed=true;}
-            });
-            Object.keys(assignment).forEach(sessionId=>{
-                if(!slots.some(slot=>String(slot.item.id)===String(sessionId))){delete assignment[sessionId];changed=true;return;}
-                const next=assignment[sessionId].map(String).filter(id=>validIds.has(id));
-                if(next.length!==assignment[sessionId].length||next.some((id,i)=>id!==String(assignment[sessionId][i]))){assignment[sessionId]=next;changed=true;}
-            });
-            const assignedIds=new Set(Object.values(assignment).flat().map(String));
-            const unassignedGroups=groups.map(group=>({...group,tasks:group.tasks.filter(task=>!task.done&&!assignedIds.has(String(task.id)))})).filter(group=>group.tasks.length);
-            const newUnits=taskUnitsForGroups(unassignedGroups);
-            if(newUnits.length){
-                const remaining=programAssignmentStartSlots(dateKey,slots);
-                // Spread new tasks toward the least-loaded remaining session without moving existing work.
-                const counts=new Map(remaining.map(slot=>[slot.item.id,(assignment[slot.item.id]||[]).filter(id=>{
-                    const entry=allEntries.find(item=>String(item.task.id)===String(id));
-                    return entry&&!entry.task.done;
-                }).length]));
-                newUnits.forEach(unit=>{
-                    let target=remaining[0];
-                    remaining.forEach(slot=>{if((counts.get(slot.item.id)||0)<(counts.get(target.item.id)||0))target=slot;});
-                    const ids=assignment[target.item.id]||(assignment[target.item.id]=[]);
-                    unit.items.forEach(task=>{if(!ids.includes(String(task.id)))ids.push(String(task.id));});
-                    counts.set(target.item.id,(counts.get(target.item.id)||0)+unit.items.length);
+                (assignment[slot.item.id]||[]).forEach(id=>{
+                    const entry=entryById.get(String(id));
+                    if(entry&&entry.task.done)rebuilt[slot.item.id].push(String(id));
                 });
-                changed=true;
-            }
+            });
+            const units=taskUnitsForGroups(groups);
+            distributeProgramUnits(units,programAssignmentStartSlots(dateKey,slots),rebuilt);
+            assignment=rebuilt;
+            programAssignmentState[dateKey]={version:PROGRAM_ASSIGNMENT_ALGORITHM_VERSION,signature};
+            saveProgramAssignmentState();
+            changed=true;
         }
         if(changed){programAssignments[dateKey]=assignment;saveProgramAssignments();}
         return assignment;
@@ -8795,7 +8978,7 @@ updateDailyMotivation();
                 });
             }
         }
-        return out;
+        return sortProgramTaskEntries(out);
     }
     function programTaskToggle(taskId){
         const wanted=String(taskId);
@@ -8879,13 +9062,46 @@ updateDailyMotivation();
         if(mode==='next')return {label:formatProgramDuration(start*60-secondsNow),progress:0};
         return {label:'',progress:mode==='past'||mode==='done'?100:0};
     }
-    function createProgramTimelineCard(item,index,status){
+    let expandedProgramSessionKey=null;
+    function createProgramTimelineCard(item,index,status,dateKey){
         const card=document.createElement('article');
         card.className='program-timeline-card '+status+(item.id==='exam'?' exam':'');
-        const time=document.createElement('div');time.className='program-timeline-card-time';time.textContent=item.time;
-        const name=document.createElement('div');name.className='program-timeline-card-name';name.textContent=item.name;
-        card.append(time,name);
+        const key=dateKey+'|'+String(item.id);
+        const trigger=document.createElement('button');
+        trigger.type='button';
+        trigger.className='program-timeline-card-trigger';
+        trigger.setAttribute('aria-expanded',String(expandedProgramSessionKey===key));
+        const time=document.createElement('span');time.className='program-timeline-card-time';time.textContent=item.time;
+        const name=document.createElement('span');name.className='program-timeline-card-name';name.textContent=item.name;
+        const chevron=document.createElement('span');chevron.className='program-timeline-card-chevron';
+        chevron.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>';
+        trigger.append(time,name,chevron);
+        trigger.addEventListener('click',()=>{
+            expandedProgramSessionKey=expandedProgramSessionKey===key?null:key;
+            renderProgramTimeline(dateKey,programFocusState(dateKey));
+            updateContentSwitchHeight();
+        });
+        card.appendChild(trigger);
         return card;
+    }
+    function renderProgramSessionDetails(dateKey,index){
+        const item=(CAMP_SCHEDULE[dateFromKey(dateKey).getDay()]||[])[index];
+        const detail=document.createElement('div');detail.className='program-timeline-detail';
+        if(!item)return detail;
+        const entries=item.id==='exam'?[]:getProgramSessionEntries(dateKey,index);
+        const head=document.createElement('div');head.className='program-timeline-detail-head';
+        const label=document.createElement('span');label.textContent=item.name+' · '+item.time;
+        const count=document.createElement('span');count.textContent=entries.length?String(entries.filter(entry=>entry.task.done).length)+' / '+entries.length:'';
+        head.append(label,count);detail.appendChild(head);
+        if(entries.length){
+            const list=document.createElement('div');list.className='program-timeline-detail-list';
+            entries.forEach(entry=>appendProgramFocusTask(list,entry));detail.appendChild(list);
+        }else{
+            const empty=document.createElement('div');empty.className='program-current-tasks-empty';
+            empty.textContent=item.id==='exam'?'Deneme sınavı':'Bu etüt için görev yok.';
+            detail.appendChild(empty);
+        }
+        return detail;
     }
     function renderProgramTimeline(dateKey,state){
         programSessions.innerHTML='';
@@ -8904,26 +9120,43 @@ updateDailyMotivation();
                 else if(index>focusIndex)upcoming.push({item,index});
             });
         }
+        let expandedFound=false;
         if(history.length){
             const section=document.createElement('section');section.className='program-timeline-section program-history-section';
             const deck=document.createElement('div');deck.className='program-history-deck';
             history.forEach(({item,index},order)=>{
-                const card=createProgramTimelineCard(item,index,'past');
+                const card=createProgramTimelineCard(item,index,'past',dateKey);
                 card.style.zIndex=String(order+1);
                 card.style.opacity=String(Math.min(.96,.60+order*.055));
                 card.style.transform=`translateY(${Math.min(6,(history.length-1-order))*1}px)`;
                 deck.appendChild(card);
+                if(expandedProgramSessionKey===dateKey+'|'+String(item.id)){
+                    card.classList.add('expanded');card.querySelector('.program-timeline-card-trigger')?.setAttribute('aria-expanded','true');
+                    expandedFound=true;
+                }
             });
-            section.appendChild(deck);programSessions.appendChild(section);
+            section.appendChild(deck);
+            const expanded=history.find(({item})=>expandedProgramSessionKey===dateKey+'|'+String(item.id));
+            if(expanded)section.appendChild(renderProgramSessionDetails(dateKey,expanded.index));
+            programSessions.appendChild(section);
         }
         if(upcoming.length){
             const section=document.createElement('section');section.className='program-timeline-section program-upcoming-section';
             const grid=document.createElement('div');grid.className='program-upcoming-grid';
             upcoming.forEach(({item,index})=>{
-                grid.appendChild(createProgramTimelineCard(item,index,'upcoming'));
+                const card=createProgramTimelineCard(item,index,'upcoming',dateKey);
+                grid.appendChild(card);
+                if(expandedProgramSessionKey===dateKey+'|'+String(item.id)){
+                    card.classList.add('expanded');card.querySelector('.program-timeline-card-trigger')?.setAttribute('aria-expanded','true');
+                    expandedFound=true;
+                }
             });
-            section.appendChild(grid);programSessions.appendChild(section);
+            section.appendChild(grid);
+            const expanded=upcoming.find(({item})=>expandedProgramSessionKey===dateKey+'|'+String(item.id));
+            if(expanded)section.appendChild(renderProgramSessionDetails(dateKey,expanded.index));
+            programSessions.appendChild(section);
         }
+        if(expandedProgramSessionKey&&!expandedFound)expandedProgramSessionKey=null;
         if(!history.length&&!upcoming.length){
             const empty=document.createElement('div');empty.className='program-empty';empty.textContent='Gösterilecek başka etüt bulunmuyor.';programSessions.appendChild(empty);
         }
@@ -9978,7 +10211,7 @@ updateDailyMotivation();
     'yks_avatar_style', 'yks_avatar_effect', 'yks_main_title_v11',
     'yks_camp_auto_done_v1', 'yks_camp_playlist_clicks_v1',
     'yks_camp_recent_teachers_v1', 'yks_task_groups_v1',
-    'yks_program_task_assignments_v1',
+    'yks_program_task_assignments_v1', 'yks_program_assignment_state_v2',
     'yks_task_selected_date_v1', 'yks_timer_active_seconds',
     'yks_leader_player_id'
   ]);
