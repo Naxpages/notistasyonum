@@ -636,6 +636,18 @@ body.focus-local-mode .content-track {
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
+        .card.note-newly-created {
+            outline: 1px solid rgba(113, 174, 255, .78);
+            outline-offset: 2px;
+            animation: cardAppear .4s cubic-bezier(.34, 1.56, .64, 1) forwards,
+                       noteArrivalPulse 1.2s ease-in-out 2;
+        }
+        @keyframes noteArrivalPulse {
+            0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,.2), 0 0 0 rgba(113,174,255,0); }
+            50% { box-shadow: 0 8px 24px rgba(0,0,0,.28), 0 0 22px rgba(113,174,255,.28); }
+        }
+
+
         /* =====================================================
            YUMUŞAK GLOWLAR
         ===================================================== */
@@ -781,7 +793,7 @@ body.focus-local-mode .content-track {
         .highlight-mark::after{content:"";position:absolute;left:-3px;right:-3px;bottom:0;height:7px;border-radius:3px;background:#fff176;z-index:-1;opacity:.95;}
         .note-action-btn.note-lock-btn{min-width:34px;}
         .note-color-bold-btn{color:var(--note-accent,#9da4aa)!important;}
-        .note-child-btn{font-size:1rem!important;font-weight:900;}
+
         .card-footer{display:flex;justify-content:flex-start;align-items:center;gap:8px;margin-top:15px;padding-top:10px;border-top:1px dashed var(--border-color);}
         .editable-title{font-size:1.28rem;font-weight:850;margin-top:0;margin-bottom:12px;padding-bottom:8px;padding-right:40px;border-bottom:2px solid var(--border-color);outline:none;line-height:1.22;}
         .editable-area{flex-grow:0;outline:none;font-size:.98rem;line-height:1.55;color:var(--text-color);padding:4px 2px;min-height:48px;min-width:0;overflow-wrap:anywhere;word-break:break-word;white-space:normal;font-weight:400;}
@@ -5745,6 +5757,8 @@ updateDailyMotivation();
 
     let activeNoteId = null;
     const noteNavigationStack = [];
+    let newlyCreatedNoteId = null;
+    let newlyCreatedNoteTimer = null;
 
     function sameNoteId(a, b) { return String(a) === String(b); }
 
@@ -5752,7 +5766,7 @@ updateDailyMotivation();
         return notesData.filter(candidate => candidate.parentNoteId != null && sameNoteId(candidate.parentNoteId, noteId));
     }
 
-    function leaveLinkedNote() {
+    function leaveSubNoteView() {
         if (noteNavigationStack.length) {
             activeNoteId = noteNavigationStack.pop();
             renderNotes('');
@@ -5818,22 +5832,17 @@ updateDailyMotivation();
                 back.type = 'button';
                 back.className = 'note-nav-back';
                 back.textContent = noteNavigationStack.length ? '← Önceki nota dön' : '← Tüm notlar';
-                back.addEventListener('click', leaveLinkedNote);
+                back.addEventListener('click', leaveSubNoteView);
                 const label = document.createElement('div');
                 label.className = 'note-nav-label';
                 label.textContent = 'Alt notlar · ' + String(activeNote.title || 'Başlık');
-                const addChild = document.createElement('button');
-                addChild.type = 'button';
-                addChild.className = 'note-nav-back';
-                addChild.textContent = '＋ Alt not';
-                addChild.addEventListener('click', () => createChildNote(activeNote));
-                nav.append(back, label, addChild);
+                nav.append(back, label);
                 notesGrid.appendChild(nav);
                 if (!filteredNotes.length) {
                     const empty = document.createElement('div');
                     empty.className = 'note-nav-label';
                     empty.style.padding = '18px 4px';
-                    empty.textContent = 'Henüz alt not yok. ＋ Alt not düğmesiyle oluşturabilirsin.';
+                    empty.textContent = 'Henüz alt not yok.';
                     notesGrid.appendChild(empty);
                 }
             } else {
@@ -5848,6 +5857,9 @@ updateDailyMotivation();
             const card = document.createElement('div');
             card.className = 'card';
             card.dataset.noteId = String(note.id);
+            if (newlyCreatedNoteId != null && sameNoteId(note.id, newlyCreatedNoteId)) {
+                card.classList.add('note-newly-created');
+            }
 
             const isLocked = note.locked === true;
             if (isLocked) card.classList.add('is-locked');
@@ -5901,7 +5913,6 @@ updateDailyMotivation();
                         <button class="note-action-btn note-format-btn" type="button" data-note-format="italic" title="İtalik" aria-label="İtalik"><em>I</em></button>
                         <button class="note-action-btn note-format-btn" type="button" data-note-format="underline" title="Altı çizili" aria-label="Altı çizili"><u>U</u></button>
                         <button class="note-action-btn note-format-btn note-color-bold-btn" type="button" data-note-format="colorBold" title="Not rengiyle kalın" aria-label="Not rengiyle kalın"><strong>A</strong></button>
-                        <button class="note-action-btn note-child-btn" type="button" title="Alt not oluştur" aria-label="Alt not oluştur">＋</button>
                         <button class="note-action-btn note-format-btn note-highlight-btn" type="button" data-note-format="highlight" title="Fosfor" aria-label="Fosfor"><span class="highlight-mark">A</span></button>
                         <button class="note-action-btn note-format-btn note-list-btn" type="button" data-note-format="list" title="Madde işareti" aria-label="Madde işareti">•</button>
                         <button class="note-action-btn note-lock-btn" type="button" title="Notu kilitle" aria-label="Notu kilitle">
@@ -5920,7 +5931,6 @@ updateDailyMotivation();
             const formatBtns = [...card.querySelectorAll('[data-note-format]')];
             const lockBtn = card.querySelector('.note-lock-btn');
             const lockIcon = card.querySelector('.note-lock-icon');
-            const childBtn = card.querySelector('.note-child-btn');
 
             const setLockUi = locked => {
                 card.classList.toggle('is-locked', locked);
@@ -5930,7 +5940,6 @@ updateDailyMotivation();
                 deleteBtn.disabled = locked;
                 copyBtn.disabled = false;
                 formatBtns.forEach(btn => btn.disabled = locked);
-                childBtn.disabled = !locked;
                 lockBtn.title = locked ? 'Notun kilidini aç' : 'Notu kilitle';
                 lockBtn.setAttribute('aria-label', locked ? 'Notun kilidini aç' : 'Notu kilitle');
                 if (locked) {
@@ -6163,12 +6172,6 @@ updateDailyMotivation();
                 });
             });
 
-            childBtn.addEventListener('click', () => {
-                if (note.locked !== true) return;
-                saveArea();
-                createChildNote(note);
-            });
-
             lockBtn.addEventListener('click', () => {
                 const index = notesData.findIndex(n => n.id === note.id);
                 if (index === -1) return;
@@ -6199,6 +6202,33 @@ updateDailyMotivation();
         localStorage.setItem('yks_box_data_v11', JSON.stringify(notesData));
     }
 
+    function focusCreatedNote(noteId) {
+        if (newlyCreatedNoteTimer) clearTimeout(newlyCreatedNoteTimer);
+        newlyCreatedNoteId = noteId;
+        renderNotes('');
+
+        setTimeout(() => {
+            const card = notesGrid.querySelector('[data-note-id="' + String(noteId) + '"]');
+            if (!card) return;
+            card.classList.add('note-newly-created');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const title = card.querySelector('.editable-title');
+            if (title) {
+                title.focus();
+                document.execCommand('selectAll', false, null);
+            }
+        }, 30);
+
+        newlyCreatedNoteTimer = setTimeout(() => {
+            const card = notesGrid.querySelector('[data-note-id="' + String(noteId) + '"]');
+            card?.classList.remove('note-newly-created');
+            if (newlyCreatedNoteId != null && sameNoteId(newlyCreatedNoteId, noteId)) {
+                newlyCreatedNoteId = null;
+            }
+            newlyCreatedNoteTimer = null;
+        }, 2700);
+    }
+
     function createChildNote(parentNote) {
         const nextColor = parentNote.color || systemColors[notesData.length % systemColors.length];
         const child = {
@@ -6213,12 +6243,7 @@ updateDailyMotivation();
         notesData.push(child);
         persistNotes();
         activeNoteId = parentNote.id;
-        renderNotes('');
-        setTimeout(() => {
-            const card = notesGrid.querySelector('[data-note-id="' + String(child.id) + '"]');
-            const title = card && card.querySelector('.editable-title');
-            if (title) { title.focus(); document.execCommand('selectAll', false, null); }
-        }, 30);
+        focusCreatedNote(child.id);
     }
 
     function updateData(
@@ -6253,47 +6278,30 @@ updateDailyMotivation();
        YENİ NOT
     ========================================================= */
 
-    addCardBtn.addEventListener(
-        'click',
-        () => {
-
-            const nextColor =
-                systemColors[
-                    notesData.length %
-                    systemColors.length
-                ];
-
-
-            notesData.push({
-
-                id: createUniqueNoteId(),
-
-                title: 'Başlık',
-
-                content:
-                    '',
-
-                color: nextColor,
-
-                tag: 'yildiz',
-
-                locked: false
-
-            });
-
-
-            localStorage.setItem(
-                'yks_box_data_v11',
-                JSON.stringify(notesData)
-            );
-
-
-            renderNotes(
-                searchBar.value
-            );
-
+    addCardBtn.addEventListener('click', () => {
+        if (activeNoteId != null) {
+            const parentNote = notesData.find(note => sameNoteId(note.id, activeNoteId));
+            if (parentNote) {
+                createChildNote(parentNote);
+                return;
+            }
+            activeNoteId = null;
+            noteNavigationStack.length = 0;
         }
-    );
+
+        if (searchBar) searchBar.value = '';
+        const note = {
+            id: createUniqueNoteId(),
+            title: 'Başlık',
+            content: '',
+            color: systemColors[notesData.length % systemColors.length],
+            tag: 'yildiz',
+            locked: false
+        };
+        notesData.push(note);
+        persistNotes();
+        focusCreatedNote(note.id);
+    });
 
 
     /* =========================================================
@@ -8230,12 +8238,12 @@ updateDailyMotivation();
        PROGRAM + GÖREVLER — YEREL ÇALIŞMA MOTORU
     ========================================================= */
     const CAMP_SCHEDULE = {
-        1:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
-        2:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
-        3:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
-        4:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
-        5:[{id:'1',time:'09:00–10:30',name:'1. Etüt'},{id:'2',time:'10:45–12:15',name:'2. Etüt'},{id:'3',time:'12:30–13:45',name:'3. Etüt'},{id:'4',time:'14:30–16:00',name:'4. Etüt'},{id:'5',time:'16:15–17:45',name:'5. Etüt'},{id:'6',time:'18:15–19:45',name:'6. Etüt'},{id:'7',time:'20:00–21:30',name:'7. Etüt'}],
-        6:[{id:'exam',time:'10:15–13:15',name:'Deneme Sınavı'},{id:'1',time:'14:15–15:45',name:'1. Etüt'},{id:'2',time:'16:00–17:30',name:'2. Etüt'},{id:'3',time:'17:45–19:30',name:'3. Etüt'}]
+        1:[{id:'1',time:'09:00–10:45',name:'1. Etüt'},{id:'2',time:'11:00–12:30',name:'2. Etüt'},{id:'3',time:'13:30–15:00',name:'3. Etüt'},{id:'4',time:'15:15–16:30',name:'4. Etüt'},{id:'5',time:'16:45–18:15',name:'5. Etüt'},{id:'6',time:'18:45–20:15',name:'6. Etüt'},{id:'7',time:'20:30–21:30',name:'7. Etüt'}],
+        2:[{id:'1',time:'09:00–10:45',name:'1. Etüt'},{id:'2',time:'11:00–12:30',name:'2. Etüt'},{id:'3',time:'13:30–15:00',name:'3. Etüt'},{id:'4',time:'15:15–16:30',name:'4. Etüt'},{id:'5',time:'16:45–18:15',name:'5. Etüt'},{id:'6',time:'18:45–20:15',name:'6. Etüt'},{id:'7',time:'20:30–21:30',name:'7. Etüt'}],
+        3:[{id:'1',time:'09:00–10:45',name:'1. Etüt'},{id:'2',time:'11:00–12:30',name:'2. Etüt'},{id:'3',time:'13:30–15:00',name:'3. Etüt'},{id:'4',time:'15:15–16:30',name:'4. Etüt'},{id:'5',time:'16:45–18:15',name:'5. Etüt'},{id:'6',time:'18:45–20:15',name:'6. Etüt'},{id:'7',time:'20:30–21:30',name:'7. Etüt'}],
+        4:[{id:'1',time:'09:00–10:45',name:'1. Etüt'},{id:'2',time:'11:00–12:30',name:'2. Etüt'},{id:'3',time:'13:30–15:00',name:'3. Etüt'},{id:'4',time:'15:15–16:30',name:'4. Etüt'},{id:'5',time:'16:45–18:15',name:'5. Etüt'},{id:'6',time:'18:45–20:15',name:'6. Etüt'},{id:'7',time:'20:30–21:30',name:'7. Etüt'}],
+        5:[{id:'1',time:'09:00–10:45',name:'1. Etüt'},{id:'2',time:'11:00–12:30',name:'2. Etüt'},{id:'3',time:'13:30–15:00',name:'3. Etüt'},{id:'4',time:'15:15–16:30',name:'4. Etüt'},{id:'5',time:'16:45–18:15',name:'5. Etüt'},{id:'6',time:'18:45–20:15',name:'6. Etüt'},{id:'7',time:'20:30–21:30',name:'7. Etüt'}],
+        6:[{id:'exam',time:'10:15–13:15',name:'Deneme Sınavı'},{id:'1',time:'13:30–15:00',name:'1. Etüt'},{id:'2',time:'15:15–16:30',name:'2. Etüt'},{id:'3',time:'16:45–18:15',name:'3. Etüt'}]
     };
     const CAMP_DAY_SHORT=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
     function campDateKey(date=new Date()){ const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0'); return `${y}-${m}-${d}`; }
@@ -9982,23 +9990,43 @@ updateDailyMotivation();
   function scheduleReload() {
     if (reloadScheduled || isLoggingOut) return;
     reloadScheduled = true;
-    // A cloud merge must never reload the page while someone is writing a note or editing a task.
-    // Defer until the page is in the background; if the user stays here, do not interrupt them.
-    const safeToReload = () => {
+    // Do not reload while hidden: a same-tab navigation (for example Focus -> Timer)
+    // also hides this document and would otherwise race with the destination navigation.
+    // Apply the cloud merge only after the user returns to this page/tab.
+    let pageWasHidden = document.visibilityState === 'hidden';
+    let reloadStarted = false;
+
+    const isEditing = () => {
       const active = document.activeElement;
-      const editing = !!active && (active.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
-      if (document.visibilityState === 'hidden' && !editing) {
-        window.removeEventListener('visibilitychange', safeToReload);
-        window.location.reload();
-      }
+      return !!active && (active.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
     };
-    window.addEventListener('visibilitychange', safeToReload);
-    setTimeout(() => {
-      const active = document.activeElement;
-      const editing = !!active && (active.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
-      if (!editing && document.visibilityState === 'hidden') safeToReload();
-      // If the user is active, preserve the current editing session instead of forcing a reload.
-    }, 1500);
+
+    const cleanup = () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('focusout', tryReloadWhenSafe, true);
+      window.removeEventListener('pageshow', tryReloadWhenSafe);
+      window.removeEventListener('focus', tryReloadWhenSafe);
+    };
+
+    const tryReloadWhenSafe = () => {
+      if (reloadStarted || !pageWasHidden || document.visibilityState !== 'visible' || isEditing()) return;
+      reloadStarted = true;
+      cleanup();
+      window.location.reload();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        pageWasHidden = true;
+        return;
+      }
+      tryReloadWhenSafe();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('focusout', tryReloadWhenSafe, true);
+    window.addEventListener('pageshow', tryReloadWhenSafe);
+    window.addEventListener('focus', tryReloadWhenSafe);
   }
   async function flushPending() {
     if (suppressPush) return;
